@@ -1,5 +1,38 @@
 @import '@rolemodel/optics/dist/scss/optics';
 @import '@rolemodel/optics/dist/scss/addons/panel';
 
+@import 'core/themes/go-fish-theme-core.scss';
+
+// dominic theme
+@import 'core/themes/dominic-theme-core.scss';
+@import 'core/themes/dominic-theme-light.scss';
+
+// jullian theme
+@import 'core/themes/jullian-theme-core.scss';
+@import 'core/themes/jullian-theme-light.scss';
+
+// gabriel theme
+@import 'core/themes/gabriel-theme-core.scss';
+
+// standard layout
+@import 'core/go-fish-game-layout.scss';
+@import 'core/go-fish-home-layout.scss';
+
 // layouts
 @import 'layouts/container';
+
+// general go fish layout components
+@import 'components/layouts/go-fish-panel.scss';
+@import 'components/layouts/navigation-panel.scss';
+@import 'components/layouts/games-center.scss';
+
+// optics overrides
+@import 'components/optics-overrides/badge.scss';
+
+// content components
+@import 'components/go-fish-content/notifications.scss';
+@import 'components/go-fish-content/game-action.scss';
+@import 'components/go-fish-content/playing-card.scss';
+@import 'components/go-fish-content/card-stack.scss';
+@import 'components/go-fish-content/accordion.scss';
+@import 'components/go-fish-content/games-list.scss';

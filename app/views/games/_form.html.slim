@@ -1,0 +1,6 @@
+= simple_form_for game, html: { class: "game form" } do |f|
+  / = form_error_notification(game)
+
+  = f.input :name, input_html: { autofocus: true }
+  = link_to "Cancel", games_path, class: "btn btn--light"
+  = f.submit class: "btn btn--secondary"

@@ -9,19 +9,22 @@ class GamesController < ApplicationController
   end
 
   def new
-    @game = Game.new
+    @game = Game.build
   end
 
   def edit
   end
 
   def create
-    @game = Game.new(game_params)
+    @game = Game.build(game_params)
 
     if @game.save
-      redirect_to games_path, notice: 'Game was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to games_path, notice: 'Game was successfully created.' }
+        format.turbo_stream { flash.now[:notice] = 'Game was successfully created.' }
+      end
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 

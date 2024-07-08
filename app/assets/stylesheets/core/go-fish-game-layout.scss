@@ -1,0 +1,32 @@
+.game-page {
+    --gf-panel-width: calc(100 * var(--op-size-unit));
+    --gf-panel-height: calc(65 * var(--op-size-unit));
+
+    display: grid;
+    grid-template-areas:
+        "game-board game-feed"
+        "your-hand your-books";
+    grid-template-columns: 1fr var(--gf-panel-width);
+    grid-template-rows: 1fr var(--gf-panel-height);
+    height: 100vh;
+    overflow: auto;
+}
+
+// modifiers
+.go-fish-panel--game-board {
+    grid-area: game-board;
+}
+
+.go-fish-panel--game-feed {
+    grid-area: game-feed;
+    background-color: var(--op-color-primary-plus-eight);
+}
+
+.go-fish-panel--your-hand {
+    grid-area: your-hand;
+}
+
+.go-fish-panel--your-books {
+    grid-area: your-books;
+    background-color: var(--op-color-neutral-plus-eight);
+}

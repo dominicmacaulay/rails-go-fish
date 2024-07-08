@@ -1,98 +1,28 @@
-<!doctype html>
-<html lang="en" data-theme-mode="light" data-theme="dominic">
+.games-center
+    .games-list
+        .games-list__header
+            span Your Games
 
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" href="./stylesheets/application.scss">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Go Fish Home</title>
-</head>
+            = link_to new_game_path, data: { turbo_frame: dom_id(Game.new) }, class: "btn-primary" do
+                = material_icon('add')
+                | New Game
 
-<body>
-    <div class='app-with-sidebar'>
-        <div class="side-panel navigation-panel">
-            <div class="navigation-panel__primary-navigation">
-                <div class="side-panel__header">Go Fish</div>
+        - @games.each do |game|
+            .games-list__game-row
+                span = game.name
+                .game-actions
+                    = link_to game_path(game), class: "btn" do
+                        | Play now
+                        = material_icon('arrow_right')
 
-                <div class="side-panel__body">
-                    <button class="btn btn--no-border btn--active">Games</button>
-                    <button class="btn btn--no-border">Stats</button>
-                </div>
-            </div>
+    .games-list
+        .games-list__header
+            <span>All Games</span>
 
-            <div class="divider"></div>
-
-            <div class="navigation-panel__secondary-navigation">
-                <button class="btn btn--no-border">Profile</button>
-                <button class="btn btn--no-border">Log Out</button>
-            </div>
-        </div>
-
-        <div class='app-body'>
-            <div class="games-center">
-                <div class="games-list">
-                    <div class="games-list__header">
-                        <span>Your Games</span>
-                        <button class="btn-primary">
-                            <span class="material-symbols-outlined">add</span>
-                            <span>New Game</span>
-                        </button>
-                    </div>
-
-                    <div class="games-list__game-row">
-                        <span>Game 1</span>
-                        <div class="game-actions">
-                            <span>This Game is Full</span>
-                            <button class="btn">
-                                <span>Play Now</span>
-                                <span class="material-symbols-outlined">arrow_right</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="games-list__game-row">
-                        <span>Game 2</span>
-                        <div class="game-actions">
-                            <span>2/3 Players</span>
-                            <button class="btn">
-                                <span>Play Now</span>
-                                <span class="material-symbols-outlined">arrow_right</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="games-list">
-                    <div class="games-list__header">
-                        <span>All Games</span>
-                    </div>
-
-                    <div class="games-list__game-row">
-                        <span>Game 1</span>
-                        <div class="game-actions">
-                            <span>1/5 Players</span>
-                            <button class="btn">
-                                <span>Join</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="games-list__game-row">
-                        <span>Game 2</span>
-                        <div class="game-actions">
-                            <span>2/3 Players</span>
-                            <button class="btn">
-                                <span>Join</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-</body>
-
-</html>
+        - @games.each do |game|
+            .games-list__game-row
+                span = game.name
+                .game-actions
+                    = link_to game_path(game), class: "btn" do
+                        | Play now
+                        = material_icon('arrow_right')

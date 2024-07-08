@@ -1,0 +1,43 @@
+.notification-feed {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--op-space-x-small);
+    overflow: auto;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: var(--op-space-x-small);
+    padding-inline: var(--op-space-small);
+
+    color: var(--op-color-primary-on-plus-five-alt);
+
+    >* {
+        border-radius: var(--op-radius-x-large);
+    }
+
+    .notification--player-action {
+        padding: var(--op-space-small);
+        width: auto;
+        background-color: var(--op-color-primary-plus-five);
+    }
+
+    .notification__opponent-response {
+        padding: var(--op-space-small);
+
+        box-shadow: var(--op-border-all) var(--op-color-alerts-warning-plus-five);
+        background-color: var(--op-color-alerts-warning-plus-seven);
+        color: var(--op-color-alerts-warning-on-plus-seven-alt);
+    }
+
+    .notification__round-result {
+        padding: var(--op-space-small);
+
+        box-shadow: var(--op-border-all) var(--op-color-primary-plus-seven);
+        background-color: var(--op-color-primary-plus-max);
+        color: var(--op-color-primary-on-plus-max);
+    }
+}

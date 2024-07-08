@@ -1,0 +1,68 @@
+// TODO: pull in modifiers
+.go-fish-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: calc(15 * var(--op-size-unit)) 1fr;
+    overflow: auto;
+
+    box-shadow: var(--op-border-all) var(--op-color-border);
+
+    // children
+    .go-fish-panel__header {
+        grid-area: 1 / 1 / 2 / 2;
+        display: flex;
+        align-items: center;
+
+        box-shadow: var(--op-border-bottom) var(--op-color-border);
+        padding-inline: var(--op-space-medium);
+        padding-top: var(--op-space-small);
+        padding-bottom: var(--op-space-x-small);
+
+        // modifiers
+        &.go-fish-panel__header--game-board {
+            gap: var(--op-space-x-small);
+            padding-block: var(--op-space-2x-small);
+
+            span {
+                font-size: var(--op-font-large);
+            }
+        }
+
+        &.go-fish-panel__header--game-feed {
+            justify-content: space-between;
+
+            span {
+                color: var(--op-color-primary-on-plus-eight-alt);
+            }
+        }
+
+        &.go-fish-panel__header--your-hand,
+        &.go-fish-panel__header--your-books {
+            font-size: var(--op-font-large);
+            color: var(--op-color-primary-on-plus-eight-alt);
+        }
+    }
+
+    .go-fish-panel__content {
+        display: grid;
+        padding: var(--op-space-medium);
+        overflow: auto;
+
+        // modifiers
+        &.go-fish-panel__content--game-board {
+            align-content: start;
+            gap: var(--op-space-x-small);
+        }
+
+        &.go-fish-panel__content--game-feed {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        &.go-fish-panel__content--your-hand,
+        &.go-fish-panel__content--your-books {
+            padding-bottom: var(--op-space-x-small);
+        }
+    }
+}

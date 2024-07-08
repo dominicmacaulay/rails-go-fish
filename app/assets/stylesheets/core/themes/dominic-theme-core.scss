@@ -1,0 +1,33 @@
+:root[data-theme='dominic'] {
+    --op-input-height-small: 4rem;
+    --op-input-height-medium: 5rem;
+    --op-input-height-large: 6rem;
+    --op-input-height-x-large: 8.4rem;
+
+    --op-radius-small: 0px;
+    --op-radius-medium: 0px;
+    --op-radius-large: 0px;
+    --op-radius-x-large: 0px;
+    --op-radius-2x-large: 0px;
+
+    --op-space-3x-small: calc(var(--op-space-scale-unit) * 0.4);
+    --op-space-2x-small: calc(var(--op-space-scale-unit) * 0.8);
+    --op-space-x-small: calc(var(--op-space-scale-unit) * 1.6);
+    --op-space-small: calc(var(--op-space-scale-unit) * 2.4);
+    --op-space-medium: calc(var(--op-space-scale-unit) * 3.2);
+    --op-space-large: calc(var(--op-space-scale-unit) * 4);
+    --op-space-x-large: calc(var(--op-space-scale-unit) * 4.8);
+    --op-space-2x-large: calc(var(--op-space-scale-unit) * 5.6);
+    --op-space-3x-large: calc(var(--op-space-scale-unit) * 8);
+    --op-space-4x-large: calc(var(--op-space-scale-unit) * 16);
+
+    // game action drop down override
+    %form-control-global {
+
+        &#player-selection,
+        &#card-selection {
+            padding-right: var(--op-space-large);
+            background-position-x: calc(100% - (var(--op-space-x-large) / 2 - var(--op-encoded-images-dropdown-arrow-width) / 2));
+        }
+    }
+}

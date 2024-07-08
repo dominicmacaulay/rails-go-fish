@@ -1,0 +1,22 @@
+.game-action {
+    display: flex;
+    padding: var(--op-space-small);
+    flex-direction: column;
+    gap: var(--op-space-small);
+
+    border-radius: var(--op-radius-x-large);
+    box-shadow: var(--op-border-all) var(--op-color-primary-plus-six);
+    background-color: var(--op-color-primary-plus-seven);
+
+    .game-action__options {
+        display: flex;
+        gap: var(--op-space-small);
+
+        .option {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 0 0;
+        }
+    }
+}

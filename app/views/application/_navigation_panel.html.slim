@@ -1,0 +1,12 @@
+.side-panel.navigation-panel
+  .navigation-panel__primary-navigation
+    .side-panel__header Go Fish
+
+  .divider
+
+  .navigation-panel__secondary-navigation
+    / button.btn.btn--no-border Profile
+    = button_to "Sign out",
+      destroy_user_session_path,
+      method: :delete,
+      class: "btn btn--no-border"
