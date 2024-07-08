@@ -19,10 +19,11 @@ class GamesController < ApplicationController
     @game = Game.build(game_params)
 
     if @game.save
-      respond_to do |format|
-        format.html { redirect_to games_path, notice: 'Game was successfully created.' }
-        format.turbo_stream { flash.now[:notice] = 'Game was successfully created.' }
-      end
+      redirect_to games_path, notice: 'Game was successfully created.'
+      # respond_to do |format|
+      #   format.html { redirect_to games_path, notice: 'Game was successfully created.' }
+      #   format.turbo_stream { flash.now[:notice] = 'Game was successfully created.' }
+      # end
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,13 +33,18 @@ class GamesController < ApplicationController
     if @game.update(game_params)
       redirect_to games_path, notice: 'Game was successfully updated.'
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @game.destroy
+
     redirect_to games_path, notice: 'Game was successfully destroyed.'
+    # respond_to do |format|
+    #   format.html { redirect_to games_path, notice: 'Game was successfully destroyed.' }
+    #   format.turbo_stream { flash.now[:notice] = 'Game was successfully destroyed.' }
+    # end
   end
 
   private

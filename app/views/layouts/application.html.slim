@@ -10,7 +10,7 @@ html lang="en" data-theme-mode="light" data-theme="dominic"
   body.app-with-sidebar
     = render 'navigation_panel'
 
-    .app__content
+    div class="app__content" style="overflow: auto"
       #flash.flash
         = render "layouts/flash"
       = turbo_frame_tag 'modal'

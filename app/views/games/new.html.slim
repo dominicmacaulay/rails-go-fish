@@ -1,13 +1,7 @@
-h1 New Game
-= link_to sanitize("&larr; Back to games"), games_path
-= simple_form_for @game do |f|
-  = f.input :name, required: true
-  = f.submit 'Create Game', class: 'btn btn-primary'
-
-/ turbo setup
-/main.container
+main.container
   = link_to sanitize("&larr; Back to games"), games_path
   .header
     h1 New Game
-  = turbo_frame_tag @game
+  /= turbo_frame_tag @game
     = render "form", game: @game
+  = render "form", game: @game

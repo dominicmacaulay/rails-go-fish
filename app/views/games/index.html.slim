@@ -1,28 +1,18 @@
 .games-center
-    .games-list
-        .games-list__header
-            span Your Games
+  .games-list
+    .games-list__header
+      span Your Games
 
-            = link_to new_game_path, data: { turbo_frame: dom_id(Game.new) }, class: "btn-primary" do
-                = material_icon('add')
-                | New Game
+      = link_to new_game_path, data: { turbo_frame: dom_id(Game.new) }, class: "btn-primary" do
+        = material_icon('add')
+        | New Game
 
-        - @games.each do |game|
-            .games-list__game-row
-                span = game.name
-                .game-actions
-                    = link_to game_path(game), class: "btn" do
-                        | Play now
-                        = material_icon('arrow_right')
+    - @games.each do |game|
+      = render "game", game: game, owned: true
 
-    .games-list
-        .games-list__header
-            <span>All Games</span>
+  .games-list
+    .games-list__header
+      span All Games
 
-        - @games.each do |game|
-            .games-list__game-row
-                span = game.name
-                .game-actions
-                    = link_to game_path(game), class: "btn" do
-                        | Play now
-                        = material_icon('arrow_right')
+    - @games.each do |game|
+      = render "game", game: game, owned: false

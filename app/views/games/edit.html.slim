@@ -1,0 +1,7 @@
+main.container
+  = link_to sanitize("&larr; Back to game"), game_path(@game)
+
+  div.header
+    h1 Edit game
+
+  = render "form", game: @game
