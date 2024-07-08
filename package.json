@@ -4,12 +4,27 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.4",
-    "sass": "^1.77.6",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "sass": "^1.77.6"
   },
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css --no-source-map --load-path=node_modules"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@csstools/postcss-sass": "^5.1.1",
+    "@honeybadger-io/js": "^6.9.3",
+    "@honeybadger-io/webpack": "^6.2.1",
+    "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.0",
+    "esbuild": "^0.23.0",
+    "esbuild-loader": "^4.2.0",
+    "mini-css-extract-plugin": "^2.9.0",
+    "postcss": "^8.4.39",
+    "postcss-loader": "^8.1.1",
+    "postcss-preset-env": "^9.6.0",
+    "postcss-scss": "^4.0.9",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
   }
 }
