@@ -791,6 +791,11 @@
   dependencies:
     modern-css-reset "^1.4.0"
 
+"@rolemodel/turbo-confirm@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@rolemodel/turbo-confirm/-/turbo-confirm-2.0.2.tgz#bea18fcd79e91fe2d2c08d529113a26d4e1812f4"
+  integrity sha512-IoZw7Z1ChRT9Xt0u7C2mIltrpk6FV866aSiz8u+95tmACYmyyS0S16SHynAdEmwJyLTJr3HrOVuErftGDvFRNg==
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"

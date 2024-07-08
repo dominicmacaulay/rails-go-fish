@@ -8,5 +8,8 @@ html
     = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
     meta content="width=device-width, initial-scale=1" name="viewport"
   body.app-body
+    = turbo_frame_tag 'modal'
+    = turbo_frame_tag 'panel'
+    = render 'confirm'
     .app__content
       = yield
