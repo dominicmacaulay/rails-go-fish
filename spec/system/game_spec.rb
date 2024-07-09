@@ -1,45 +1,42 @@
 require 'rails_helper'
 
-RSpec.describe 'Games', type: :system do
-  # include Warden::Test::Helpers
+RSpec.describe 'Games', type: :system, js: true do
+  include Warden::Test::Helpers
 
   let!(:user) { create(:user) }
   let!(:game) { create(:game) }
 
-  # before do
-  #   login_as user
-  # end
+  before do
+    login_as user
+  end
 
-  it 'can create a new game', :js do
+  it 'can create a new game' do
     visit games_path
-    expect(page).to have_selector('.games-list__header', text: 'Games')
+    expect_header
 
-    click_on 'New game'
+    click_on 'New Game'
     fill_in 'Name', with: 'Capybara game'
-    expect(page).to have_selector('.games-list__header', text: 'Games')
     click_on 'Create game'
 
-    expect(page).to have_selector('.games-list__header', text: 'Games')
+    expect_header
     expect(page).to have_content('Capybara game')
   end
 
   it 'shows a game' do
     visit games_path
-    click_on game.name
+    click_on 'Play now', match: :first
 
-    expect(page).to have_selector('.games-list__header', text: game.name)
+    expect_header(selector: '.header', text: game.name)
   end
 
-  it 'Updating a game', :js do
+  it 'Updating a game' do
     visit games_path
-    expect(page).to have_selector('.games-list__header', text: 'Games')
 
     click_on 'Edit', match: :first
     fill_in 'Name', with: 'Updated game'
-    expect(page).to have_selector('.games-list__header', text: 'Games')
     click_on 'Update game'
 
-    expect(page).to have_selector('.games-list__header', text: 'Games')
+    expect_header
     expect(page).to have_content('Updated game')
   end
 
@@ -50,4 +47,8 @@ RSpec.describe 'Games', type: :system do
     click_on 'Delete', match: :first
     expect(page).not_to have_content(game.name)
   end
+end
+
+def expect_header(selector: '.games-list__header', text: 'Your Games')
+  expect(page).to have_selector(selector, text:)
 end
