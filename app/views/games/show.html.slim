@@ -3,7 +3,10 @@ main.container
   div.header
     h1 = @game.name
 
-  p #{@game.users.count}/#{@game.number_of_players} players joined
+  - if @game.queue_full?
+    p Game started!
+  - else
+    p #{@game.users.count}/#{@game.number_of_players} players joined
 
   p Players:
   - @users.each do |user|

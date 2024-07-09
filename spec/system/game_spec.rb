@@ -62,15 +62,22 @@ RSpec.describe 'Games', type: :system, js: true do
 
     before do
       login_as user
+      user2 = create(:user)
+      create(:game_user, game:, user: user2)
     end
 
     it 'displays that the game is full and takes away the join button when full' do
-      user2 = create(:user)
-      create(:game_user, game:, user: user2)
       visit games_path
       expect(page).to have_content('Game full')
       expect(page).not_to have_content('Players')
       expect(page).not_to have_content('Join')
+    end
+
+    it 'shows a game started message in the show window' do
+      visit games_path
+      click_on 'Play now', match: :first
+
+      expect(page).to have_content('Game started!')
     end
   end
 
