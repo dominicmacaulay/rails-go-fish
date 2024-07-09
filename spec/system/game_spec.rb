@@ -55,6 +55,25 @@ RSpec.describe 'Games', type: :system, js: true do
     end
   end
 
+  describe 'showing a full game' do
+    let!(:user) { create(:user) }
+    let!(:game) { create(:game) }
+    let!(:game_user) { create(:game_user, game:, user:) }
+
+    before do
+      login_as user
+    end
+
+    it 'displays that the game is full and takes away the join button when full' do
+      user2 = create(:user)
+      create(:game_user, game:, user: user2)
+      visit games_path
+      expect(page).to have_content('Game full')
+      expect(page).not_to have_content('Players')
+      expect(page).not_to have_content('Join')
+    end
+  end
+
   describe 'game that is not yours', js: true do
     let!(:user) { create(:user) }
     let!(:game) { create(:game) }

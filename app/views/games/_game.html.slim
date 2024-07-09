@@ -1,14 +1,18 @@
 .games-list__game-row
   span = game.name
   .game-actions
-    span #{game.users.count}/#{game.number_of_players} Players
+    - if game.queue_full?
+      span Game full
+    - else
+      span #{game.users.count}/#{game.number_of_players} Players
+
     - if owned
       = link_to game_path(game), class: "btn" do
         | Play now
         = material_icon('arrow_right')
       = link_to "Edit", edit_game_path(game), class: "btn btn--light"
       = button_to "Delete", game_path(game), method: :delete, class: "btn btn--light"
-    - else
+    - elsif !game.queue_full?
       / display how  many users of the total allowed users are in the game
       = button_to game_game_users_path(game, current_user), method: :post, class: "btn" do
         | Join game
