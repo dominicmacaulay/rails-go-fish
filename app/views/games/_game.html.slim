@@ -1,6 +1,7 @@
 .games-list__game-row
   span = game.name
   .game-actions
+    span #{game.users.count}/#{game.number_of_players} Players
     - if owned
       = link_to game_path(game), class: "btn" do
         | Play now

@@ -3,6 +3,8 @@ main.container
   div.header
     h1 = @game.name
 
+  p #{@game.users.count}/#{@game.number_of_players} players joined
+
   p Players:
   - @users.each do |user|
     = user.name

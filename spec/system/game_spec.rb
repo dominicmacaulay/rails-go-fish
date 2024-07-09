@@ -18,11 +18,12 @@ RSpec.describe 'Games', type: :system, js: true do
 
       click_on 'New Game'
       fill_in 'Name', with: 'Capybara game'
-      fill_in 'Number of players', with: '3'
+      fill_in 'Number of Players', with: '3'
       click_on 'Create game'
 
       expect_header
       expect(page).to have_content('Capybara game')
+      expect(page).to have_content('1/3 Players')
     end
 
     it 'shows a game' do
@@ -30,9 +31,10 @@ RSpec.describe 'Games', type: :system, js: true do
       click_on 'Play now', match: :first
 
       expect_header(selector: '.header', text: game.name)
+      expect(page).to have_content('players joined')
     end
 
-    it 'Updating a game', :chrome do
+    it 'Updating a game' do
       visit games_path
 
       click_on 'Edit', match: :first
@@ -61,8 +63,9 @@ RSpec.describe 'Games', type: :system, js: true do
       login_as user
     end
 
-    it 'does not allow you to edit or delete it' do
+    it 'does not allow you to edit or delete it, but still shows the players' do
       visit games_path
+      expect(page).to have_content('0/2 Players')
       expect(page).not_to have_content('Delete')
       expect(page).not_to have_content('Edit')
     end
@@ -75,6 +78,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
       click_on 'Back'
 
+      expect(page).to have_content('1/2 Players')
       expect(page).to have_content('Delete')
       expect(page).to have_content('Edit')
     end
