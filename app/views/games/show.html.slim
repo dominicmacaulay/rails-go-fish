@@ -1,6 +1,6 @@
 main.container
   = link_to sanitize("&larr; Back to games"), games_path
-  div.header
+  .header
     h1 = @game.name
 
   - if @game.queue_full?
