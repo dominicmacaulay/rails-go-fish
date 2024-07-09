@@ -20,7 +20,7 @@ class GamesController < ApplicationController
     @game = Game.build(game_params)
 
     if @game.save
-      # game_users#create
+      @game.users << current_user
       redirect_to games_path, notice: 'Game was successfully created.'
       # respond_to do |format|
       #   format.html { redirect_to games_path, notice: 'Game was successfully created.' }
@@ -41,6 +41,7 @@ class GamesController < ApplicationController
 
   def destroy
     @game.destroy
+    # @game.users.each(&:destroy)
 
     redirect_to games_path, notice: 'Game was successfully destroyed.'
     # respond_to do |format|

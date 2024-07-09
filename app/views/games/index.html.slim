@@ -7,7 +7,7 @@
         = material_icon('add')
         | New Game
 
-    - @games.each do |game|
+    - current_user.games.each do |game|
       = render "game", game: game, owned: true
 
   .games-list
@@ -15,4 +15,4 @@
       span All Games
 
     - @games.each do |game|
-      = render "game", game: game, owned: false
+      = render "game", game: game, owned: game.users.include?(current_user)
