@@ -6,6 +6,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @users = @game.users
   end
 
   def new
@@ -19,6 +20,7 @@ class GamesController < ApplicationController
     @game = Game.build(game_params)
 
     if @game.save
+      # game_users#create
       redirect_to games_path, notice: 'Game was successfully created.'
       # respond_to do |format|
       #   format.html { redirect_to games_path, notice: 'Game was successfully created.' }
