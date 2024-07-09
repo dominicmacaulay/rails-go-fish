@@ -2,5 +2,5 @@
   = form_error_notification(game)
 
   = f.input :name, input_html: { autofocus: true }
-  / = f.input :number_of_players
+  = f.input :number_of_players unless editing == true
   = f.submit class: "btn btn--secondary"

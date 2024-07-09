@@ -18,6 +18,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
       click_on 'New Game'
       fill_in 'Name', with: 'Capybara game'
+      fill_in 'Number of players', with: '3'
       click_on 'Create game'
 
       expect_header
@@ -35,6 +36,7 @@ RSpec.describe 'Games', type: :system, js: true do
       visit games_path
 
       click_on 'Edit', match: :first
+      expect(page).not_to have_content('Number of Players')
       fill_in 'Name', with: 'Updated game'
       click_on 'Update game'
 

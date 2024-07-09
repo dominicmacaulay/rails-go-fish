@@ -3,9 +3,11 @@ en:
     placeholders:
       game:
         name: Name of your game
+        number_of_players: Number of players allowed in your game
     labels:
       game:
         name: Name
+        number_of_players: Number of Players
 
   helpers:
     submit:
