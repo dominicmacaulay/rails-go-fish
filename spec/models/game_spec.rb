@@ -16,4 +16,16 @@ RSpec.describe Game, type: :model do
       expect(game.queue_full?).to be false
     end
   end
+
+  describe 'start!' do
+    let(:game) { create(:game) }
+    it 'returns false if the game is not full' do
+      expect(game.start!).to be false
+    end
+
+    it 'starts the game if the queue is full' do
+      2.times { create(:game_user, user: create(:user), game:) }
+      expect(game.start!).not_to be false
+    end
+  end
 end

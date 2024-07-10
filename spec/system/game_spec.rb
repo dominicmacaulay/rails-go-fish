@@ -10,10 +10,10 @@ RSpec.describe 'Games', type: :system, js: true do
 
     before do
       login_as user
+      visit games_path
     end
 
     it 'can create a new game' do
-      visit games_path
       expect_header
 
       click_on 'New Game'
@@ -27,7 +27,6 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'shows a game' do
-      visit games_path
       click_on 'Play now', match: :first
 
       expect_header(selector: '.header', text: game.name)
@@ -35,8 +34,6 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'Updating a game' do
-      visit games_path
-
       click_on 'Edit', match: :first
       expect(page).not_to have_content('Number of Players')
       fill_in 'Name', with: 'Updated game'
@@ -47,7 +44,6 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'Destroying a game' do
-      visit games_path
       expect(page).to have_content(game.name)
 
       click_on 'Delete', match: :first
@@ -64,17 +60,16 @@ RSpec.describe 'Games', type: :system, js: true do
       login_as user
       user2 = create(:user)
       create(:game_user, game:, user: user2)
+      visit games_path
     end
 
     it 'displays that the game is full and takes away the join button when full' do
-      visit games_path
       expect(page).to have_content('Game full')
       expect(page).not_to have_content('Players')
       expect(page).not_to have_content('Join')
     end
 
     it 'shows a game started message in the show window' do
-      visit games_path
       click_on 'Play now', match: :first
 
       expect(page).to have_content('Game started!')
@@ -87,17 +82,16 @@ RSpec.describe 'Games', type: :system, js: true do
 
     before do
       login_as user
+      visit games_path
     end
 
     it 'does not allow you to edit or delete it, but still shows the players' do
-      visit games_path
       expect(page).to have_content('0/2 Players')
       expect(page).not_to have_content('Delete')
       expect(page).not_to have_content('Edit')
     end
 
     it 'allows you to join the game' do
-      visit games_path
       click_on 'Join'
 
       expect(page).to have_content('joined')
@@ -110,16 +104,16 @@ RSpec.describe 'Games', type: :system, js: true do
     end
   end
 
-  describe 'joining the game' do
+  describe 'joining the game', js: true do
     let!(:user) { create(:user) }
     let!(:game) { create(:game) }
 
     before do
       login_as user
+      visit games_path
     end
 
     it 'does not join if already in the game' do
-      visit games_path
       create(:game_user, user:, game:)
       click_on 'Join'
       expect(page).to have_content(game.name).twice
@@ -127,12 +121,33 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'does not join if the game is full' do
-      visit games_path
       2.times { create(:game_user, user: create(:user), game:) }
 
       click_on 'Join'
       expect(page).to have_content(game.name).once
       expect(page).to have_content('Game full').once
+    end
+  end
+
+  describe 'sidebar navigation', js: true do
+    let!(:user) { create(:user) }
+    let!(:game) { create(:game) }
+    let!(:game_user) { create(:game_user, game:, user:) }
+
+    before do
+      login_as user
+      visit games_path
+    end
+
+    it 'signs out when button is clicked' do
+      click_on 'Sign out'
+      expect(page).to have_content('Sign in')
+    end
+
+    it 'returns to the game home page when button is clicked' do
+      click_on 'Play', match: :first
+      click_on 'Games'
+      expect(page).to have_content('Your Games')
     end
   end
 end
