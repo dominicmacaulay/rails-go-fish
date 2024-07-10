@@ -31,6 +31,8 @@ class GoFish
   end
 
   def self.load(payload)
+    return if payload.nil?
+
     from_json(payload)
   end
 

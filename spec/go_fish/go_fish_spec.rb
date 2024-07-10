@@ -32,6 +32,11 @@ RSpec.describe GoFish do
       @game = GoFish.load(@json)
       expect(@game.current_player).to eql @game.players.first
     end
+
+    it 'returns nil if the parameter is nil' do
+      expect(GoFish.dump(nil)).to be nil
+      expect(GoFish.load(nil)).to be nil
+    end
   end
 
   describe '#next_player' do

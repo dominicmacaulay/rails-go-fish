@@ -39,12 +39,9 @@ RSpec.describe Game, type: :model do
       create(:game_user, game:, user: user2)
     end
 
-    it 'converts itself to json' do
+    it 'seriliazes' do
       game.start!
       expect(game.go_fish).not_to be nil
-    end
-
-    xit 'returns the game as json' do
     end
   end
 end
