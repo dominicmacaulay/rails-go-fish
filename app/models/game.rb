@@ -9,7 +9,7 @@ class Game < ApplicationRecord
     users.count == number_of_players
   end
 
-  # serialize :go_fish, GoFish
+  serialize :go_fish, JSON, type: GoFish
 
   def start!
     return false unless queue_full?
@@ -20,8 +20,8 @@ class Game < ApplicationRecord
     update(go_fish:, started_at: Time.zone.now)
   end
 
-  # def play_round!
-  #   go_fish.play_round!
-  #   save!
-  # end
+  def play_round!
+    go_fish.play_round!
+    save!
+  end
 end
