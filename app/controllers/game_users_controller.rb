@@ -3,10 +3,12 @@ class GameUsersController < ApplicationController
   before_action :set_game_user, only: %i[destroy]
 
   def create
+    redirect_to games_path, status: :unprocessable_entity if @game.queue_full?
+
     @game_user = @game.game_users.build(user: current_user)
 
     if @game_user.save
-      # game.start!
+      @game.start!
       redirect_to @game, notice: 'You have joined a game'
     else
       redirect_to games_path, status: :unprocessable_entity
