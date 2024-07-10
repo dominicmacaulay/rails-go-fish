@@ -28,4 +28,23 @@ RSpec.describe Game, type: :model do
       expect(game.start!).not_to be false
     end
   end
+
+  describe '#go_fish' do
+    let(:game) { create(:game) }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+
+    before do
+      create(:game_user, game:, user: user1)
+      create(:game_user, game:, user: user2)
+    end
+
+    it 'converts itself to json' do
+      game.start!
+      expect(game.go_fish).not_to be nil
+    end
+
+    xit 'returns the game as json' do
+    end
+  end
 end

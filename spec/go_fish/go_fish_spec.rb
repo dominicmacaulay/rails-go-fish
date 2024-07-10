@@ -13,6 +13,36 @@ RSpec.describe GoFish do
       expect(count_equal).to be true
     end
   end
+
+  describe 'serialization' do
+    before do
+      @game = GoFish.new(create_players(2))
+      @json = GoFish.dump(@game)
+    end
+    it 'converts the passed in object to json' do
+      expect(@json['players'].count).to eql 2
+      expect(@json['current_player']).to eql @json['players'].first
+    end
+
+    it 'converts the passed json into an object' do
+      # change the state of the game
+      @game.next_player
+      expect(@game.current_player).to eql @game.players.last
+      # reload the old state of the game
+      @game = GoFish.load(@json)
+      expect(@game.current_player).to eql @game.players.first
+    end
+  end
+
+  describe '#next_player' do
+    it 'switches players' do
+      players = create_players(2)
+      game = GoFish.new(players)
+      expect(game.current_player).to eql players.first
+      game.next_player
+      expect(game.current_player).to eql players.last
+    end
+  end
 end
 
 def create_players(times)

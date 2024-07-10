@@ -9,7 +9,7 @@ class Game < ApplicationRecord
     users.count == number_of_players
   end
 
-  serialize :go_fish, JSON, type: GoFish
+  serialize :go_fish, coder: GoFish
 
   def start!
     return false unless queue_full?
@@ -17,7 +17,8 @@ class Game < ApplicationRecord
     players = users.map { |user| Player.new(user.id, user.name) }
     go_fish = GoFish.new(players)
     go_fish.deal!
-    update(go_fish:, started_at: Time.zone.now)
+    update(go_fish:)
+    # update(go_fish:, started_at: DateTime.current)
   end
 
   def play_round!
