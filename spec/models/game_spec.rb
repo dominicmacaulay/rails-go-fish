@@ -23,25 +23,29 @@ RSpec.describe Game, type: :model do
       expect(game.start!).to be false
     end
 
-    it 'starts the game if the queue is full' do
+    it 'updates the go_fish attribute' do
+      expect(game.go_fish).to be_nil
+
       2.times { create(:game_user, user: create(:user), game:) }
-      expect(game.start!).not_to be false
-    end
-  end
-
-  describe '#go_fish' do
-    let(:game) { create(:game) }
-    let(:user1) { create(:user) }
-    let(:user2) { create(:user) }
-
-    before do
-      create(:game_user, game:, user: user1)
-      create(:game_user, game:, user: user2)
-    end
-
-    it 'seriliazes' do
       game.start!
-      expect(game.go_fish).not_to be nil
+
+      expect(game.go_fish).not_to be_nil
     end
   end
+
+  # describe '#go_fish' do
+  #   let(:game) { create(:game) }
+  #   let(:user1) { create(:user) }
+  #   let(:user2) { create(:user) }
+
+  #   before do
+  #     create(:game_user, game:, user: user1)
+  #     create(:game_user, game:, user: user2)
+  #   end
+
+  #   it 'seriliazes' do
+  #     game.start!
+  #     expect(game.go_fish).not_to be nil
+  #   end
+  # end
 end
