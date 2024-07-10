@@ -109,6 +109,32 @@ RSpec.describe 'Games', type: :system, js: true do
       expect(page).to have_content('Edit')
     end
   end
+
+  describe 'joining the game' do
+    let!(:user) { create(:user) }
+    let!(:game) { create(:game) }
+
+    before do
+      login_as user
+    end
+
+    it 'does not join if already in the game' do
+      visit games_path
+      create(:game_user, user:, game:)
+      click_on 'Join'
+      expect(page).to have_content(game.name).twice
+      expect(page).to have_content('1/2 Players').twice
+    end
+
+    it 'does not join if the game is full' do
+      visit games_path
+      2.times { create(:game_user, user: create(:user), game:) }
+
+      click_on 'Join'
+      expect(page).to have_content(game.name).once
+      expect(page).to have_content('Game full').once
+    end
+  end
 end
 
 def expect_header(selector: '.games-list__header', text: 'Your Games')
