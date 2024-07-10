@@ -37,29 +37,9 @@ class GoFish
   end
 
   def self.from_json(json)
-    players = json['players'].map { |player| create_player(player) }
+    players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
-    deck = create_deck(json['deck'])
+    deck = Card.from_json(json['deck'])
     GoFish.new(players, current_player:, deck:)
-  end
-
-  def self.create_player(player)
-    hand = player['hand'].map { |card| create_card(card) }
-    books = player['books'].map { |book| create_book(book) }
-    Player.new(player['id'], player['name'], hand:, books:)
-  end
-
-  def self.create_deck(deck)
-    cards = deck['cards'].map { |card| create_card(card) }
-    Deck.new(cards)
-  end
-
-  def self.create_book(book)
-    cards = book['cards'].map { |card| create_card(card) }
-    Book.new(cards)
-  end
-
-  def self.create_card(card)
-    Card.new(card['rank'], card['suit'])
   end
 end

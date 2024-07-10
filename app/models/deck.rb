@@ -22,6 +22,11 @@ class Deck
 
   delegate :count, to: :cards
 
+  def self.from_json(json)
+    cards = json['cards'].map { |card| Card.from_json(card) }
+    Deck.new(cards)
+  end
+
   private
 
   def make_cards

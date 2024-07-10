@@ -52,6 +52,12 @@ class Player
     unique_cards != find_unique_cards
   end
 
+  def self.from_json(json)
+    hand = json['hand'].map { |card| Card.from_json(card) }
+    books = json['books'].map { |book| Book.from_json(book) }
+    Player.new(json['id'], json['name'], hand:, books:)
+  end
+
   private
 
   def find_unique_cards

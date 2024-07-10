@@ -11,4 +11,9 @@ class Book
   def value
     @value ||= cards.first.value
   end
+
+  def self.from_json(json)
+    cards = json['cards'].map { |card| Card.from_json(card) }
+    Book.new(cards)
+  end
 end

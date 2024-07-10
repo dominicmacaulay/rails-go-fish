@@ -17,7 +17,7 @@ RSpec.describe GoFish do
   describe 'serialization' do
     before do
       @game = GoFish.new(create_players(2))
-      @json = GoFish.dump(@game)
+      @json = @game.as_json
     end
     it 'converts the passed in object to json' do
       expect(@json['players'].count).to eql 2
@@ -29,7 +29,7 @@ RSpec.describe GoFish do
       @game.next_player
       expect(@game.current_player).to eql @game.players.last
       # reload the old state of the game
-      @game = GoFish.load(@json)
+      @game = GoFish.from_json(@json)
       expect(@game.current_player).to eql @game.players.first
     end
 

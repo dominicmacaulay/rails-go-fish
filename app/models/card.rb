@@ -23,4 +23,8 @@ class Card
   def ==(other)
     rank == other.rank && suit == other.suit
   end
+
+  def self.from_json(json)
+    Card.new(json['rank'], json['suit'])
+  end
 end
