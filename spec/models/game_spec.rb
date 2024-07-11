@@ -42,6 +42,7 @@ RSpec.describe Game, type: :model do
       user2 = create(:game_user, user: create(:user), game:)
       game.start!
 
+      expect(game.reload.go_fish).not_to be_nil
       players = game.go_fish.players
       expect(players.map(&:id)).to match [user1.user_id, user2.user_id]
       expect(game.go_fish.deck).to respond_to(:deal)
