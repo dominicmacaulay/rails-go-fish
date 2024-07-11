@@ -26,6 +26,14 @@ class GoFish
     self.current_player = players[(index + 1) % players.count]
   end
 
+  def ==(other)
+    return false unless players == other.players
+    return false unless current_player == other.current_player
+    return false unless deck == other.deck
+
+    true
+  end
+
   # JSON SECTION
   def self.dump(object)
     object.as_json
