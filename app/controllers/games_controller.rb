@@ -32,7 +32,7 @@ class GamesController < ApplicationController
   end
 
   def update # rubocop:disable Metrics/MethodLength
-    if round_params
+    if !round_params.empty?
       opponent = round_params[:opponent].to_i
       rank = round_params[:rank]
       if @game.play_round!(opponent, rank)

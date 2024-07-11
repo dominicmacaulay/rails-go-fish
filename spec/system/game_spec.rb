@@ -53,13 +53,14 @@ RSpec.describe 'Games', type: :system, js: true do
 
   describe 'showing a full game' do
     let!(:user) { create(:user) }
+    let!(:user2) { create(:user) }
     let!(:game) { create(:game) }
     let!(:game_user) { create(:game_user, game:, user:) }
 
     before do
       login_as user
-      user2 = create(:user)
       create(:game_user, game:, user: user2)
+      game.start!
       visit games_path
     end
 
@@ -69,11 +70,33 @@ RSpec.describe 'Games', type: :system, js: true do
       expect(page).not_to have_content('Join')
     end
 
-    it 'shows a game started message in the show window', chrome: true do
-      game.start!
+    it 'shows a game started message in the show window' do
       click_on 'Play now', match: :first
 
       expect(page).to have_content('Game started!')
+    end
+
+    it 'should show the players cards in the your hand section' do
+      click_on 'Play now', match: :first
+      session_player = game.go_fish.players.detect { |player| player.id == user.id }
+      session_player.hand.each do |card|
+        expect(page).to have_content("#{card.rank}, #{card.suit}").once
+      end
+    end
+
+    it 'should show the players cards in the accordion section' do
+      click_on 'Play now', match: :first
+      session_player = game.go_fish.players.detect { |player| player.id == user.id }
+      page.find('.accordion__contents', text: session_player.name).click
+      session_player.hand.each do |card|
+        expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+      end
+    end
+
+    it 'should show the opponents cards as hidden' do
+      click_on 'Play now', match: :first
+      page.find('.accordion__contents', text: user2.name).click
+      expect(page).to have_content('BACK', count: 5)
     end
   end
 
