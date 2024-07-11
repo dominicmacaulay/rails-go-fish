@@ -22,7 +22,7 @@ class Deck
 
   def ==(other)
     return false unless count == other.count
-    return false unless match_cards(other)
+    return false unless cards_match?(other)
 
     true
   end
@@ -36,7 +36,7 @@ class Deck
 
   private
 
-  def match_cards(other)
+  def cards_match?(other)
     cards.each do |card|
       return false unless other.cards.include?(card)
     end

@@ -45,11 +45,19 @@ class Player
   end
 
   def make_book?
-    unique_cards = find_unique_cards
+    unique_cards = hand.uniq(&:rank)
     unique_cards.each do |unique_card|
       create_book(unique_card.rank) if rank_count(unique_card.rank) >= Game::MINIMUM_BOOK_LENGTH
     end
     unique_cards != find_unique_cards
+  end
+
+  def ==(other)
+    return false unless id == other.id && name == other.name
+    return false unless hand_matches?(other)
+    return false unless books_match?(other)
+
+    true
   end
 
   def self.from_json(json)
@@ -60,8 +68,18 @@ class Player
 
   private
 
-  def find_unique_cards
-    hand.uniq(&:rank)
+  def hand_matches?(other)
+    hand.each do |card|
+      return false unless other.hand.include?(card)
+    end
+    true
+  end
+
+  def books_match?(other)
+    books.each do |book|
+      return false unless other.books.include?(book)
+    end
+    true
   end
 
   def create_book(rank)

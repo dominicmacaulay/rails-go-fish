@@ -3,6 +3,7 @@
 # class for Go fish
 class GoFish
   DEAL_NUMBER = 5
+  MINIMUM_BOOK_LENGTH = 4
 
   attr_reader :players, :deck
   attr_accessor :current_player
