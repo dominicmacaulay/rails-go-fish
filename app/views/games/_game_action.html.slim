@@ -2,13 +2,13 @@ form.game-action action=game_path(game) method="patch"
       .game-action__options
         .option
           label.form-label for="player-selection" Select Player:
-          select.form-control.form-control--small id="player-selection"
+          select.form-control.form-control--small#player-selection name='opponent'
             - go_fish.players.each do |other_player|
               - unless other_player == session_player
-                option value="#{go_fish.players.index(other_player)}" = other_player.name
+                option value="#{other_player.id}" = other_player.name
         .option
           label.form-label for="card-selection" Select Rank:
-          select.form-control.form-control--small id="card-selection"
+          select.form-control.form-control--small#card-selection name='rank'
             - go_fish.current_player.hand.uniq(&:rank).each do |card|
               option value="#{card.rank}" = card.rank
       button.btn-primary.btn--small Take Turn

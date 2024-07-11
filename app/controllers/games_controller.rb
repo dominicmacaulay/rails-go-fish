@@ -31,8 +31,14 @@ class GamesController < ApplicationController
     end
   end
 
-  def update
-    if @game.update(game_params)
+  def update # rubocop:disable Metrics/MethodLength
+    if round_params
+      if @game.play_round!(round_params)
+        redirect_to @game
+      else
+        redirect_to @game, alert: 'Error, Try taking your turn again'
+      end
+    elsif @game.update(game_params)
       redirect_to games_path, notice: 'Game was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
@@ -58,5 +64,9 @@ class GamesController < ApplicationController
 
   def game_params
     params.require(:game).permit(:name, :number_of_players)
+  end
+
+  def round_params
+    params.require(:game).permit(:opponent, :rank)
   end
 end
