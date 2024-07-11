@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Game, type: :model do
-  describe 'queue_full' do
+  context 'queue_full' do
     let!(:game) { create(:game) }
     let!(:user1) { create(:user) }
     let!(:game_user) { create(:game_user, game:, user: user1) }
@@ -17,7 +17,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'started?' do
+  context 'started?' do
     let(:game) { create(:game) }
     it 'should return false if the go_fish is nil' do
       expect(game.started?).to be false
@@ -30,7 +30,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'start!' do
+  context 'start!' do
     let(:game) { create(:game) }
     it 'returns false if the game is not full' do
       expect(game.start!).to be false
@@ -49,7 +49,7 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'serialization' do
+  context 'serialization' do
     let(:game) { create(:game) }
     let(:user1) { create(:user) }
     let(:user2) { create(:user) }
@@ -65,6 +65,40 @@ RSpec.describe Game, type: :model do
       go_fish = GoFish.new([player1, player2])
       game.update(go_fish:)
       expect(game.go_fish).to eq go_fish
+    end
+  end
+
+  context '#play_round!' do
+    let(:game) { create(:game) }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+
+    before do
+      create(:game_user, game:, user: user1)
+      create(:game_user, game:, user: user2)
+      game.start!
+    end
+
+    context 'when the parameters are invalid' do
+      it 'returns false when parameters are not given' do
+        result = game.play_round!
+        expect(result).to be false
+      end
+
+      it 'returns false when the opponent id is not valid' do
+        result = game.play_round!(1, game.go_fish.current_player.hand.sample.rank)
+        expect(result).to be false
+      end
+
+      it 'returns false when the opponent id is the current players' do
+        result = game.play_round!(user1.id, game.go_fish.current_player.hand.sample.rank)
+        expect(result).to be false
+      end
+
+      it "returns false when the rank is not in the player's hand" do
+        result = game.play_round!(user2.id, '11')
+        expect(result).to be false
+      end
     end
   end
 end

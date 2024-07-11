@@ -33,7 +33,9 @@ class GamesController < ApplicationController
 
   def update # rubocop:disable Metrics/MethodLength
     if round_params
-      if @game.play_round!(round_params)
+      opponent = round_params[:opponent].to_i
+      rank = round_params[:rank]
+      if @game.play_round!(opponent, rank)
         redirect_to @game
       else
         redirect_to @game, alert: 'Error, Try taking your turn again'

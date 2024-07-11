@@ -25,10 +25,9 @@ class Game < ApplicationRecord
     # update(go_fish:, started_at: DateTime.current)
   end
 
-  def play_round!(params)
-    opponent = find_player(params[:opponent])
-    rank = params[:rank]
-    return false unless opponent && go_fish.current_player.hand_has_rank?(rank)
+  def play_round!(opponent_id = nil, rank = nil)
+    opponent = find_player(opponent_id)
+    return false unless opponent && rank && go_fish.current_player.hand_has_rank?(rank)
 
     go_fish.play_round!
     save!
@@ -36,7 +35,9 @@ class Game < ApplicationRecord
 
   private
 
-  def find_player(id_string)
-    go_fish.players.detect { |player| player.id == id_string.to_i }
+  def find_player(id)
+    return if id == go_fish.current_player.id
+
+    go_fish.players.detect { |player| player.id == id }
   end
 end
