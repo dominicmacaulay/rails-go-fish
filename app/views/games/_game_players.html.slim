@@ -1,6 +1,7 @@
 .go-fish-panel.go-fish-panel--game-board
   .go-fish-panel__header.go-fish-panel__header--game-board
-    = link_to sanitize("&larr; Go back"), games_path
+    = link_to games_path, class: "btn-primary" do
+        = material_icon('arrow_back')
     span = game.name
 
   .go-fish-panel__content.go-fish-panel__content--game-board.accordion
