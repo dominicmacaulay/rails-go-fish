@@ -8,7 +8,7 @@ html lang="en" data-theme-mode="" data-theme=""
     = javascript_include_tag 'application', 'data-turbo-track': 'reload', defer: true
     meta content="width=device-width, initial-scale=1" name="viewport"
   body.app-body
-    .app__content style="overflow: auto"
+    .app__content
       = render "layouts/flash"
       = render 'confirm'
       = yield

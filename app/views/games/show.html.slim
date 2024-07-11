@@ -1,15 +1,139 @@
-main.container
+- if @game.queue_full? == false
   = link_to sanitize("&larr; Back to games"), games_path
   .header
     h1 = @game.name
+  p #{@game.users.count}/#{@game.number_of_players} players joined
+- else
+  .game-page
+    .go-fish-panel.go-fish-panel--game-board
+      .go-fish-panel__header.go-fish-panel__header--game-board
+        = link_to sanitize("&larr; Back to games"), games_path
+        span = @game.name
 
-  - if @game.queue_full?
-    p Game started!
-  - else
-    p #{@game.users.count}/#{@game.number_of_players} players joined
+      .go-fish-panel__content.go-fish-panel__content--game-board.accordion
+        span.accordion__heading Players
 
-  p Players:
-  ul
-    - @users.each do |user|
-      li
-        = user.name
+        details.accordion__contents
+          summary
+            .player-name
+              span.material-symbols-outlined.accordion__marker arrow_right
+              span Dominic
+            .player-details
+              span.cards Cards: 8
+              span.books Books: 2
+
+          .player-cards
+            .card-stack.card-stack--accordion-hand
+              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
+              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
+              img.playing-card src="assets/card-2H.svg" alt="Playing Card"
+              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
+              img.playing-card src="assets/card-2H.svg" alt="Playing Card"
+              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
+              img.playing-card src="assets/card-9S.svg" alt="Playing Card"
+              img.playing-card src="assets/card-9H.svg" alt="Playing Card"
+
+            .card-stack--accordion-books.card-stack
+              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
+              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
+
+        details.accordion__contents
+          summary
+            .player-name
+              span.material-symbols-outlined.accordion__marker arrow_right
+              span Gabriel
+            .player-details
+              span.cards Cards: 4
+              span.books Books: 1
+
+          .player-cards
+            .card-stack.card-stack--accordion-hand
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+
+            .card-stack--accordion-books.card-stack
+              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
+
+        details.accordion__contents
+          summary
+            .player-name
+              span.material-symbols-outlined.accordion__marker arrow_right
+              span Jullian
+            .player-details
+              span.cards Cards: 5
+              span.books Books: 3
+
+          .player-cards
+            .card-stack.card-stack--accordion-hand
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+              img.playing-card src="assets/card-back.svg" alt="Playing Card"
+
+            .card-stack--accordion-books.card-stack
+              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
+              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
+              img.playing-card src="assets/card-6H.svg" alt="Playing Card"
+
+    .go-fish-panel.go-fish-panel--game-feed
+      .go-fish-panel__header.go-fish-panel__header--game-feed
+        span Game Feed
+        .badge-primary.badge--with-border Your Turn
+
+      .go-fish-panel__content.go-fish-panel__content--game-feed
+        .notification-feed
+          .notification
+            span.notification--player-action Scott Asked Dominic for any 8's
+
+          .notification
+            span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+            span.notification__opponent-response Go Fish! Dominic did not have any 8's
+
+          .notification
+            span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+            span.notification__round-result You drew a 7 of Diamonds
+
+        .game-action
+          .game-action__options
+            .option
+              label.form-label for="player-selection" Player
+              select.form-control.form-control--small id="player-selection"
+                option Dominic
+                option Gabriel
+                option Jullian
+
+            .option
+              label.form-label for="card-selection" Card
+              select.form-control.form-control--small id="card-selection"
+                option 4
+                option Jack
+                option Queen
+
+          button.btn-primary.btn--small Ask Gabriel for 7's
+
+    .go-fish-panel.go-fish-panel--your-hand
+      .go-fish-panel__header.go-fish-panel__header--your-hand
+        span Your Hand
+
+      .go-fish-panel__content.go-fish-panel__content--your-hand
+        .card-stack
+          img.playing-card src="assets/card-KD.svg" alt="Playing Card"
+          img.playing-card src="assets/card-KD.svg" alt="Playing Card"
+          img.playing-card src="assets/card-2H.svg" alt="Playing Card"
+          img.playing-card src="assets/card-2C.svg" alt="Playing Card"
+          img.playing-card src="assets/card-2H.svg" alt="Playing Card"
+          img.playing-card src="assets/card-2C.svg" alt="Playing Card"
+          img.playing-card src="assets/card-9S.svg" alt="Playing Card"
+          img.playing-card src="assets/card-9H.svg" alt="Playing Card"
+
+    .go-fish-panel.go-fish-panel--your-books
+      .go-fish-panel__header.go-fish-panel__header--your-books
+        span Your Books
+
+      .go-fish-panel__content.go-fish-panel__content--your-books
+        .card-stack.card-stack--your-books
+          img.playing-card src="assets/card-10S.svg" alt="Playing Card"
+          img.playing-card src="assets/card-10S.svg" alt="Playing Card"

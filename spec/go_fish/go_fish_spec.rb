@@ -15,22 +15,20 @@ RSpec.describe GoFish do
   end
 
   describe 'serialization' do
-    before do
-      @game = GoFish.new(create_players(2))
-      @json = @game.as_json
-    end
+    let(:game) { GoFish.new(create_players(2)) }
+    let(:json) { game.as_json }
     it 'converts the passed in object to json' do
-      expect(@json['players'].count).to eql 2
-      expect(@json['current_player']).to eql @json['players'].first
+      expect(json['players'].count).to eql 2
+      expect(json['current_player']).to eql json['players'].first
     end
 
     it 'converts the passed json into an object' do
       # change the state of the game
-      @game.next_player
-      expect(@game.current_player).to eql @game.players.last
+      game.next_player
+      expect(game.current_player).to eql game.players.last
       # reload the old state of the game
-      @game = GoFish.from_json(@json)
-      expect(@game.current_player).to eql @game.players.first
+      game = GoFish.from_json(json)
+      expect(game.current_player).to eql game.players.first
     end
 
     it 'returns nil if the parameter is nil' do

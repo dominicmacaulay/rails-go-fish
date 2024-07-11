@@ -39,7 +39,7 @@ class GoFish
   def self.from_json(json)
     players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
-    deck = Card.from_json(json['deck'])
+    deck = Deck.from_json(json['deck'])
     GoFish.new(players, current_player:, deck:)
   end
 end

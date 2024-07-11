@@ -24,6 +24,7 @@ RSpec.describe Game, type: :model do
     end
 
     it 'updates the go_fish attribute' do
+      # TODO: check that go fish got populated
       expect(game.go_fish).to be_nil
 
       2.times { create(:game_user, user: create(:user), game:) }
@@ -33,19 +34,20 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  # describe '#go_fish' do
-  #   let(:game) { create(:game) }
-  #   let(:user1) { create(:user) }
-  #   let(:user2) { create(:user) }
+  describe '#go_fish' do
+    let(:game) { create(:game) }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
 
-  #   before do
-  #     create(:game_user, game:, user: user1)
-  #     create(:game_user, game:, user: user2)
-  #   end
+    before do
+      create(:game_user, game:, user: user1)
+      create(:game_user, game:, user: user2)
+    end
 
-  #   it 'seriliazes' do
-  #     game.start!
-  #     expect(game.go_fish).not_to be nil
-  #   end
-  # end
+    it 'seriliazes' do
+      # TODO: change this to serialization instead of start!
+      game.start!
+      expect(game.go_fish).not_to be nil
+    end
+  end
 end

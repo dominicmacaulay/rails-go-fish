@@ -12,6 +12,10 @@ class Book
     @value ||= cards.first.value
   end
 
+  def ==(other)
+    value == other.value
+  end
+
   def self.from_json(json)
     cards = json['cards'].map { |card| Card.from_json(card) }
     Book.new(cards)
