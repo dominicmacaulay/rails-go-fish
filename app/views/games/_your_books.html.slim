@@ -1,0 +1,7 @@
+.go-fish-panel.go-fish-panel--your-books
+  .go-fish-panel__header.go-fish-panel__header--your-books
+    span Your Books
+  .go-fish-panel__content.go-fish-panel__content--your-books
+    .card-stack.card-stack--your-books
+      - player.books.each do |book|
+        = render "playing_card", back: false, rank: book.first.rank, suit: book.first.suit

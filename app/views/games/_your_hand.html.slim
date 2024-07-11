@@ -1,0 +1,7 @@
+.go-fish-panel.go-fish-panel--your-hand
+  .go-fish-panel__header.go-fish-panel__header--your-hand
+    span Your Hand
+  .go-fish-panel__content.go-fish-panel__content--your-hand
+    .card-stack
+      - player.hand.each do |card|
+        = render "playing_card", back: false, rank: card.rank, suit: card.suit

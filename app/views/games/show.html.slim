@@ -6,20 +6,12 @@
 - else
   - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id }
   .game-page
-    .go-fish-panel.go-fish-panel--game-board
-      .go-fish-panel__header.go-fish-panel__header--game-board
-        = link_to sanitize("&larr; Go back"), games_path
-        span = @game.name
-
-      .go-fish-panel__content.go-fish-panel__content--game-board.accordion
-        span.accordion__heading Players
-        - @game.go_fish.players.each do |player|
-          = render "player_accordion", player: player, reveal_hand: player == session_player
+    = render "game_players", game: @game, players: @game.go_fish.players, session_player:
 
     .go-fish-panel.go-fish-panel--game-feed
       .go-fish-panel__header.go-fish-panel__header--game-feed
         span Game Feed
-        .badge-primary.badge--with-border Your Turn
+        .badge-primary.badge--with-border #{@game.go_fish.current_player.name}'s Turn
 
       .go-fish-panel__content.go-fish-panel__content--game-feed
         .notification-feed
@@ -52,18 +44,6 @@
 
           button.btn-primary.btn--small Ask Gabriel for 7's
 
-    .go-fish-panel.go-fish-panel--your-hand
-      .go-fish-panel__header.go-fish-panel__header--your-hand
-        span Your Hand
-      .go-fish-panel__content.go-fish-panel__content--your-hand
-        .card-stack
-          - session_player.hand.each do |card|
-            = render "playing_card", back: false, rank: card.rank, suit: card.suit
+    = render "your_hand", player: session_player
 
-    .go-fish-panel.go-fish-panel--your-books
-      .go-fish-panel__header.go-fish-panel__header--your-books
-        span Your Books
-      .go-fish-panel__content.go-fish-panel__content--your-books
-        .card-stack.card-stack--your-books
-          - session_player.books.each do |book|
-            = render "playing_card", back: false, rank: book.first.rank, suit: book.first.suit
+    = render "your_books", player: session_player

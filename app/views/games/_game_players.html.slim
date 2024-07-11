@@ -1,0 +1,9 @@
+.go-fish-panel.go-fish-panel--game-board
+  .go-fish-panel__header.go-fish-panel__header--game-board
+    = link_to sanitize("&larr; Go back"), games_path
+    span = game.name
+
+  .go-fish-panel__content.go-fish-panel__content--game-board.accordion
+    span.accordion__heading Players
+    - players.each do |player|
+      = render "player_accordion", player: player, reveal_hand: player == session_player
