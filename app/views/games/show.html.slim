@@ -1,4 +1,4 @@
-- if @game.queue_full? == false
+- unless @game.started?
   = link_to sanitize("&larr; Back to games"), games_path
   .header
     h1 = @game.name
@@ -7,76 +7,14 @@
   .game-page
     .go-fish-panel.go-fish-panel--game-board
       .go-fish-panel__header.go-fish-panel__header--game-board
-        = link_to sanitize("&larr; Back to games"), games_path
+        = link_to sanitize("&larr; Go back"), games_path
         span = @game.name
 
       .go-fish-panel__content.go-fish-panel__content--game-board.accordion
         span.accordion__heading Players
 
-        details.accordion__contents
-          summary
-            .player-name
-              span.material-symbols-outlined.accordion__marker arrow_right
-              span Dominic
-            .player-details
-              span.cards Cards: 8
-              span.books Books: 2
-
-          .player-cards
-            .card-stack.card-stack--accordion-hand
-              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
-              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
-              img.playing-card src="assets/card-2H.svg" alt="Playing Card"
-              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
-              img.playing-card src="assets/card-2H.svg" alt="Playing Card"
-              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
-              img.playing-card src="assets/card-9S.svg" alt="Playing Card"
-              img.playing-card src="assets/card-9H.svg" alt="Playing Card"
-
-            .card-stack--accordion-books.card-stack
-              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
-              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
-
-        details.accordion__contents
-          summary
-            .player-name
-              span.material-symbols-outlined.accordion__marker arrow_right
-              span Gabriel
-            .player-details
-              span.cards Cards: 4
-              span.books Books: 1
-
-          .player-cards
-            .card-stack.card-stack--accordion-hand
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-
-            .card-stack--accordion-books.card-stack
-              img.playing-card src="assets/card-2C.svg" alt="Playing Card"
-
-        details.accordion__contents
-          summary
-            .player-name
-              span.material-symbols-outlined.accordion__marker arrow_right
-              span Jullian
-            .player-details
-              span.cards Cards: 5
-              span.books Books: 3
-
-          .player-cards
-            .card-stack.card-stack--accordion-hand
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-              img.playing-card src="assets/card-back.svg" alt="Playing Card"
-
-            .card-stack--accordion-books.card-stack
-              img.playing-card src="assets/card-KD.svg" alt="Playing Card"
-              img.playing-card src="assets/card-10S.svg" alt="Playing Card"
-              img.playing-card src="assets/card-6H.svg" alt="Playing Card"
+        - @game.go_fish.players.each do |player|
+          = render "player_accordion", player: player
 
     .go-fish-panel.go-fish-panel--game-feed
       .go-fish-panel__header.go-fish-panel__header--game-feed

@@ -1,0 +1,17 @@
+details.accordion__contents
+  summary
+    .player-name
+      span.material-symbols-outlined.accordion__marker arrow_right
+      span = player.name
+    .player-details
+      span.cards Cards: #{player.hand_count}
+      span.books Books: #{player.book_count}
+
+  .player-cards
+    .card-stack.card-stack--accordion-hand
+      - player.hand.each do |card|
+        = render "playing_card", rank: card.rank, suit: card.suit
+
+    .card-stack--accordion-books.card-stack
+      - player.books.each do |book|
+        = render "playing_card", rank: book.cards.first.rank, suit: book.cards.first.suit

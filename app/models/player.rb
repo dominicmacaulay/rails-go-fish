@@ -17,7 +17,9 @@ class Player
     hand.push(*cards)
   end
 
-  delegate :count, to: :hand, prefix: true
+  def hand_count # rubocop:disable Rails/Delegate
+    hand.count
+  end
 
   def book_count
     books.count

@@ -9,6 +9,10 @@ class Game < ApplicationRecord
     users.count == number_of_players
   end
 
+  def started?
+    !go_fish.nil?
+  end
+
   serialize :go_fish, coder: GoFish
 
   def start!

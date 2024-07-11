@@ -17,6 +17,19 @@ RSpec.describe Game, type: :model do
     end
   end
 
+  describe 'started?' do
+    let(:game) { create(:game) }
+    it 'should return false if the go_fish is nil' do
+      expect(game.started?).to be false
+    end
+
+    it 'should return true if go_fish is not nil' do
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      expect(game.started?).to be true
+    end
+  end
+
   describe 'start!' do
     let(:game) { create(:game) }
     it 'returns false if the game is not full' do
