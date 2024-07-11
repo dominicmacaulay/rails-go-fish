@@ -20,6 +20,13 @@ class Deck
     self.cards = []
   end
 
+  def ==(other)
+    return false unless count == other.count
+    return false unless match_cards(other)
+
+    true
+  end
+
   delegate :count, to: :cards
 
   def self.from_json(json)
@@ -28,6 +35,13 @@ class Deck
   end
 
   private
+
+  def match_cards(other)
+    cards.each do |card|
+      return false unless other.cards.include?(card)
+    end
+    true
+  end
 
   def make_cards
     Card::SUITS.flat_map do |suit|
