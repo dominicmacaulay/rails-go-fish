@@ -1,0 +1,19 @@
+.go-fish-panel.go-fish-panel--game-feed
+  .go-fish-panel__header.go-fish-panel__header--game-feed
+    span Game Feed
+    .badge-primary.badge--with-border #{current_player.name}'s Turn
+
+  .go-fish-panel__content.go-fish-panel__content--game-feed
+    .notification-feed
+      .notification
+        span.notification--player-action Scott Asked Dominic for any 8's
+
+      .notification
+        span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+        span.notification__opponent-response Go Fish! Dominic did not have any 8's
+
+      .notification
+        span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+        span.notification__round-result You drew a 7 of Diamonds
+
+    = render "game_action", game:, go_fish:, session_player:

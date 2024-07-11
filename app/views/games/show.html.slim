@@ -8,41 +8,7 @@
   .game-page
     = render "game_players", game: @game, players: @game.go_fish.players, session_player:
 
-    .go-fish-panel.go-fish-panel--game-feed
-      .go-fish-panel__header.go-fish-panel__header--game-feed
-        span Game Feed
-        .badge-primary.badge--with-border #{@game.go_fish.current_player.name}'s Turn
-
-      .go-fish-panel__content.go-fish-panel__content--game-feed
-        .notification-feed
-          .notification
-            span.notification--player-action Scott Asked Dominic for any 8's
-
-          .notification
-            span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
-            span.notification__opponent-response Go Fish! Dominic did not have any 8's
-
-          .notification
-            span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
-            span.notification__round-result You drew a 7 of Diamonds
-
-        .game-action
-          .game-action__options
-            .option
-              label.form-label for="player-selection" Player
-              select.form-control.form-control--small id="player-selection"
-                option Dominic
-                option Gabriel
-                option Jullian
-
-            .option
-              label.form-label for="card-selection" Card
-              select.form-control.form-control--small id="card-selection"
-                option 4
-                option Jack
-                option Queen
-
-          button.btn-primary.btn--small Ask Gabriel for 7's
+    = render "game_feed", game: @game, go_fish: @game.go_fish, current_player: @game.go_fish.current_player, session_player:
 
     = render "your_hand", player: session_player
 
