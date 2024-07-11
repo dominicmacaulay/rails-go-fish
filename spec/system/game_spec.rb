@@ -69,7 +69,8 @@ RSpec.describe 'Games', type: :system, js: true do
       expect(page).not_to have_content('Join')
     end
 
-    it 'shows a game started message in the show window' do
+    it 'shows a game started message in the show window', chrome: true do
+      game.start!
       click_on 'Play now', match: :first
 
       expect(page).to have_content('Game started!')
