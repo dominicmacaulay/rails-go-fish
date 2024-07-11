@@ -23,18 +23,19 @@ RSpec.describe Game, type: :model do
       expect(game.start!).to be false
     end
 
-    it 'updates the go_fish attribute' do
-      # TODO: check that go fish got populated
+    it 'populates the go_fish attributes' do
       expect(game.go_fish).to be_nil
-
-      2.times { create(:game_user, user: create(:user), game:) }
+      user1 = create(:game_user, user: create(:user), game:)
+      user2 = create(:game_user, user: create(:user), game:)
       game.start!
 
-      expect(game.go_fish).not_to be_nil
+      players = game.go_fish.players
+      expect(players.map(&:id)).to match [user1.user_id, user2.user_id]
+      expect(game.go_fish.deck).to respond_to(:deal)
     end
   end
 
-  describe '#go_fish' do
+  describe 'serialization' do
     let(:game) { create(:game) }
     let(:user1) { create(:user) }
     let(:user2) { create(:user) }
@@ -45,9 +46,11 @@ RSpec.describe Game, type: :model do
     end
 
     it 'seriliazes' do
-      # TODO: change this to serialization instead of start!
-      game.start!
-      expect(game.go_fish).not_to be nil
+      player1 = Player.new(user1.id, user1.name)
+      player2 = Player.new(user2.id, user2.name)
+      go_fish = GoFish.new([player1, player2])
+      game.update(go_fish:)
+      expect(game.go_fish).to eq go_fish
     end
   end
 end

@@ -10,11 +10,6 @@
         gap: var(--op-space-2x-large);
         flex: 1 0 0;
 
-        .side-panel__header {
-            // TODO: get this font
-            // font-family: "Finger Paint";
-        }
-
         .side-panel__body {
             display: flex;
             flex-direction: column;

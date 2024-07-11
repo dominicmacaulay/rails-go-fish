@@ -27,6 +27,7 @@ class GoFish
   end
 
   def ==(other)
+    return false unless other
     return false unless players == other.players
     return false unless current_player == other.current_player
     return false unless deck == other.deck
