@@ -4,6 +4,7 @@
     h1 = @game.name
   p #{@game.users.count}/#{@game.number_of_players} players joined
 - else
+  - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id }
   .game-page
     .go-fish-panel.go-fish-panel--game-board
       .go-fish-panel__header.go-fish-panel__header--game-board
@@ -12,9 +13,8 @@
 
       .go-fish-panel__content.go-fish-panel__content--game-board.accordion
         span.accordion__heading Players
-
         - @game.go_fish.players.each do |player|
-          = render "player_accordion", player: player
+          = render "player_accordion", player: player, reveal_hand: player == session_player
 
     .go-fish-panel.go-fish-panel--game-feed
       .go-fish-panel__header.go-fish-panel__header--game-feed
@@ -55,23 +55,15 @@
     .go-fish-panel.go-fish-panel--your-hand
       .go-fish-panel__header.go-fish-panel__header--your-hand
         span Your Hand
-
       .go-fish-panel__content.go-fish-panel__content--your-hand
         .card-stack
-          img.playing-card src="assets/card-KD.svg" alt="Playing Card"
-          img.playing-card src="assets/card-KD.svg" alt="Playing Card"
-          img.playing-card src="assets/card-2H.svg" alt="Playing Card"
-          img.playing-card src="assets/card-2C.svg" alt="Playing Card"
-          img.playing-card src="assets/card-2H.svg" alt="Playing Card"
-          img.playing-card src="assets/card-2C.svg" alt="Playing Card"
-          img.playing-card src="assets/card-9S.svg" alt="Playing Card"
-          img.playing-card src="assets/card-9H.svg" alt="Playing Card"
+          - session_player.hand.each do |card|
+            = render "playing_card", back: false, rank: card.rank, suit: card.suit
 
     .go-fish-panel.go-fish-panel--your-books
       .go-fish-panel__header.go-fish-panel__header--your-books
         span Your Books
-
       .go-fish-panel__content.go-fish-panel__content--your-books
         .card-stack.card-stack--your-books
-          img.playing-card src="assets/card-10S.svg" alt="Playing Card"
-          img.playing-card src="assets/card-10S.svg" alt="Playing Card"
+          - session_player.books.each do |book|
+            = render "playing_card", back: false, rank: book.first.rank, suit: book.first.suit

@@ -1,2 +1,5 @@
 .playing-card
-  span #{rank}, #{suit}
+  - if back
+    span BACK
+  - else
+    span #{rank}, #{suit}

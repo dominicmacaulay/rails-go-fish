@@ -10,8 +10,11 @@ details.accordion__contents
   .player-cards
     .card-stack.card-stack--accordion-hand
       - player.hand.each do |card|
-        = render "playing_card", rank: card.rank, suit: card.suit
+        - if reveal_hand
+          = render "playing_card", back: false, rank: card.rank, suit: card.suit
+        - else
+          = render "playing_card", back: true
 
     .card-stack--accordion-books.card-stack
       - player.books.each do |book|
-        = render "playing_card", rank: book.cards.first.rank, suit: book.cards.first.suit
+        = render "playing_card", back: false, rank: book.cards.first.rank, suit: book.cards.first.suit
