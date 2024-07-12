@@ -72,6 +72,10 @@ RSpec.describe Game, type: :model do
     let(:game) { create(:game) }
     let(:user1) { create(:user) }
     let(:user2) { create(:user) }
+    let(:go_fish) { game.go_fish }
+    let(:current_user) { game.users.detect { |user| user.id == go_fish.current_player.id } }
+    let(:opponent) { game.users.detect { |user| user.id != go_fish.current_player.id } }
+    let(:rank) { go_fish.current_player.hand.sample.rank }
 
     before do
       create(:game_user, game:, user: user1)
@@ -86,17 +90,22 @@ RSpec.describe Game, type: :model do
       end
 
       it 'returns false when the opponent id is not valid' do
-        result = game.play_round!(1, game.go_fish.current_player.hand.sample.rank)
+        result = game.play_round!(1, rank, current_user)
         expect(result).to be false
       end
 
       it 'returns false when the opponent id is the current players' do
-        result = game.play_round!(user1.id, game.go_fish.current_player.hand.sample.rank)
+        result = game.play_round!(current_user.id, rank, current_user)
         expect(result).to be false
       end
 
       it "returns false when the rank is not in the player's hand" do
-        result = game.play_round!(user2.id, '11')
+        result = game.play_round!(opponent.id, '11', current_user)
+        expect(result).to be false
+      end
+
+      it 'returns false when the user who made the request is not the current player' do
+        result = game.play_round!(opponent.id, rank, opponent)
         expect(result).to be false
       end
     end

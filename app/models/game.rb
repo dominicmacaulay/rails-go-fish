@@ -24,10 +24,10 @@ class Game < ApplicationRecord
     update(go_fish:, started_at: DateTime.current)
   end
 
-  def play_round!(opponent_id = nil, rank = nil)
+  def play_round!(opponent_id = nil, rank = nil, requester = nil)
     opponent = go_fish.match_player_id(opponent_id)
     chosen_rank = go_fish.validate_rank(rank)
-    return false unless opponent && chosen_rank
+    return false unless opponent && chosen_rank && requester.id == go_fish.current_player.id
 
     go_fish.play_round!(opponent, rank)
     save!

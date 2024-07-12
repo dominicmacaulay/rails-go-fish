@@ -57,60 +57,77 @@ RSpec.describe 'Games', type: :system, js: true do
     let!(:game) { create(:game) }
     let!(:game_user) { create(:game_user, game:, user:) }
 
-    before do
-      login_as user
-      create(:game_user, game:, user: user2)
-      game.start!
-      visit games_path
-    end
+    context 'logging in as the current player' do
+      before do
+        login_as user
+        create(:game_user, game:, user: user2)
+        game.start!
+        visit games_path
+      end
 
-    it 'displays that the game is full and takes away the join button when full' do
-      expect(page).to have_content('Game full')
-      expect(page).not_to have_content('Players')
-      expect(page).not_to have_content('Join')
-    end
+      it 'displays that the game is full and takes away the join button when full' do
+        expect(page).to have_content('Game full')
+        expect(page).not_to have_content('Players')
+        expect(page).not_to have_content('Join')
+      end
 
-    it 'shows a game started message in the show window' do
-      click_on 'Play now', match: :first
+      it 'shows a game started message in the show window' do
+        click_on 'Play now', match: :first
 
-      expect(page).to have_content('Game started!')
-    end
+        expect(page).to have_content('Game started!')
+      end
 
-    it 'should show the players cards in the your hand section' do
-      click_on 'Play now', match: :first
-      session_player = game.go_fish.players.detect { |player| player.id == user.id }
-      session_player.hand.each do |card|
-        expect(page).to have_content("#{card.rank}, #{card.suit}").once
+      it 'should show the players cards in the your hand section' do
+        click_on 'Play now', match: :first
+        session_player = game.go_fish.players.detect { |player| player.id == user.id }
+        session_player.hand.each do |card|
+          expect(page).to have_content("#{card.rank}, #{card.suit}").once
+        end
+      end
+
+      it 'should show the players cards in the accordion section' do
+        click_on 'Play now', match: :first
+        session_player = game.go_fish.players.detect { |player| player.id == user.id }
+        page.find('.accordion__contents', text: session_player.name).click
+        session_player.hand.each do |card|
+          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+        end
+      end
+
+      it 'should show the opponents cards as hidden' do
+        click_on 'Play now', match: :first
+        page.find('.accordion__contents', text: user2.name).click
+        expect(page).to have_content('BACK', count: 5)
+      end
+
+      it 'should show the game action section if it is your turn' do
+        click_on 'Play now', match: :first
+        expect(page).to have_content('Take Turn')
+      end
+
+      it 'should no longer display the game action window after you take your turn' do
+        click_on 'Play now', match: :first
+        click_on 'Take Turn'
+
+        page.refresh
+
+        expect(page).not_to have_content('Take Turn')
       end
     end
 
-    it 'should show the players cards in the accordion section' do
-      click_on 'Play now', match: :first
-      session_player = game.go_fish.players.detect { |player| player.id == user.id }
-      page.find('.accordion__contents', text: session_player.name).click
-      session_player.hand.each do |card|
-        expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+    context 'logging in as the opponent' do
+      before do
+        create(:game_user, game:, user: user2)
+        game.start!
       end
-    end
 
-    it 'should show the opponents cards as hidden' do
-      click_on 'Play now', match: :first
-      page.find('.accordion__contents', text: user2.name).click
-      expect(page).to have_content('BACK', count: 5)
-    end
-
-    it 'should show the game action section if it is your turn' do
-      click_on 'Play now', match: :first
-      expect(page).to have_content('Take Turn')
-    end
-
-    it ' should not show the game action section if it is not your turn' do
-      click_on 'Sign out'
-      non_current_player = user.id == game.go_fish.current_player.id ? user2 : user
-      login_as non_current_player
-      visit game_path(game)
-      expect(page).to have_content('Game started!')
-      expect(page).not_to have_content('Take Turn')
+      it ' should not show the game action section if it is not your turn' do
+        non_current_player = game.users.detect { |user| user.id != game.go_fish.current_player.id }
+        login_as non_current_player
+        visit game_path(game)
+        expect(page).to have_content('Game started!')
+        expect(page).not_to have_content('Take Turn')
+      end
     end
   end
 
