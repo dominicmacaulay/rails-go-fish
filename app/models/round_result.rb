@@ -18,15 +18,14 @@ class RoundResult
     @book_made = false
   end
 
-  def display_for(player)
+  def generate_message_for(player)
     message = current_player_message if player == current_player
 
     message = opponent_message if player == opponent
 
     message = other_player_message unless player == current_player || player == opponent
 
-    message.concat book_made ? ', then created a book with them.' : '.'
-
+    message.result.concat book_made ? ' and created a book with them' : ''
     message
   end
 
@@ -52,25 +51,32 @@ class RoundResult
   private
 
   def current_player_message
-    message = "You asked #{opponent.name} for #{rank}'s and "
-    message.concat(fished_message)
-    message.concat(got_cards_message(reveal_card: true))
+    action = "You asked #{opponent.name} for #{rank}'s"
+    opponent_response = opponent_or_fish
+    result = 'You '.concat(got_cards_message(reveal_card: true))
+    RoundResultMessage.new(action:, opponent_response:, result:)
   end
 
   def opponent_message
-    message = "#{current_player.name} asked you for #{rank}'s and "
-    message.concat(fished_message)
-    message.concat(got_cards_message)
+    action = "#{current_player.name} asked you for #{rank}'s"
+    opponent_response = opponent_or_fish('second')
+    result = "#{current_player.name} ".concat(got_cards_message)
+    RoundResultMessage.new(action:, opponent_response:, result:)
   end
 
   def other_player_message
-    message = "#{current_player.name} asked #{opponent.name} for #{rank}'s and "
-    message.concat(fished_message)
-    message.concat(got_cards_message)
+    action = "#{current_player.name} asked #{opponent.name} for #{rank}'s"
+    opponent_response = opponent_or_fish
+    result = "#{current_player.name} ".concat(got_cards_message)
+    RoundResultMessage.new(action:, opponent_response:, result:)
   end
 
-  def fished_message
-    fished == true ? 'went fishing and ' : ''
+  def opponent_or_fish(party = 'first or third')
+    unless party == 'second'
+      return fished ? "Go Fish! #{opponent.name} did not have any #{rank}'s" : "#{opponent.name} had #{rank}'s"
+    end
+
+    fished ? "Go Fish! You did not have any #{rank}'s" : "You had #{rank}'s"
   end
 
   def got_cards_message(reveal_card: false)
@@ -79,7 +85,7 @@ class RoundResult
     elsif !empty_pond
       reveal_card ? "got a #{card_gotten}" : 'had no luck'
     else
-      'got nothing! The pond is empty'
+      'got nothing for the pond is empty'
     end
   end
 end

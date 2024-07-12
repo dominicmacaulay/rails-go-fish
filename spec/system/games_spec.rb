@@ -132,6 +132,17 @@ RSpec.describe 'Games', type: :system, js: true do
           expect(page).to have_content("#{card.rank}, #{card.suit}").twice
         end
       end
+
+      xit 'does not reload the full page when the player takes a turn' do
+        click_on 'Play now', match: :first
+        session_player = game.go_fish.players.detect { |player| player.id == user.id }
+        page.find('.accordion__contents', text: session_player.name).click
+
+        click_on 'Take Turn'
+        session_player.hand.each do |card|
+          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+        end
+      end
     end
 
     context 'logging in as the opponent' do
