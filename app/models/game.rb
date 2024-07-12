@@ -21,14 +21,13 @@ class Game < ApplicationRecord
     players = users.map { |user| Player.new(user.id, user.name) }
     go_fish = GoFish.new(players)
     go_fish.deal!
-    update(go_fish:)
-    # update(go_fish:, started_at: DateTime.current)
+    update(go_fish:, started_at: DateTime.current)
   end
 
   def play_round!(opponent_id = nil, rank = nil)
     opponent = go_fish.match_player_id(opponent_id)
-    rank = go_fish.validate_rank(rank)
-    return false unless opponent && rank
+    chosen_rank = go_fish.validate_rank(rank)
+    return false unless opponent && chosen_rank
 
     go_fish.play_round!
     save!
