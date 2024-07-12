@@ -55,10 +55,10 @@ RSpec.describe 'Games', type: :system, js: true do
     let!(:user) { create(:user) }
     let!(:user2) { create(:user) }
     let!(:game) { create(:game) }
-    let!(:game_user) { create(:game_user, game:, user:) }
 
     context 'logging in as the current player' do
       before do
+        create(:game_user, game:, user:)
         login_as user
         create(:game_user, game:, user: user2)
         game.start!
@@ -105,18 +105,38 @@ RSpec.describe 'Games', type: :system, js: true do
         expect(page).to have_content('Take Turn')
       end
 
-      it 'should no longer display the game action window after you take your turn' do
+      it 'sends the form information to the game model' do
+        rank = game.go_fish.current_player.hand.sample.rank
+        expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, rank, user)
         click_on 'Play now', match: :first
+
+        expect(page).to have_selector('.btn-primary', text: 'Take Turn')
+
+        select user2.name, from: 'opponent'
+        select rank, from: 'rank'
+        click_on 'Take Turn'
+      end
+
+      it 'reflects that the player has drawn a card' do
+        click_on 'Play now', match: :first
+
+        rank = game.go_fish.current_player.hand.sample.rank
+        select user2.name, from: 'opponent'
+        select rank, from: 'rank'
         click_on 'Take Turn'
 
-        page.refresh
-
-        expect(page).not_to have_content('Take Turn')
+        expect(page).to have_content('Cards: 6')
+        session_player = game.go_fish.players.detect { |player| player.id == user.id }
+        page.find('.accordion__contents', text: session_player.name).click
+        session_player.hand.each do |card|
+          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+        end
       end
     end
 
     context 'logging in as the opponent' do
       before do
+        create(:game_user, game:, user:)
         create(:game_user, game:, user: user2)
         game.start!
       end

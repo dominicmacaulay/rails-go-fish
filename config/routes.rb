@@ -11,5 +11,6 @@ Rails.application.routes.draw do
   root to: "pages#home"
   resources :games do
     resources :game_users, only: %i[create destroy]
+    resources :rounds, only: %i[create]
   end
 end
