@@ -29,7 +29,7 @@ class Game < ApplicationRecord
     chosen_rank = go_fish.validate_rank(rank)
     return false unless opponent && chosen_rank
 
-    go_fish.play_round!
+    go_fish.play_round!(opponent, rank)
     save!
   end
 end

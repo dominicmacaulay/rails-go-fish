@@ -120,7 +120,7 @@ RSpec.describe GoFish do
       end
     end
 
-    describe 'play_round' do
+    describe 'play_round!' do
       before do
         player1.add_to_hand(Card.new('4', 'Hearts'))
       end
@@ -129,12 +129,12 @@ RSpec.describe GoFish do
           player2.add_to_hand(Card.new('4', 'Spades'))
         end
         it 'take the card from the opponent and gives it to the player' do
-          go_fish.play_round(player2, '4')
+          go_fish.play_round!(player2, '4')
           expect(player2.hand_has_rank?('4')).to be false
           expect(player1.rank_count('4')).to be 2
         end
         it 'returns object' do
-          result = go_fish.play_round(player2, '4')
+          result = go_fish.play_round!(player2, '4')
           object = RoundResult.new(player: player1, opponent: player2, rank: '4', got_rank: true, amount: 'one')
           expect(result).to eq object
         end
@@ -143,7 +143,7 @@ RSpec.describe GoFish do
       describe 'runs transaction if the pond has no cards in it' do
         it 'sends the player a message saying that the pond was empty' do
           go_fish.deck.clear_cards
-          result = go_fish.play_round(player2, '4')
+          result = go_fish.play_round!(player2, '4')
           object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, empty_pond: true)
           expect(result).to eq object
         end
@@ -152,13 +152,13 @@ RSpec.describe GoFish do
       describe 'runs transaction with the pond' do
         it 'returns message object if the player got the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
-          result = go_fish.play_round(player2, '4')
+          result = go_fish.play_round!(player2, '4')
           object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, got_rank: true)
           expect(result).to eq object
         end
         it 'returns a message object if the player did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
-          result = go_fish.play_round(player2, '2')
+          result = go_fish.play_round!(player2, '2')
           object = RoundResult.new(player: player1, opponent: player2, rank: '2', fished: true, card_gotten: '4')
           expect(result).to eq object
         end
@@ -167,7 +167,7 @@ RSpec.describe GoFish do
       describe 'creating a book' do
         it 'creates books if possible' do
           player2.add_to_hand([Card.new('4', 'Clubs'), Card.new('4', 'Spades'), Card.new('4', 'Diamonds')])
-          go_fish.play_round(player2, '4')
+          go_fish.play_round!(player2, '4')
           expect(player1.book_count).to be 1
         end
       end
@@ -176,14 +176,14 @@ RSpec.describe GoFish do
         it 'switches the player after the transactions has occurred if they did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('6', 'Spades')]))
           player2.add_to_hand(Card.new('5', 'Clubs'))
-          go_fish.play_round(player2, '4')
+          go_fish.play_round!(player2, '4')
           expect(go_fish.current_player).to eql player2
         end
 
         it 'does not switch players if the player got what they wanted from the opponent' do
           player1.add_to_hand(Card.new('4', 'Spades'))
           player2.add_to_hand(Card.new('4', 'Clubs'))
-          go_fish.play_round(player2, '4')
+          go_fish.play_round!(player2, '4')
           expect(go_fish.current_player).to eql player1
         end
 
@@ -191,7 +191,7 @@ RSpec.describe GoFish do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Diamonds')]))
           player1.add_to_hand(Card.new('4', 'Spades'))
           player2.add_to_hand(Card.new('5', 'Clubs'))
-          go_fish.play_round(player2, '4')
+          go_fish.play_round!(player2, '4')
           expect(go_fish.current_player).to eql player1
         end
       end

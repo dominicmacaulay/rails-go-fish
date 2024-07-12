@@ -16,4 +16,5 @@
         span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
         span.notification__round-result You drew a 7 of Diamonds
 
-    = render "game_action", game:, go_fish:, session_player:
+    - if session_player == current_player
+      = render "game_action", game:, go_fish:, session_player:

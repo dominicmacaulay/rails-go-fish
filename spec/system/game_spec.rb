@@ -98,6 +98,20 @@ RSpec.describe 'Games', type: :system, js: true do
       page.find('.accordion__contents', text: user2.name).click
       expect(page).to have_content('BACK', count: 5)
     end
+
+    it 'should show the game action section if it is your turn' do
+      click_on 'Play now', match: :first
+      expect(page).to have_content('Take Turn')
+    end
+
+    it ' should not show the game action section if it is not your turn' do
+      click_on 'Sign out'
+      non_current_player = user.id == game.go_fish.current_player.id ? user2 : user
+      login_as non_current_player
+      visit game_path(game)
+      expect(page).to have_content('Game started!')
+      expect(page).not_to have_content('Take Turn')
+    end
   end
 
   describe 'game that is not yours', js: true do
