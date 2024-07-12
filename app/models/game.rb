@@ -26,18 +26,11 @@ class Game < ApplicationRecord
   end
 
   def play_round!(opponent_id = nil, rank = nil)
-    opponent = find_player(opponent_id)
-    return false unless opponent && rank && go_fish.current_player.hand_has_rank?(rank)
+    opponent = go_fish.match_player_id(opponent_id)
+    rank = go_fish.validate_rank(rank)
+    return false unless opponent && rank
 
     go_fish.play_round!
     save!
-  end
-
-  private
-
-  def find_player(id)
-    return if id == go_fish.current_player.id
-
-    go_fish.players.detect { |player| player.id == id }
   end
 end

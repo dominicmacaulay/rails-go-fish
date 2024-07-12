@@ -96,6 +96,11 @@ class GoFish
 
   private
 
+  def next_player
+    index = players.index(current_player)
+    self.current_player = players[(index + 1) % players.count]
+  end
+
   def run_transaction(opponent, rank)
     return opponent_transaction(opponent, rank) if opponent.hand_has_rank?(rank)
     return pond_transaction(opponent, rank) unless deck.count.zero?
