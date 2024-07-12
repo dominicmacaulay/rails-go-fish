@@ -49,9 +49,9 @@ class Player
   def make_book?
     unique_cards = hand.uniq(&:rank)
     unique_cards.each do |unique_card|
-      create_book(unique_card.rank) if rank_count(unique_card.rank) >= Game::MINIMUM_BOOK_LENGTH
+      create_book(unique_card.rank) if rank_count(unique_card.rank) >= GoFish::MINIMUM_BOOK_LENGTH
     end
-    unique_cards != find_unique_cards
+    unique_cards != hand.uniq(&:rank)
   end
 
   def ==(other)
