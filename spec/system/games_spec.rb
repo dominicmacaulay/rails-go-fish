@@ -100,36 +100,42 @@ RSpec.describe 'Games', type: :system, js: true do
         expect(page).to have_content('BACK', count: 5)
       end
 
-      it 'should show the game action section if it is your turn' do
-        click_on 'Play now', match: :first
-        expect(page).to have_content('Take Turn')
-      end
+      context 'taking a turn' do
+        before do
+          click_on 'Play now', match: :first
 
-      it 'sends the form information to the game model' do
-        rank = game.go_fish.current_player.hand.sample.rank
-        expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, rank, user)
-        click_on 'Play now', match: :first
+          @rank = game.go_fish.current_player.hand.sample.rank
+          select user2.name, from: 'opponent'
+          select @rank, from: 'rank'
+        end
+        it 'should show the game action section if it is your turn' do
+          expect(page).to have_content('Take Turn')
+        end
 
-        expect(page).to have_selector('.btn-primary', text: 'Take Turn')
+        it 'sends the form information to the game model' do
+          expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
+          expect(page).to have_selector('.btn-primary', text: 'Take Turn')
 
-        select user2.name, from: 'opponent'
-        select rank, from: 'rank'
-        click_on 'Take Turn'
-      end
+          click_on 'Take Turn'
+        end
 
-      it 'reflects that the player has drawn a card' do
-        click_on 'Play now', match: :first
+        it 'reflects that the player has drawn a card' do
+          click_on 'Take Turn'
 
-        rank = game.go_fish.current_player.hand.sample.rank
-        select user2.name, from: 'opponent'
-        select rank, from: 'rank'
-        click_on 'Take Turn'
+          expect(page).to have_content('Cards: 6')
+          session_player = game.go_fish.players.detect { |player| player.id == user.id }
+          page.find('.accordion__contents', text: session_player.name).click
+          session_player.hand.each do |card|
+            expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+          end
+        end
 
-        expect(page).to have_content('Cards: 6')
-        session_player = game.go_fish.players.detect { |player| player.id == user.id }
-        page.find('.accordion__contents', text: session_player.name).click
-        session_player.hand.each do |card|
-          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+        it 'show the round results in the game feed' do
+          click_on 'Take Turn'
+          expect(page).to have_content "You asked #{user2.name}"
+          expect(page).to have_content "have any #{@rank}'s"
+          expect(page).to have_content 'got'
+          expect(page).to have_content 'Game started!'
         end
       end
 

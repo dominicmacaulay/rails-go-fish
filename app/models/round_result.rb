@@ -6,7 +6,7 @@ class RoundResult
   attr_accessor :book_made
 
   def initialize(player:, opponent:, rank:, fished: false, got_rank: false, card_gotten: nil, # rubocop:disable Metrics/ParameterLists
-                 amount: 'one', empty_pond: false)
+                 amount: 'one', empty_pond: false, book_made: false)
     @current_player = player
     @opponent = opponent
     @rank = rank
@@ -15,7 +15,11 @@ class RoundResult
     @card_gotten = card_gotten
     @amount = amount
     @empty_pond = empty_pond
-    @book_made = false
+    @book_made = book_made
+  end
+
+  def book_was_made
+    self.book_made = true
   end
 
   def generate_message_for(player)
@@ -27,6 +31,19 @@ class RoundResult
 
     message.result.concat book_made ? ' and created a book with them' : ''
     message
+  end
+
+  def self.from_json(json)
+    player = Player.from_json(json['current_player'])
+    opponent = Player.from_json(json['opponent'])
+    rank = json['rank']
+    fished = json['fished']
+    got_rank = json['got_rank']
+    card_gotten = json['card_gotten']
+    amount = json['amount']
+    empty_pond = json['empty_pond']
+    book_made = json['book_made']
+    RoundResult.new(player:, opponent:, rank:, fished:, got_rank:, card_gotten:, amount:, empty_pond:, book_made:)
   end
 
   def ==(other) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
@@ -42,10 +59,6 @@ class RoundResult
     return false unless other.book_made == book_made
 
     true
-  end
-
-  def book_was_made
-    self.book_made = true
   end
 
   private

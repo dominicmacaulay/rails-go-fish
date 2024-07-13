@@ -6,6 +6,29 @@ RSpec.describe RoundResult do
   let(:player3) { Player.new(3, 'P3') }
 
   # TODO: write serialization tests for this
+  context '#from_json' do
+    let(:result) do
+      RoundResult.new(player: player1, opponent: player2, rank: '2', fished: false, got_rank: true,
+                      card_gotten: '2', amount: 'two', empty_pond: true)
+    end
+    let(:json) do
+      { 'current_player' => { 'id' => 1, 'name' => 'P1', 'hand' => [], 'books' => [] },
+        'opponent' => { 'id' => 2, 'name' => 'P2', 'hand' => [], 'books' => [] },
+        'rank' => '2',
+        'fished' => false,
+        'got_rank' => true,
+        'card_gotten' => '2',
+        'amount' => 'two',
+        'empty_pond' => true,
+        'book_made' => false }
+    end
+    it 'returns a new RoundResult object from the passed in json' do
+      new_result = RoundResult.from_json(json)
+      second_new_result = RoundResult.from_json(json)
+      expect(new_result).to eq second_new_result
+      expect(new_result).to eq result
+    end
+  end
   context '#==' do
     it 'returns true if the stored strings are the same' do
       result1 = RoundResult.new(player: player1, opponent: player2, rank: '2', fished: false, got_rank: true,
