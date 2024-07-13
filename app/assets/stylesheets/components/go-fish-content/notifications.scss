@@ -1,15 +1,22 @@
 .notification-feed {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: var(--op-space-x-small);
     overflow: auto;
 }
 
-.notification {
+.notification-feed__round-result {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    align-items: flex-start;
+    gap: var(--op-space-x-small);
+}
+
+.round-result__notification {
     display: flex;
     align-items: center;
-    width: 100%;
+    // width: 100%;
     height: 100%;
     gap: var(--op-space-x-small);
     padding-inline: var(--op-space-small);
@@ -20,7 +27,7 @@
         border-radius: var(--op-radius-x-large);
     }
 
-    .notification--player-action {
+    .notification__player-action {
         padding: var(--op-space-small);
         width: auto;
         background-color: var(--op-color-primary-plus-five);
@@ -34,11 +41,29 @@
         color: var(--op-color-alerts-warning-on-plus-seven-alt);
     }
 
-    .notification__round-result {
+    .notification__result {
         padding: var(--op-space-small);
 
         box-shadow: var(--op-border-all) var(--op-color-primary-plus-seven);
         background-color: var(--op-color-primary-plus-max);
         color: var(--op-color-primary-on-plus-max);
     }
+}
+
+.notification-feed__game-announcement {
+    display: flex;
+    align-self: center;
+    align-items: center;
+    // width: 100%;
+    height: 100%;
+    gap: var(--op-space-x-small);
+    padding-inline: var(--op-space-small);
+
+    color: var(--op-color-primary-on-plus-five-alt);
+
+    border-radius: var(--op-radius-x-large);
+
+    padding: var(--op-space-small);
+    width: auto;
+    background-color: var(--op-color-primary-plus-five);
 }
