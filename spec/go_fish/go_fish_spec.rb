@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe GoFish do
   describe 'serialization' do
-    let(:go_fish) { GoFish.new(create_players(2)) }
+    let(:players) { create_players(2) }
+    let(:go_fish) { GoFish.new(players, round_results: create_round_results(2, players)) }
     let(:json) { go_fish_json }
 
     it 'converts the passed json into an object' do
@@ -137,6 +138,7 @@ RSpec.describe GoFish do
           result = go_fish.play_round!(player2, '4')
           object = RoundResult.new(player: player1, opponent: player2, rank: '4', got_rank: true, amount: 'one')
           expect(result).to eq object
+          expect(go_fish.round_results.count).to eql 1
         end
       end
 
@@ -150,11 +152,13 @@ RSpec.describe GoFish do
       end
 
       describe 'runs transaction with the pond' do
-        it 'returns message object if the player got the card they wanted' do
+        it 'returns message object if the player got the card they wanted and lets them play again' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
           result = go_fish.play_round!(player2, '4')
           object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, got_rank: true)
           expect(result).to eq object
+          go_fish.play_round!(player2, '4')
+          expect(go_fish.round_results.count).to eql 2
         end
         it 'returns a message object if the player did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
@@ -262,9 +266,20 @@ def create_players(times)
   players
 end
 
+def create_round_results(times, players)
+  x = 1
+  results = []
+
+  until x > times
+    results << RoundResult.new(player: players.first, opponent: players.last, rank: '2')
+    x += 1
+  end
+
+  results
+end
+
 def go_fish_json # rubocop:disable Metrics/MethodLength
-  { 'players' => [{ 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] }, { 'id' => 2, 'name' => 'Player 2',
-                                                                                      'hand' => [], 'books' => [] }],
+  { 'players' => [{ 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] }, { 'id' => 2, 'name' => 'Player 2', 'hand' => [], 'books' => [] }],
     'current_player' => { 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] },
     'deck' =>
   { 'cards' =>
@@ -319,5 +334,25 @@ def go_fish_json # rubocop:disable Metrics/MethodLength
      { 'rank' => 'Jack', 'suit' => 'Diamonds' },
      { 'rank' => 'Queen', 'suit' => 'Diamonds' },
      { 'rank' => 'King', 'suit' => 'Diamonds' },
-     { 'rank' => 'Ace', 'suit' => 'Diamonds' }] } }
+     { 'rank' => 'Ace', 'suit' => 'Diamonds' }] },
+    'round_results' =>
+  [{ 'current_player' => { 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] },
+     'opponent' => { 'id' => 2, 'name' => 'Player 2', 'hand' => [], 'books' => [] },
+     'rank' => '2',
+     'fished' => false,
+     'got_rank' => false,
+     'card_gotten' => nil,
+     'amount' => 'one',
+     'empty_pond' => false,
+     'book_made' => false },
+   { 'current_player' => { 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] },
+     'opponent' => { 'id' => 2, 'name' => 'Player 2', 'hand' => [], 'books' => [] },
+     'rank' => '2',
+     'fished' => false,
+     'got_rank' => false,
+     'card_gotten' => nil,
+     'amount' => 'one',
+     'empty_pond' => false,
+     'book_made' => false }],
+    'winners' => nil }
 end

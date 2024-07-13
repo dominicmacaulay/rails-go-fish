@@ -5,14 +5,15 @@ class GoFish
   DEAL_NUMBER = 5
   MINIMUM_BOOK_LENGTH = 4
 
-  attr_reader :players, :deck
+  attr_reader :players, :deck, :round_results
   attr_accessor :current_player, :winners
 
-  def initialize(players, current_player: players.first, deck: Deck.new)
+  def initialize(players, current_player: players.first, deck: Deck.new, round_results: [], winners: nil)
     @players = players
     @current_player = current_player
     @deck = deck
-    @winners = nil
+    @round_results = round_results
+    @winners = winners
   end
 
   def deal!
@@ -49,6 +50,7 @@ class GoFish
     message.book_was_made if current_player.make_book?
     switch_player unless message.got_rank
     check_for_winners
+    round_results << message
     message
   end
 
@@ -69,9 +71,14 @@ class GoFish
 
   def ==(other)
     return false unless other
+
     return false unless players == other.players
+
     return false unless current_player == other.current_player
+
     return false unless deck == other.deck
+
+    return false unless round_results_equal?(other.round_results)
 
     true
   end
@@ -87,11 +94,13 @@ class GoFish
     from_json(payload)
   end
 
-  def self.from_json(json)
+  def self.from_json(json) # rubocop:disable Metrics/AbcSize
     players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
     deck = Deck.from_json(json['deck'])
-    GoFish.new(players, current_player:, deck:)
+    round_results = json['round_results'].map { |result| RoundResult.from_json(result) }
+    winners = json['winners']&.map { |winner| Player.from_json(winner) }
+    GoFish.new(players, current_player:, deck:, round_results:, winners:)
   end
 
   private
@@ -170,5 +179,12 @@ class GoFish
       message.concat(', ') if winner != winners.last && winner != winners[-2]
     end
     message.concat("tied with #{winners.first.book_count} books totalling in #{winners.first.total_book_value}")
+  end
+
+  def round_results_equal?(other)
+    return false unless round_results.count == other.count
+    return false unless round_results.each { |result| other.include?(result) }
+
+    true
   end
 end
