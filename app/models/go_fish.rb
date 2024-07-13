@@ -98,9 +98,17 @@ class GoFish
     players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
     deck = Deck.from_json(json['deck'])
-    round_results = json['round_results'].map { |result| RoundResult.from_json(result) }
+    round_results = hydrate_round_results(json['round_results'])
     winners = json['winners']&.map { |winner| Player.from_json(winner) }
     GoFish.new(players, current_player:, deck:, round_results:, winners:)
+  end
+
+  def self.hydrate_round_results(json)
+    if json.nil?
+      []
+    else
+      json.map { |result| RoundResult.from_json(result) }
+    end
   end
 
   private

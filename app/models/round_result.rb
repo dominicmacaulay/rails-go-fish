@@ -22,12 +22,12 @@ class RoundResult
     self.book_made = true
   end
 
-  def generate_message_for(player)
-    message = current_player_message if player == current_player
+  def generate_message_for(player) # rubocop:disable Metrics/AbcSize
+    message = current_player_message if player.id == current_player.id
 
-    message = opponent_message if player == opponent
+    message = opponent_message if player.id == opponent.id
 
-    message = other_player_message unless player == current_player || player == opponent
+    message = other_player_message unless player.id == current_player.id || player.id == opponent.id
 
     message.result.concat book_made ? ' and created a book with them' : ''
     message

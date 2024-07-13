@@ -55,7 +55,8 @@ class Player
   end
 
   def ==(other)
-    return false unless id == other.id && name == other.name
+    return false unless id == other.id
+    return false unless name == other.name
     return false unless hand_matches?(other)
     return false unless books_match?(other)
 
@@ -71,6 +72,8 @@ class Player
   private
 
   def hand_matches?(other)
+    return false unless hand_count == other.hand_count
+
     hand.each do |card|
       return false unless other.hand.include?(card)
     end
@@ -78,6 +81,8 @@ class Player
   end
 
   def books_match?(other)
+    return false unless book_count == other.book_count
+
     books.each do |book|
       return false unless other.books.include?(book)
     end

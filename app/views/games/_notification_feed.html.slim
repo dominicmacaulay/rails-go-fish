@@ -1,0 +1,19 @@
+.notification-feed
+  - round_results&.reverse.each do |round_result|
+    - message = round_result.generate_message_for(session_player)
+    .notification
+      span.notification--player-action
+        = message.action
+
+    .notification
+      span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+      span.notification__opponent-response
+        = message.opponent_response
+
+    .notification
+      span.material-symbols-outlined.icon--x-large.icon--weight-bold subdirectory_arrow_right
+      span.notification__round-result
+        = message.result
+
+  .notification
+    span.notification--player-action Game started!
