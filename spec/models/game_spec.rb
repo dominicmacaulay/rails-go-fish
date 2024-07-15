@@ -36,6 +36,12 @@ RSpec.describe Game, type: :model do
       expect(game.start!).to be false
     end
 
+    it 'returns false if the game is already started' do
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      expect(game.start!).to be false
+    end
+
     it 'populates the go_fish attributes' do
       expect(game.go_fish).to be_nil
       user1 = create(:game_user, user: create(:user), game:)
@@ -77,13 +83,29 @@ RSpec.describe Game, type: :model do
     let(:opponent) { game.users.detect { |user| user.id != go_fish.current_player.id } }
     let(:rank) { go_fish.current_player.hand.sample.rank }
 
-    before do
-      create(:game_user, game:, user: user1)
-      create(:game_user, game:, user: user2)
-      game.start!
+    context 'when the game state is not valid for playing' do
+      it 'returns false if the game has not started yet' do
+        result = game.play_round!
+        expect(result).to be false
+      end
+
+      it 'returns false if the game is over' do
+        create(:game_user, game:, user: user1)
+        create(:game_user, game:, user: user2)
+        game.start!
+        game.go_fish.winners = game.go_fish.players
+        result = game.play_round!(opponent.id, rank, current_user)
+        expect(result).to be false
+      end
     end
 
     context 'when the parameters are invalid' do
+      before do
+        create(:game_user, game:, user: user1)
+        create(:game_user, game:, user: user2)
+        game.start!
+      end
+
       it 'returns false when parameters are not given' do
         result = game.play_round!
         expect(result).to be false

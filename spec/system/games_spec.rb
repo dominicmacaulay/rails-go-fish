@@ -140,7 +140,7 @@ RSpec.describe 'Games', type: :system, js: true do
       end
 
       context 'game over' do
-        fit 'show the game end results when a winner is declared', chrome: true do
+        it 'show the game end results when a winner is declared' do
           go_fish = game.go_fish
           winner = go_fish.players.detect { |player| player.id == user.id }
           go_fish.winners = [winner]

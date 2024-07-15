@@ -21,6 +21,7 @@ class Game < ApplicationRecord
 
   def start!
     return false unless queue_full?
+    return false if started?
 
     players = users.map { |user| Player.new(user.id, user.name) }
     go_fish = GoFish.new(players)
@@ -29,6 +30,9 @@ class Game < ApplicationRecord
   end
 
   def play_round!(opponent_id = nil, rank = nil, requester = nil)
+    return false unless started?
+    return false if over?
+
     opponent = go_fish.match_player_id(opponent_id)
     chosen_rank = go_fish.validate_rank(rank)
     return false unless opponent && chosen_rank && requester.id == go_fish.current_player.id
