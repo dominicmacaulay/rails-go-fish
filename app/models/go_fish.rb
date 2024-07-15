@@ -34,6 +34,10 @@ class GoFish
     current_player.hand_has_rank?(rank)
   end
 
+  def validate_requester(requester_id)
+    current_player.id == requester_id
+  end
+
   def play_round!(opponent, rank)
     message = run_transaction(opponent, rank)
     message.book_was_made if current_player.make_book?

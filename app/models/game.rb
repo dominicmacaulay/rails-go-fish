@@ -29,15 +29,49 @@ class Game < ApplicationRecord
     update(go_fish:, started_at: DateTime.current)
   end
 
-  def play_round!(opponent_id = nil, rank = nil, requester = nil)
-    return false unless started?
-    return false if over?
+  def play_round!(opponent_id = nil, rank = nil, requester = nil) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    raise UnplayableError unless started?
+    raise UnplayableError if over?
+    raise ParamsRequiredError if opponent_id.nil? || rank.nil? || requester.nil?
 
     opponent = go_fish.match_player_id(opponent_id)
     chosen_rank = go_fish.validate_rank(rank)
-    return false unless opponent && chosen_rank && requester.id == go_fish.current_player.id
+    raise InvalidOpponentError unless opponent
+    raise InvalidRankError unless chosen_rank
+    raise InvalidRequesterError unless go_fish.validate_requester(requester.id)
 
     go_fish.play_round!(opponent, rank)
     save!
+  end
+
+  # custom exceptions
+  class UnplayableError < StandardError
+    def message
+      'The game cannot currently be played as requested...'
+    end
+  end
+
+  class ParamsRequiredError < StandardError
+    def message
+      'You need to enter values to play a round...'
+    end
+  end
+
+  class InvalidOpponentError < StandardError
+    def message
+      'The opponent you entered is not valid!'
+    end
+  end
+
+  class InvalidRankError < StandardError
+    def message
+      'The rank you entered is not valid!'
+    end
+  end
+
+  class InvalidRequesterError < StandardError
+    def message
+      'It is not your turn yet!'
+    end
   end
 end

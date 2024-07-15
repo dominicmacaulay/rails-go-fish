@@ -1,8 +1,9 @@
 - unless @game.started?
-  = link_to sanitize("&larr; Back to games"), games_path
-  .header
-    h1 = @game.name
-  p #{@game.users.count}/#{@game.number_of_players} players joined
+  .container
+    = link_to sanitize("&larr; Back to games"), games_path
+    .header
+      h1 = @game.name
+    p #{@game.users.count}/#{@game.number_of_players} players joined
 - else
   - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id }
   .game-page

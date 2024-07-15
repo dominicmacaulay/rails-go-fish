@@ -4,11 +4,11 @@ class RoundsController < ApplicationController
   def create
     opponent = round_params[:opponent].to_i
     rank = round_params[:rank]
-    if @game.play_round!(opponent, rank, current_user)
-      redirect_to @game, notice: 'Round played'
-    else
-      redirect_to @game, alert: 'Error, Try taking your turn again'
-    end
+    @game.play_round!(opponent, rank, current_user)
+    redirect_to @game, notice: 'Round played'
+  rescue Game::UnplayableError, Game::ParamsRequiredError, Game::InvalidOpponentError, Game::InvalidRankError,
+          Game::InvalidRequesterError => e
+    render games_path(@game), alert: "Error: #{e.message}"
   end
 
   private

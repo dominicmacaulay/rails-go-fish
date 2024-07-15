@@ -106,6 +106,18 @@ RSpec.describe GoFish do
       end
     end
 
+    context '#validate_requester' do
+      it 'returns true if the requestor is the current player' do
+        return_value = go_fish.validate_requester(player1.id)
+        expect(return_value).to be true
+      end
+
+      it 'returns false if the requestor is not the current player' do
+        return_value = go_fish.validate_requester(player2.id)
+        expect(return_value).to be false
+      end
+    end
+
     context 'play_round!' do
       before do
         player1.add_to_hand(Card.new('4', 'Hearts'))

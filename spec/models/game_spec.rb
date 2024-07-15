@@ -85,8 +85,7 @@ RSpec.describe Game, type: :model do
 
     context 'when the game state is not valid for playing' do
       it 'returns false if the game has not started yet' do
-        result = game.play_round!
-        expect(result).to be false
+        expect { game.play_round! }.to raise_error(Game::UnplayableError)
       end
 
       it 'returns false if the game is over' do
@@ -94,8 +93,7 @@ RSpec.describe Game, type: :model do
         create(:game_user, game:, user: user2)
         game.start!
         game.go_fish.winners = game.go_fish.players
-        result = game.play_round!(opponent.id, rank, current_user)
-        expect(result).to be false
+        expect { game.play_round!(opponent.id, rank, current_user) }.to raise_error(Game::UnplayableError)
       end
     end
 
@@ -107,28 +105,23 @@ RSpec.describe Game, type: :model do
       end
 
       it 'returns false when parameters are not given' do
-        result = game.play_round!
-        expect(result).to be false
+        expect { game.play_round! }.to raise_error(Game::ParamsRequiredError)
       end
 
       it 'returns false when the opponent id is not valid' do
-        result = game.play_round!(1, rank, current_user)
-        expect(result).to be false
+        expect { game.play_round!(1, rank, current_user) }.to raise_error(Game::InvalidOpponentError)
       end
 
       it 'returns false when the opponent id is the current players' do
-        result = game.play_round!(current_user.id, rank, current_user)
-        expect(result).to be false
+        expect { game.play_round!(current_user.id, rank, current_user) }.to raise_error(Game::InvalidOpponentError)
       end
 
       it "returns false when the rank is not in the player's hand" do
-        result = game.play_round!(opponent.id, '11', current_user)
-        expect(result).to be false
+        expect { game.play_round!(opponent.id, '11', current_user) }.to raise_error(Game::InvalidRankError)
       end
 
       it 'returns false when the user who made the request is not the current player' do
-        result = game.play_round!(opponent.id, rank, opponent)
-        expect(result).to be false
+        expect { game.play_round!(opponent.id, rank, opponent) }.to raise_error(Game::InvalidRequesterError)
       end
     end
   end
