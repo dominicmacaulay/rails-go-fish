@@ -1,10 +1,17 @@
 .go-fish-panel.go-fish-panel--game-feed
   .go-fish-panel__header.go-fish-panel__header--game-feed
     span Game Feed
-    .badge-primary.badge--with-border #{current_player.name}'s Turn
+    .badge-primary.badge--with-border
+      - if game.over?
+        | Game Over
+      - else
+        = "#{current_player.name}'s Turn"
 
   .go-fish-panel__content.go-fish-panel__content--game-feed
     = render "notification_feed", round_results: go_fish.round_results, session_player:, game:, go_fish:
 
     - if session_player == current_player && !game.over?
       = render "game_action", game:, go_fish:, session_player:
+
+    - if game.over?
+      = link_to "Go back to your games", games_path, class: "btn-primary"

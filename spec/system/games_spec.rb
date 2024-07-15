@@ -140,16 +140,26 @@ RSpec.describe 'Games', type: :system, js: true do
       end
 
       context 'game over' do
-        it 'show the game end results when a winner is declared' do
-          go_fish = game.go_fish
-          winner = go_fish.players.detect { |player| player.id == user.id }
+        let(:go_fish) { game.go_fish }
+        let(:winner) { go_fish.players.detect { |player| player.id == user.id } }
+        before do
           go_fish.winners = [winner]
           game.update(go_fish:)
-
           click_on 'Play now', match: :first
+        end
+
+        it 'shows the game end results when a winner is declared' do
           expect(page).to have_content 'Game Over!'
           expect(page).to have_content "#{winner.name} won the game"
+        end
+
+        it 'replaces the game action section with a button to the index page' do
+          expect(page).to have_selector('.btn-primary', text: 'Go back to your games')
           expect(page).not_to have_css '.game-action'
+        end
+
+        it 'replaces the current_player badge text with a message' do
+          expect(page).to have_selector('.badge-primary', text: 'Game Over')
         end
       end
 
