@@ -2,6 +2,7 @@
 
 # round result class
 class RoundResult
+  RoundResultMessage = Data.define(:action, :opponent_response, :result)
   attr_reader :current_player, :opponent, :rank, :fished, :got_rank, :card_gotten, :amount, :empty_pond
   attr_accessor :book_made
 

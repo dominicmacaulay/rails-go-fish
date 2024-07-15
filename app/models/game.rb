@@ -36,6 +36,7 @@ class Game < ApplicationRecord
 
     opponent = go_fish.match_player_id(opponent_id)
     chosen_rank = go_fish.validate_rank(rank)
+    # TODO: move errors to go_fish
     raise InvalidOpponentError unless opponent
     raise InvalidRankError unless chosen_rank
     raise InvalidRequesterError unless go_fish.validate_requester(requester.id)
@@ -45,31 +46,33 @@ class Game < ApplicationRecord
   end
 
   # custom exceptions
-  class UnplayableError < StandardError
+  class GoFishError < StandardError; end
+
+  class UnplayableError < GoFishError
     def message
       'The game cannot currently be played as requested...'
     end
   end
 
-  class ParamsRequiredError < StandardError
+  class ParamsRequiredError < GoFishError
     def message
       'You need to enter values to play a round...'
     end
   end
 
-  class InvalidOpponentError < StandardError
+  class InvalidOpponentError < GoFishError
     def message
       'The opponent you entered is not valid!'
     end
   end
 
-  class InvalidRankError < StandardError
+  class InvalidRankError < GoFishError
     def message
       'The rank you entered is not valid!'
     end
   end
 
-  class InvalidRequesterError < StandardError
+  class InvalidRequesterError < GoFishError
     def message
       'It is not your turn yet!'
     end

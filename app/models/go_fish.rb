@@ -48,7 +48,7 @@ class GoFish
   end
 
   def display_winners
-    winners.count > 1 ? tie_message_for_multiple_winners(winners) : single_winner_message(winners.first)
+    GameResult.new(winners)
   end
 
   def check_for_winners
@@ -179,23 +179,9 @@ class GoFish
     players.select { |player| player.book_count == maximum_value }
   end
 
-  def single_winner_message(winner)
-    "#{winner.name} won the game with #{winner.book_count} books totalling in #{winner.total_book_value}"
-  end
-
-  def tie_message_for_multiple_winners(winners)
-    message = ''
-    winners.each do |winner|
-      message.concat('and ') if winner == winners.last
-      message.concat("#{winner.name} ")
-      message.concat(', ') if winner != winners.last && winner != winners[-2]
-    end
-    message.concat("tied with #{winners.first.book_count} books totalling in #{winners.first.total_book_value}")
-  end
-
   def round_results_equal?(other)
     return false unless round_results.count == other.count
-    return false unless round_results.each { |result| other.include?(result) }
+    return false unless round_results.all? { |result| other.include?(result) }
 
     true
   end

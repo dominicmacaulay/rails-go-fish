@@ -6,8 +6,7 @@ class RoundsController < ApplicationController
     rank = round_params[:rank]
     @game.play_round!(opponent, rank, current_user)
     redirect_to @game, notice: 'Round played'
-  rescue Game::UnplayableError, Game::ParamsRequiredError, Game::InvalidOpponentError, Game::InvalidRankError,
-          Game::InvalidRequesterError => e
+  rescue Game::GoFishError => e
     render games_path(@game), alert: "Error: #{e.message}"
   end
 

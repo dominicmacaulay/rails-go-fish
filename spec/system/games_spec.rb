@@ -159,7 +159,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
         it 'shows the game end results when a winner is declared' do
           expect(page).to have_content 'Game Over!'
-          expect(page).to have_content "#{winner.name} won the game"
+          expect(page).to have_content 'You won the game'
         end
 
         it 'replaces the game action section with a button to the index page' do

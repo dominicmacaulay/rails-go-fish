@@ -2,7 +2,7 @@
   - if game.over? == true
     span.notification-feed__game-announcement Game Over!
     span.notification-feed__game-announcement
-      = go_fish.display_winners
+      = go_fish.display_winners.display_for(session_player)
     .divider.divider--large.divider--spacing-medium
 
   - round_results&.reverse.each do |round_result|

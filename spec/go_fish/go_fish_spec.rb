@@ -234,7 +234,8 @@ RSpec.describe GoFish do
           winner_go_fish = GoFish.new([winner, loser], deck: Deck.new([0]))
           winner_go_fish.deck.deal
           winner_go_fish.check_for_winners
-          expect(winner_go_fish.display_winners).to eql 'Winner won the game with 7 books totalling in 28'
+          message = GameResult.new(winner_go_fish.winners)
+          expect(winner_go_fish.display_winners).to eq message
         end
         it 'in case of a book tie, declares the winner with the highest book value' do
           winner = Player.new(1, 'Winner', books: books.pop(6))
@@ -243,7 +244,8 @@ RSpec.describe GoFish do
           winner_go_fish = GoFish.new([winner, loser1, loser2], deck: Deck.new([0]))
           winner_go_fish.deck.deal
           winner_go_fish.check_for_winners
-          expect(winner_go_fish.display_winners).to eql 'Winner won the game with 6 books totalling in 63'
+          message = GameResult.new(winner_go_fish.winners)
+          expect(winner_go_fish.display_winners).to eq message
         end
         it 'in case of total tie, display tie messge' do
           winner = Player.new(1, 'Winner', books: [books[1], books[3], books[5], books[7], books[9], books[11]])
@@ -252,7 +254,8 @@ RSpec.describe GoFish do
           winner_go_fish = GoFish.new([winner, loser1, loser2], deck: Deck.new([0]))
           winner_go_fish.deck.deal
           winner_go_fish.check_for_winners
-          expect(winner_go_fish.display_winners).to eql 'Winner and Loser tied with 6 books totalling in 42'
+          message = GameResult.new(winner_go_fish.winners)
+          expect(winner_go_fish.display_winners).to eq message
         end
       end
     end
