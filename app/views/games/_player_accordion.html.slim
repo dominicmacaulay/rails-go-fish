@@ -3,6 +3,8 @@ details.accordion__contents
     .player-name
       span.material-symbols-outlined.accordion__marker arrow_right
       span = player.name
+      - if reveal_information
+        | (you)
     .player-details
       span.cards Cards: #{player.hand_count}
       span.books Books: #{player.book_count}
@@ -10,7 +12,7 @@ details.accordion__contents
   .player-cards
     .card-stack.card-stack--accordion-hand
       - player.hand.each do |card|
-        - if reveal_hand
+        - if reveal_information
           = render "playing_card", back: false, rank: card.rank, suit: card.suit
         - else
           = render "playing_card", back: true

@@ -77,6 +77,12 @@ RSpec.describe 'Games', type: :system, js: true do
         expect(page).to have_content('Game started!')
       end
 
+      it 'should indicate that which player you are' do
+        click_on 'Play now', match: :first
+        session_player = game.go_fish.players.detect { |player| player.id == user.id }
+        expect(page).to have_content("\n#{session_player.name}\n(you)")
+      end
+
       it 'should show the players cards in the your hand section' do
         click_on 'Play now', match: :first
         session_player = game.go_fish.players.detect { |player| player.id == user.id }
@@ -122,7 +128,7 @@ RSpec.describe 'Games', type: :system, js: true do
         it 'reflects that the player has drawn a card' do
           click_on 'Take Turn'
 
-          expect(page).to have_content('Cards: 6')
+          expect(page).to have_content("\n(you)\nCards: 6")
           session_player = game.go_fish.players.detect { |player| player.id == user.id }
           page.find('.accordion__contents', text: session_player.name).click
           session_player.hand.each do |card|
