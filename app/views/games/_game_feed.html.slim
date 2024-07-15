@@ -4,7 +4,7 @@
     .badge-primary.badge--with-border #{current_player.name}'s Turn
 
   .go-fish-panel__content.go-fish-panel__content--game-feed
-    = render "notification_feed", round_results: go_fish.round_results, session_player:
+    = render "notification_feed", round_results: go_fish.round_results, session_player:, game:, go_fish:
 
-    - if session_player == current_player
+    - if session_player == current_player && !game.over?
       = render "game_action", game:, go_fish:, session_player:

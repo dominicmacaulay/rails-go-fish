@@ -1,4 +1,8 @@
 .notification-feed
+  - if game.over? == true
+    span.notification-feed__game-announcement Game Over!
+    span.notification-feed__game-announcement
+      = go_fish.display_winners
   - round_results&.reverse.each do |round_result|
     - message = round_result.generate_message_for(session_player)
     .notification-feed__round-result

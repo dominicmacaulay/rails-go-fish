@@ -110,4 +110,20 @@ RSpec.describe Game, type: :model do
       end
     end
   end
+
+  context '#over?' do
+    let(:game) { create(:game) }
+    before do
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+    end
+    it 'returns false when the game is not over' do
+      expect(game.over?).to be false
+    end
+
+    it 'returns true when a winner is declared' do
+      game.go_fish.winners = game.go_fish.players
+      expect(game.over?).to be true
+    end
+  end
 end

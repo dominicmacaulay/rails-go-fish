@@ -139,6 +139,20 @@ RSpec.describe 'Games', type: :system, js: true do
         end
       end
 
+      context 'game over' do
+        fit 'show the game end results when a winner is declared', chrome: true do
+          go_fish = game.go_fish
+          winner = go_fish.players.detect { |player| player.id == user.id }
+          go_fish.winners = [winner]
+          game.update(go_fish:)
+
+          click_on 'Play now', match: :first
+          expect(page).to have_content 'Game Over!'
+          expect(page).to have_content "#{winner.name} won the game"
+          expect(page).not_to have_css '.game-action'
+        end
+      end
+
       xit 'does not reload the full page when the player takes a turn' do
         click_on 'Play now', match: :first
         session_player = game.go_fish.players.detect { |player| player.id == user.id }

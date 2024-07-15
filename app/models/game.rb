@@ -13,6 +13,10 @@ class Game < ApplicationRecord
     !go_fish.nil?
   end
 
+  def over?
+    !go_fish.winners.nil?
+  end
+
   serialize :go_fish, coder: GoFish
 
   def start!
