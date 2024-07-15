@@ -23,22 +23,8 @@ class GoFish
     end
   end
 
-  def match_player_id(id)
-    named_player = players.detect do |player|
-      player.id == id && player != current_player
-    end
-    named_player.nil? ? nil : named_player
-  end
-
-  def validate_rank(rank)
-    current_player.hand_has_rank?(rank)
-  end
-
-  def validate_requester(requester_id)
-    current_player.id == requester_id
-  end
-
-  def play_round!(opponent, rank)
+  def play_round!(opponent_id, rank, requester)
+    opponent = validate_input_and_find_opponent(opponent_id, rank, requester)
     message = run_transaction(opponent, rank)
     message.book_was_made if current_player.make_book?
     switch_player unless deal_to_player_if_necessary == false || message.got_rank
@@ -76,6 +62,33 @@ class GoFish
     true
   end
 
+  # custom exceptions
+  class GoFishError < StandardError; end
+
+  class ParamsRequiredError < GoFishError
+    def message
+      'You need to enter values to play a round...'
+    end
+  end
+
+  class InvalidOpponentError < GoFishError
+    def message
+      'The opponent you entered is not valid!'
+    end
+  end
+
+  class InvalidRankError < GoFishError
+    def message
+      'The rank you entered is not valid!'
+    end
+  end
+
+  class InvalidRequesterError < GoFishError
+    def message
+      'It is not your turn yet!'
+    end
+  end
+
   # JSON SECTION
   def self.dump(object)
     object.as_json
@@ -105,6 +118,33 @@ class GoFish
   end
 
   private
+
+  def validate_input_and_find_opponent(opponent_id, chosen_rank, requester)
+    raise ParamsRequiredError if opponent_id.nil? || chosen_rank.nil? || requester.nil?
+
+    opponent = match_player_id(opponent_id)
+    rank = validate_rank(chosen_rank)
+    raise InvalidOpponentError unless opponent
+    raise InvalidRankError unless rank
+    raise InvalidRequesterError unless validate_requester(requester.id)
+
+    opponent
+  end
+
+  def match_player_id(id)
+    named_player = players.detect do |player|
+      player.id == id && player != current_player
+    end
+    named_player.nil? ? nil : named_player
+  end
+
+  def validate_rank(rank)
+    current_player.hand_has_rank?(rank)
+  end
+
+  def validate_requester(requester_id)
+    current_player.id == requester_id
+  end
 
   def next_player
     index = players.index(current_player)

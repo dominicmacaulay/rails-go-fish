@@ -105,23 +105,23 @@ RSpec.describe Game, type: :model do
       end
 
       it 'returns false when parameters are not given' do
-        expect { game.play_round! }.to raise_error(Game::ParamsRequiredError)
+        expect { game.play_round! }.to raise_error(GoFish::ParamsRequiredError)
       end
 
       it 'returns false when the opponent id is not valid' do
-        expect { game.play_round!(1, rank, current_user) }.to raise_error(Game::InvalidOpponentError)
+        expect { game.play_round!(1, rank, current_user) }.to raise_error(GoFish::InvalidOpponentError)
       end
 
       it 'returns false when the opponent id is the current players' do
-        expect { game.play_round!(current_user.id, rank, current_user) }.to raise_error(Game::InvalidOpponentError)
+        expect { game.play_round!(current_user.id, rank, current_user) }.to raise_error(GoFish::InvalidOpponentError)
       end
 
       it "returns false when the rank is not in the player's hand" do
-        expect { game.play_round!(opponent.id, '11', current_user) }.to raise_error(Game::InvalidRankError)
+        expect { game.play_round!(opponent.id, '11', current_user) }.to raise_error(GoFish::InvalidRankError)
       end
 
       it 'returns false when the user who made the request is not the current player' do
-        expect { game.play_round!(opponent.id, rank, opponent) }.to raise_error(Game::InvalidRequesterError)
+        expect { game.play_round!(opponent.id, rank, opponent) }.to raise_error(GoFish::InvalidRequesterError)
       end
     end
   end
