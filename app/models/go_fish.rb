@@ -23,17 +23,6 @@ class GoFish
     end
   end
 
-  def deal_to_player_if_necessary
-    return nil unless current_player.hand_count.zero?
-
-    if deck.count.zero?
-      @current_player = next_player
-      return false
-    end
-    DEAL_NUMBER.times { current_player.add_to_hand(deck.deal) }
-    true
-  end
-
   def match_player_id(id)
     named_player = players.detect do |player|
       player.id == id && player != current_player
@@ -48,7 +37,7 @@ class GoFish
   def play_round!(opponent, rank)
     message = run_transaction(opponent, rank)
     message.book_was_made if current_player.make_book?
-    switch_player unless message.got_rank
+    switch_player unless deal_to_player_if_necessary == false || message.got_rank
     check_for_winners
     round_results << message
     message
@@ -152,6 +141,17 @@ class GoFish
     return 'three' if integer == 3
 
     'several'
+  end
+
+  def deal_to_player_if_necessary
+    return nil unless current_player.hand_count.zero?
+
+    if deck.count.zero?
+      switch_player
+      return false
+    end
+    DEAL_NUMBER.times { current_player.add_to_hand(deck.deal) unless deck.count.zero? }
+    true
   end
 
   def determine_winners

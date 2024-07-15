@@ -131,6 +131,9 @@ RSpec.describe 'Games', type: :system, js: true do
         end
 
         it 'show the round results in the game feed' do
+          go_fish = game.go_fish
+          go_fish.players.last.clear
+          game.update(go_fish:)
           click_on 'Take Turn'
           expect(page).to have_content "You asked #{user2.name}"
           expect(page).to have_content "have any #{@rank}'s"

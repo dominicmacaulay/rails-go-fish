@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GoFish do
-  describe 'serialization' do
+  context 'serialization' do
     let(:players) { create_players(2) }
     let(:go_fish) { GoFish.new(players, round_results: create_round_results(2, players)) }
     let(:json) { go_fish_json }
@@ -75,21 +75,6 @@ RSpec.describe GoFish do
       end
     end
 
-    context '#deal_to_player_if_necessary' do
-      it 'returns nil if the player has cards' do
-        player1.add_to_hand(Card.new('4', 'Hearts'))
-        expect(go_fish.deal_to_player_if_necessary).to be nil
-      end
-      it 'returns a message if the deck is also empty and switches players' do
-        go_fish.deck.clear_cards
-        expect(go_fish.deal_to_player_if_necessary).to be false
-        expect(go_fish.current_player).to be player2
-      end
-      it 'returns a message if the player received cards' do
-        expect(go_fish.deal_to_player_if_necessary).to be true
-      end
-    end
-
     context '#validate_rank' do
       it 'returns a message if the rank if valid' do
         rank = '4'
@@ -121,11 +106,11 @@ RSpec.describe GoFish do
       end
     end
 
-    describe 'play_round!' do
+    context 'play_round!' do
       before do
         player1.add_to_hand(Card.new('4', 'Hearts'))
       end
-      describe 'runs transaction when opponent has the card' do
+      context 'runs transaction when opponent has the card' do
         before do
           player2.add_to_hand(Card.new('4', 'Spades'))
         end
@@ -142,7 +127,7 @@ RSpec.describe GoFish do
         end
       end
 
-      describe 'runs transaction if the pond has no cards in it' do
+      context 'runs transaction if the pond has no cards in it' do
         it 'sends the player a message saying that the pond was empty' do
           go_fish.deck.clear_cards
           result = go_fish.play_round!(player2, '4')
@@ -151,7 +136,7 @@ RSpec.describe GoFish do
         end
       end
 
-      describe 'runs transaction with the pond' do
+      context 'runs transaction with the pond' do
         it 'returns message object if the player got the card they wanted and lets them play again' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
           result = go_fish.play_round!(player2, '4')
@@ -168,7 +153,7 @@ RSpec.describe GoFish do
         end
       end
 
-      describe 'creating a book' do
+      context 'creating a book' do
         it 'creates books if possible' do
           player2.add_to_hand([Card.new('4', 'Clubs'), Card.new('4', 'Spades'), Card.new('4', 'Diamonds')])
           go_fish.play_round!(player2, '4')
@@ -176,7 +161,7 @@ RSpec.describe GoFish do
         end
       end
 
-      describe 'switching the player' do
+      context 'switching the player' do
         it 'switches the player after the transactions has occurred if they did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('6', 'Spades')]))
           player2.add_to_hand(Card.new('5', 'Clubs'))
@@ -200,7 +185,36 @@ RSpec.describe GoFish do
         end
       end
 
-      describe 'checks for winner' do
+      context 'dealing to the player if necessary' do
+        before do
+          player1.clear
+          player2.clear
+        end
+        it 'switches the player if the player and the deck have no cards' do
+          go_fish = GoFish.new([player1, player2])
+          go_fish.deck.clear_cards
+          go_fish.play_round!(player2, '4')
+          expect(player1.hand_count).to eq 0
+          expect(go_fish.current_player).to eql player2
+        end
+
+        it "does not increase the player's hand if they already have cards" do
+          go_fish = GoFish.new([player1, player2])
+          go_fish.play_round!(player2, '4')
+          expect(player1.hand_count).to eq 1
+          expect(go_fish.current_player).to eq player2
+        end
+
+        it 'deals cards to the player if they do not have any cards' do
+          go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('6', 'Spades'), Card.new('7', 'Diamonds')]))
+          player1.add_to_hand([Card.new('6', 'Hearts'), Card.new('6', 'Diamonds'), Card.new('6', 'Clubs')])
+          go_fish.play_round!(player2, '6')
+          expect(player1.hand_count).to eq 1
+          expect(go_fish.current_player).to eql player1
+        end
+      end
+
+      context 'checks for winner' do
         let(:books) { make_books(13) }
         it 'declares the winner with the most books' do
           winner = Player.new(1, 'Winner', books: books.shift(7))

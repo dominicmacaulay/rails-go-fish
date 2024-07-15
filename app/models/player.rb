@@ -54,6 +54,11 @@ class Player
     unique_cards != hand.uniq(&:rank)
   end
 
+  def clear
+    @books = []
+    @hand = []
+  end
+
   def ==(other)
     return false unless id == other.id
     return false unless name == other.name
