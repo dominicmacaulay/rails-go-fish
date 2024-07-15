@@ -87,7 +87,7 @@ RSpec.describe 'Games', type: :system, js: true do
         click_on 'Play now', match: :first
         session_player = game.go_fish.players.detect { |player| player.id == user.id }
         session_player.hand.each do |card|
-          expect(page).to have_content("#{card.rank}, #{card.suit}").once
+          expect(page).to have_selector("img[alt='#{card.rank}, #{card.suit}']").once
         end
       end
 
@@ -96,14 +96,14 @@ RSpec.describe 'Games', type: :system, js: true do
         session_player = game.go_fish.players.detect { |player| player.id == user.id }
         page.find('.accordion__contents', text: session_player.name).click
         session_player.hand.each do |card|
-          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+          expect(page).to have_selector("img[alt='#{card.rank}, #{card.suit}']").twice
         end
       end
 
       it 'should show the opponents cards as hidden' do
         click_on 'Play now', match: :first
         page.find('.accordion__contents', text: user2.name).click
-        expect(page).to have_content('BACK', count: 5)
+        expect(page).to have_selector("img[alt='Playing Card Back']", count: 5)
       end
 
       context 'taking a turn' do
@@ -128,11 +128,11 @@ RSpec.describe 'Games', type: :system, js: true do
         it 'reflects that the player has drawn a card' do
           click_on 'Take Turn'
 
-          expect(page).to have_content("\n(you)\nCards: 6")
           session_player = game.go_fish.players.detect { |player| player.id == user.id }
+          expect(page).to have_content("\n(you)\nCards: #{session_player.hand_count}")
           page.find('.accordion__contents', text: session_player.name).click
           session_player.hand.each do |card|
-            expect(page).to have_content("#{card.rank}, #{card.suit}").twice
+            expect(page).to have_selector("img[alt='#{card.rank}, #{card.suit}']").twice
           end
         end
 

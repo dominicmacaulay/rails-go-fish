@@ -1,5 +1,4 @@
-.playing-card
-  - if back
-    span BACK
-  - else
-    span #{rank}, #{suit}
+- if back
+  = image_tag "ugly-cards/1B.svg", alt: "Playing Card Back", class: "playing-card"
+- else
+  = image_tag "ugly-cards/#{rank.first.upcase}#{suit.first.upcase}.svg", alt: "#{rank}, #{suit}", class: "playing-card"

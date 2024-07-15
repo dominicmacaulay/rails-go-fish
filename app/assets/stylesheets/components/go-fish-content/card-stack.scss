@@ -3,16 +3,16 @@
     overflow: auto;
 
     &.card-stack--accordion-hand {
-        height: calc(35 * var(--op-size-unit));
+        max-height: calc(35 * var(--op-size-unit));
     }
 
     &.card-stack--accordion-books {
-        height: calc(25 * var(--op-size-unit));
+        max-height: calc(25 * var(--op-size-unit));
         max-width: calc(50 * var(--op-size-unit))
     }
 
     &.card-stack--your-books {
-        height: calc(30 * var(--op-size-unit));
+        max-height: calc(30 * var(--op-size-unit));
     }
 
     .playing-card:not(:first-child) {
