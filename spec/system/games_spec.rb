@@ -156,6 +156,8 @@ RSpec.describe 'Games', type: :system, js: true do
         it 'replaces the game action section with a button to the index page' do
           expect(page).to have_selector('.btn-primary', text: 'Go back to your games')
           expect(page).not_to have_css '.game-action'
+          click_on 'Go back to your games'
+          expect(page).to have_content 'Your Games'
         end
 
         it 'replaces the current_player badge text with a message' do
