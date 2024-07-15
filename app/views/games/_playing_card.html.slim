@@ -1,4 +1,8 @@
 - if back
   = image_tag "ugly-cards/1B.svg", alt: "Playing Card Back", class: "playing-card"
 - else
-  = image_tag "ugly-cards/#{rank.first.upcase}#{suit.first.upcase}.svg", alt: "#{rank}, #{suit}", class: "playing-card"
+  - if rank.length > 2
+    - svg_rank = rank.first.upcase
+  - else
+    - svg_rank = rank
+  = image_tag "ugly-cards/#{svg_rank}#{suit.first.upcase}.svg", alt: "#{rank}, #{suit}", class: "playing-card"
