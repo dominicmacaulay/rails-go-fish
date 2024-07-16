@@ -37,7 +37,9 @@ class Game < ApplicationRecord
     save!
   end
 
-  class UnplayableError < GoFish::GoFishError
+  class GameError < StandardError; end
+
+  class UnplayableError < GameError
     def message
       'The game cannot currently be played as requested...'
     end

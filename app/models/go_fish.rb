@@ -1,7 +1,7 @@
 # frozen_string_literal: false
 
 # class for Go fish
-class GoFish
+class GoFish # rubocop:disable Metrics/ClassLength
   DEAL_NUMBER = 5
   MINIMUM_BOOK_LENGTH = 4
 
