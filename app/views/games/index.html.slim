@@ -1,5 +1,8 @@
+= turbo_stream_from current_user, "games"
+
 .games-center
   .games-list
+    / = turbo_frame_tag "first_turbo_frame" do
     .games-list__header
       span Your Games
 
@@ -7,12 +10,17 @@
         = material_icon('add')
         | New Game
 
-    - current_user.games.each do |game|
-      = render "game", game: game, owned: true
+    = turbo_frame_tag Game.new
+
+    = turbo_frame_tag "your_games"
+      - @games.each do |game|
+        - if current_user.games.include?(game)
+          = render "game", game: game
 
   .games-list
     .games-list__header
       span All Games
 
-    - @games.each do |game|
-      = render "game", game: game, owned: game.users.include?(current_user)
+    = turbo_frame_tag "all_games"
+      - @games.each do |game|
+        = render "game", game: game

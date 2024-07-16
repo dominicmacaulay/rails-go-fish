@@ -19,11 +19,12 @@ RSpec.describe 'Games', type: :system, js: true do
       click_on 'New Game'
       fill_in 'Name', with: 'Capybara game'
       fill_in 'Number of Players', with: '3'
+      expect_header
       click_on 'Create game'
 
       expect_header
-      expect(page).to have_content('Capybara game')
-      expect(page).to have_content('1/3 Players')
+      expect(page).to have_content('Capybara game').twice
+      expect(page).to have_content('1/3 Players').twice
     end
 
     it 'shows a game' do
@@ -35,12 +36,13 @@ RSpec.describe 'Games', type: :system, js: true do
 
     it 'Updating a game' do
       click_on 'Edit', match: :first
-      expect(page).not_to have_content('Number of Players')
+      expect(page).to have_no_content('Number of Players')
+      expect_header
       fill_in 'Name', with: 'Updated game'
       click_on 'Update game'
 
       expect_header
-      expect(page).to have_content('Updated game')
+      expect(page).to have_content('Updated game').twice
     end
 
     it 'Destroying a game' do
