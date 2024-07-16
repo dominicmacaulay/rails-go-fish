@@ -7,7 +7,7 @@ class Game < ApplicationRecord
 
   after_update_commit lambda {
                         users.each do |user|
-                          broadcast_update_to "#{user.id}_games", partial: 'games/game_play',
+                          broadcast_update_to "#{user.id}_#{id}", partial: 'games/game_play',
                                                                   locals: { game: self, current_user: user }
                         end
                       }

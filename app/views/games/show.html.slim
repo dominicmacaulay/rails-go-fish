@@ -1,4 +1,4 @@
-= turbo_stream_from "#{current_user.id}_games"
+= turbo_stream_from "#{current_user.id}_#{@game.id}"
 
 = turbo_frame_tag "games"
   = render "game_play", game: @game, current_user:

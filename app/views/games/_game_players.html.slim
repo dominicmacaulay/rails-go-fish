@@ -1,6 +1,6 @@
 .go-fish-panel.go-fish-panel--game-board
   .go-fish-panel__header.go-fish-panel__header--game-board
-    = link_to games_path, class: "btn-primary" do
+    = link_to games_path('/index'), class: "btn-primary" do
         = material_icon('arrow_back')
     span = game.name
 
