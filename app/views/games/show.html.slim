@@ -1,16 +1,4 @@
-- unless @game.started?
-  .container
-    = link_to sanitize("&larr; Back to games"), games_path
-    .header
-      h1 = @game.name
-    p #{@game.users.count}/#{@game.number_of_players} players joined
-- else
-  - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id }
-  .game-page
-    = render "game_players", game: @game, players: @game.go_fish.players, session_player:
+= turbo_stream_from "#{current_user.id}_games"
 
-    = render "game_feed", game: @game, go_fish: @game.go_fish, current_player: @game.go_fish.current_player, session_player:
-
-    = render "your_hand", player: session_player
-
-    = render "your_books", player: session_player
+= turbo_frame_tag "games"
+  = render "game_play", game: @game, current_user:

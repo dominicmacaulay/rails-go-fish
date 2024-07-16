@@ -5,6 +5,13 @@ class Game < ApplicationRecord
   validates :name, presence: true
   validates :number_of_players, presence: true, numericality: { only_integer: true, greater_than: 1 }
 
+  after_update_commit lambda {
+                        users.each do |user|
+                          broadcast_update_to "#{user.id}_games", partial: 'games/game_play',
+                                                                  locals: { game: self, current_user: user }
+                        end
+                      }
+
   def queue_full?
     users.count == number_of_players
   end
