@@ -3,5 +3,5 @@
     span Your Hand
   .go-fish-panel__content.go-fish-panel__content--your-hand
     .card-stack
-      - player.hand.each do |card|
+      - player&.hand&.each do |card|
         = render "games/playing_card", back: false, rank: card.rank, suit: card.suit

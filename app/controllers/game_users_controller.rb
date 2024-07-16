@@ -11,6 +11,7 @@ class GameUsersController < ApplicationController
       if @game_user.save
         @game.start!
         redirect_to @game, notice: 'You have joined a game'
+        # redirect_to @game, flash.now[:notice] = "You have successfully joined #{@game.name}"
       else
         redirect_to games_path, status: :unprocessable_entity
       end
