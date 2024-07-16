@@ -20,7 +20,7 @@ class GameUsersController < ApplicationController
   def destroy
     @game_user.destroy
 
-    redirect_to @game, notice: 'Game was successfully destroyed.'
+    # redirect_to @game, notice: 'Game was successfully destroyed.'
     # respond_to do |format|
     #   format.html { redirect_to games_path, notice: 'Game was successfully destroyed.' }
     #   format.turbo_stream { flash.now[:notice] = 'Game was successfully destroyed.' }
