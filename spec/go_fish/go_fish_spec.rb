@@ -220,6 +220,40 @@ RSpec.describe GoFish do
       end
     end
   end
+
+  describe 'smoke test' do
+    let(:player1) { Player.new(1, 'Dom') }
+    let(:player2) { Player.new(2, 'Micah') }
+    let(:player3) { Player.new(3, 'Josh') }
+    let(:game) { GoFish.new([player1, player2, player3]) }
+    it 'runs test' do
+      game.deal!
+      until game.winners
+        current_index = game.players.index(game.current_player)
+        other_player = game.players[(current_index + 1) % game.players.count]
+        rank = game.current_player.hand.sample.rank
+        # puts "#{game.current_player.name} is asking for #{rank}'s"
+        result = game.play_round!(other_player.id, rank, game.current_player)
+        message = result.generate_message_for(game.players[current_index])
+        puts message.action
+        puts message.opponent_response
+        puts message.result
+        puts '-----------------------------'
+        message = result.generate_message_for(other_player)
+        puts message.action
+        puts message.opponent_response
+        puts message.result
+        puts '-----------------------------'
+        message = result.generate_message_for(game.players[(current_index + 2) % game.players.count])
+        puts message.action
+        puts message.opponent_response
+        puts message.result
+        puts '-----------------------------'
+        puts
+      end
+      puts game.display_winners
+    end
+  end
 end
 
 def make_card_set(rank)

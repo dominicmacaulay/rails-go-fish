@@ -5,12 +5,10 @@ class Game < ApplicationRecord
   validates :name, presence: true
   validates :number_of_players, presence: true, numericality: { only_integer: true, greater_than: 1 }
 
-  after_update_commit lambda {
-                        users.each do |user|
-                          broadcast_update_to "#{user.id}_#{id}", partial: 'games/game_play',
-                                                                  locals: { game: self, current_user: user }
-                        end
-                      }
+  after_create_commit -> { broadcast_refresh_to 'games' }
+  after_update_commit -> { broadcast_refresh_to 'games' }
+  after_destroy_commit -> { broadcast_refresh_to 'games' }
+  # broadcasts_refreshes
 
   def queue_full?
     users.count == number_of_players
@@ -37,6 +35,7 @@ class Game < ApplicationRecord
     go_fish = GoFish.new(players)
     go_fish.deal!
     update(go_fish:, started_at: DateTime.current)
+    update_show
   end
 
   def play_round!(opponent_id = nil, rank = nil, requester = nil)
@@ -45,6 +44,11 @@ class Game < ApplicationRecord
 
     go_fish.play_round!(opponent_id, rank, requester)
     save!
+    update_show
+  end
+
+  def update_show
+    users.each { |user| broadcast_refresh_to "#{user.id}_#{id}" }
   end
 
   class GameError < StandardError; end

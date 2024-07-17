@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: var(--op-space-x-small);
     overflow: auto;
+    view-transition-name: notifications;
 }
 
 .notification-feed__round-result {
