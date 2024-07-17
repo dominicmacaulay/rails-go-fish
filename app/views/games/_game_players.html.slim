@@ -10,4 +10,5 @@
       - players.each do |player|
         = render "games/player_accordion", player: player, reveal_information: player == session_player
     - else
-      span Waiting for other players to join #{game.name}
+      p Waiting for other players to join #{game.name}
+      p #{game.users.count}/#{game.number_of_players} players joined

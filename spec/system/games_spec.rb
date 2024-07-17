@@ -214,15 +214,29 @@ RSpec.describe 'Games', type: :system, js: true do
     let(:game) { create(:game) }
 
     context 'joining a game' do
-      before do
+      it 'broadcasts that more players have joined the queue' do
+        game = create(:game, number_of_players: 3)
         create(:game_user, game:, user: user1)
         login_as user1
         visit games_path
+        click_on 'Play now', match: :first
+        expect(page).to have_content 'Waiting for other players'
+        expect(page).to have_content "#{game.users.count}/#{game.number_of_players} players joined"
+
+        create(:game_user, game:, user: create(:user))
+        game.start!
+
+        expect(page).to have_content 'Waiting for other players'
+        expect(page).to have_content "#{game.users.count}/#{game.number_of_players} players joined"
       end
 
-      it 'joining game' do
+      it 'broadcasts when the game is started' do
+        create(:game_user, game:, user: user1)
+        login_as user1
+        visit games_path
         click_on 'Play now', match: :first
-        expect(page).to have_content 'Waiting'
+        expect(page).to have_content 'Waiting for other players'
+        expect(page).to have_content "#{game.users.count}/#{game.number_of_players} players joined"
         create(:game_user, game:, user: create(:user))
         game.start!
         expect(page).to have_content 'Game started!'

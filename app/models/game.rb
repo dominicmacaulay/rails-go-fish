@@ -27,6 +27,7 @@ class Game < ApplicationRecord
   serialize :go_fish, coder: GoFish
 
   def start!
+    update(users:)
     return false unless queue_full?
     return false if started?
 
