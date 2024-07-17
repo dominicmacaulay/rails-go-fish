@@ -21,6 +21,8 @@ class Game < ApplicationRecord
   end
 
   def over?
+    return false if go_fish.nil?
+
     !go_fish.winners.nil?
   end
 

@@ -2,14 +2,19 @@
   .games-list__game-row
     span = game.name
     .game-actions
-      - if game.queue_full?
+      - if game.over?
+        span Game Over
+      - elsif game.queue_full?
         span Game full
       - else
         span #{game.users.count}/#{game.number_of_players} Players
 
       - if game.users.include?(current_user)
         = link_to game_path(game), data: { turbo_frame: "_top" }, class: "btn" do
-          | Play now
+          - if game.over?
+            | View
+          - else
+            | Play now
           = material_icon('arrow_right')
         = link_to "Edit", edit_game_path(game), class: "btn btn--light"
         = button_to "Delete", game_path(game), method: :delete, class: "btn btn--light"

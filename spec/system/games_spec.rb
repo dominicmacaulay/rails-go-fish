@@ -175,6 +175,13 @@ RSpec.describe 'Games', type: :system, js: true do
           expect(page).to have_content 'Your Games'
         end
 
+        it 'replaces the Game Full text with Game Over' do
+          click_on 'Go back to your games'
+          expect(page).to have_content('Game Over').twice
+          expect(page).to have_content('View').twice
+          expect(page).to have_no_content('Game Full')
+        end
+
         it 'replaces the current_player badge text with a message' do
           expect(page).to have_selector('.badge-primary', text: 'Game Over')
         end
