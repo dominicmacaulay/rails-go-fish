@@ -28,6 +28,7 @@ class Game < ApplicationRecord
 
   def start!
     update(users:)
+    update_show
     return false unless queue_full?
     return false if started?
 

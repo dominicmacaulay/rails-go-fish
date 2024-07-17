@@ -251,7 +251,10 @@ RSpec.describe GoFish do
         puts '-----------------------------'
         puts
       end
-      puts game.display_winners
+      final_result = game.display_winners
+      game.players.each do |player|
+        puts final_result.display_for(player)
+      end
     end
   end
 end
