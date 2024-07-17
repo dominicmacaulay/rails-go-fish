@@ -261,13 +261,13 @@ RSpec.describe 'Games', type: :system, js: true do
         login_as user2
         visit games_path
         click_on 'Play', match: :first
-        expect(page).to have_no_content('Take Turn')
+        expect(page).to have_content('Game Feed')
         wait_for_stream_connection
 
         expect do
           game.play_round!(user2.id, game.go_fish.current_player.hand.sample.rank, user1)
         end.to broadcast_to "#{user2.id}_#{game.id}"
-        # expect(page).to have_content('asked')
+        expect(page).to have_content('asked')
       end
     end
   end

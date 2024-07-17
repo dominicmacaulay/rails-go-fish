@@ -40,5 +40,6 @@
 
 ::view-transition-old(notifications),
 ::view-transition-new(notifications) {
-  animation-duration: 0.5s;
+  animation: slide-to-right 0.5s ease-out;
+  // animation-duration: 0.5s;
 }

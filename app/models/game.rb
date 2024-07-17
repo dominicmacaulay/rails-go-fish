@@ -49,7 +49,7 @@ class Game < ApplicationRecord
   end
 
   def update_show
-    users.each { |user| broadcast_refresh_to "#{user.id}_#{id}" }
+    users.each { |user| broadcast_refresh_to "games:#{id}:users:#{user.id}" }
   end
 
   class GameError < StandardError; end

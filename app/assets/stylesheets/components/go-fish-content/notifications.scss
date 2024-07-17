@@ -3,7 +3,6 @@
     flex-direction: column;
     gap: var(--op-space-x-small);
     overflow: auto;
-    view-transition-name: notifications;
 }
 
 .notification-feed__round-result {
@@ -13,6 +12,10 @@
     align-self: flex-start;
     align-items: flex-start;
     gap: var(--op-space-x-small);
+
+    &.notification-feed__round-result--animated {
+        view-transition-name: notifications;
+    }
 }
 
 .round-result__notification {
