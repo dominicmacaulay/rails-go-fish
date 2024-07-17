@@ -9,7 +9,9 @@
   .divider
 
   .navigation-panel__secondary-navigation
-    / button.btn.btn--no-border Profile
+    .profile
+      = material_icon('account_circle', size: 'large')
+      | #{current_user.name}
     = button_to "Sign out",
       destroy_user_session_path,
       method: :delete,
