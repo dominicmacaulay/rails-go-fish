@@ -258,37 +258,17 @@ RSpec.describe 'Games', type: :system, js: true do
         game.start!
       end
 
-      xit 'plays a turn', chrome: true do
-        login_as user1
+      it 'plays a turn', chrome: true do
+        login_as user2
         visit games_path
         click_on 'Play', match: :first
-        go_fish = game.go_fish
-        player2 = go_fish.players.detect { |player| player.id == user2.id }
-        go_fish.current_player = player2
-        game.save!
-
         expect(page).to have_no_content('Take Turn')
-        game.play_round!(user1.id, go_fish.current_player.hand.sample.rank, user2)
-        expect(page).to have_content('asked').once
-      end
+        wait_for_stream_connection
 
-      xit 'plays a turn', chrome: true do
-        using_session('user1') do
-          login_as user1
-          visit games_path
-          click_on 'Play', match: :first
-        end
-
-        using_session('user2') do
-          login_as user2
-          visit games_path
-          click_on 'Play', match: :first
-          click_on 'Take Turn'
-        end
-
-        using_session('user1') do
-          expect(page).to have_content 'User2 asked'
-        end
+        expect do
+          game.play_round!(user2.id, game.go_fish.current_player.hand.sample.rank, user1)
+        end.to broadcast_to "#{user2.id}_#{game.id}"
+        expect(page).to have_content('asked')
       end
     end
   end
@@ -354,6 +334,10 @@ RSpec.describe 'Games', type: :system, js: true do
     before do
       login_as user
       visit games_path
+    end
+
+    it "shows the user's name" do
+      expect(page).to have_content(user.name)
     end
 
     it 'signs out when button is clicked' do
