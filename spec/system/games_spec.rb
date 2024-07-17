@@ -30,8 +30,8 @@ RSpec.describe 'Games', type: :system, js: true do
     it 'shows a game' do
       click_on 'Play now', match: :first
 
-      expect_header(selector: '.header', text: game.name)
-      expect(page).to have_content('players joined')
+      expect(page).to have_content game.name
+      expect(page).to have_content('Waiting')
     end
 
     it 'Updating a game' do
@@ -46,7 +46,7 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'Destroying a game' do
-      expect(page).to have_content(game.name)
+      expect(page).to have_content(game.name).twice
 
       click_on 'Delete', match: :first
       expect(page).not_to have_content(game.name)
@@ -113,8 +113,6 @@ RSpec.describe 'Games', type: :system, js: true do
           click_on 'Play now', match: :first
 
           @rank = game.go_fish.current_player.hand.sample.rank
-          select user2.name, from: 'opponent'
-          select @rank, from: 'rank'
         end
         it 'should show the game action section if it is your turn' do
           expect(page).to have_content('Take Turn')
@@ -124,10 +122,14 @@ RSpec.describe 'Games', type: :system, js: true do
           expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
           expect(page).to have_selector('.btn-primary', text: 'Take Turn')
 
+          select user2.name, from: 'opponent'
+          select @rank, from: 'rank'
           click_on 'Take Turn'
         end
 
         it 'reflects that the player has drawn a card' do
+          select user2.name, from: 'opponent'
+          select @rank, from: 'rank'
           click_on 'Take Turn'
 
           session_player = game.go_fish.players.detect { |player| player.id == user.id }
@@ -142,6 +144,8 @@ RSpec.describe 'Games', type: :system, js: true do
           go_fish = game.go_fish
           go_fish.players.last.clear
           game.update(go_fish:)
+          select user2.name, from: 'opponent'
+          select @rank, from: 'rank'
           click_on 'Take Turn'
           expect(page).to have_content "You asked #{user2.name}"
           expect(page).to have_content "have any #{@rank}'s"
@@ -205,6 +209,69 @@ RSpec.describe 'Games', type: :system, js: true do
     end
   end
 
+  context 'broadcasting' do
+    let!(:user1) { create(:user) }
+    let(:game) { create(:game) }
+
+    context 'joining a game' do
+      before do
+        create(:game_user, game:, user: user1)
+        login_as user1
+        visit games_path
+      end
+
+      it 'joining game' do
+        click_on 'Play now', match: :first
+        expect(page).to have_content 'Waiting'
+        create(:game_user, game:, user: create(:user))
+        game.start!
+        expect(page).to have_content 'Game started!'
+      end
+    end
+
+    context 'playing a game' do
+      let!(:user2) { create(:user) }
+      before do
+        create(:game_user, game:, user: user1)
+        create(:game_user, game:, user: user2)
+        game.start!
+      end
+
+      xit 'plays a turn', chrome: true do
+        login_as user1
+        visit games_path
+        click_on 'Play', match: :first
+        go_fish = game.go_fish
+        player2 = go_fish.players.detect { |player| player.id == user2.id }
+        go_fish.current_player = player2
+        game.save!
+
+        expect(page).to have_no_content('Take Turn')
+        game.play_round!(user1.id, go_fish.current_player.hand.sample.rank, user2)
+        expect(page).to have_content('asked').once
+      end
+
+      xit 'plays a turn', chrome: true do
+        using_session('user1') do
+          login_as user1
+          visit games_path
+          click_on 'Play', match: :first
+        end
+
+        using_session('user2') do
+          login_as user2
+          visit games_path
+          click_on 'Play', match: :first
+          click_on 'Take Turn'
+        end
+
+        using_session('user1') do
+          expect(page).to have_content 'User2 asked'
+        end
+      end
+    end
+  end
+
   describe 'game that is not yours', js: true do
     let!(:user) { create(:user) }
     let!(:game) { create(:game) }
@@ -225,7 +292,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
       expect(page).to have_content('joined')
 
-      click_on 'Back'
+      click_on 'Games'
 
       expect(page).to have_content('1/2 Players')
       expect(page).to have_content('Delete')
