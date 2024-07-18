@@ -38,8 +38,4 @@
 @import 'components/go-fish-content/accordion.scss';
 @import 'components/go-fish-content/games-list.scss';
 
-::view-transition-old(notifications),
-::view-transition-new(notifications) {
-  animation: slide-to-right 0.5s ease-out;
-  // animation-duration: 0.5s;
-}
+@import 'config/animation.scss';
