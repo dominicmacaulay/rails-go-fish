@@ -29,7 +29,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
     message.book_was_made if current_player.make_book?
     switch_player unless deal_to_player_if_necessary == false || message.got_rank
     check_for_winners
-    round_results << message
+    round_results.unshift message
     message
   end
 

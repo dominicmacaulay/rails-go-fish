@@ -124,7 +124,7 @@ RSpec.describe 'Games', type: :system, js: true do
           @rank = game.go_fish.current_player.hand.sample.rank
         end
         it 'should show the game action section if it is your turn' do
-          expect(page).to have_content('Take Turn')
+          expect(page).to have_selector("input[type=submit][value='Take Turn']")
         end
 
         it 'sends the form information to the game model' do
@@ -150,7 +150,7 @@ RSpec.describe 'Games', type: :system, js: true do
         end
 
         it 'show the round results in the game feed' do
-          select user2.name, from: 'opponent'
+          select user2.name, from: 'opponent_id'
           select @rank, from: 'rank'
           click_on 'Take Turn'
           expect(page).to have_content "You asked #{user2.name}"

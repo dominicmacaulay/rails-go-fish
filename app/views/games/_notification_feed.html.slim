@@ -1,4 +1,4 @@
-.notification-feed data-preserve-scroll="data-preserve-scroll"
+.notification-feed data-controller="notification-feed"
   - if game.over? == true
     .notification-feed__round-result
       span.notification-feed__game-announcement Game Over!
@@ -6,9 +6,9 @@
         = go_fish.display_winners.display_for(session_player)
       .divider.divider--large.divider--spacing-medium
 
-  - round_results&.reverse.each do |round_result|
+  - round_results&.each do |round_result|
     - message = round_result.generate_message_for(session_player)
-    .notification-feed__round-result
+    .notification-feed__round-result data-notification-feed-target="item"
       .round-result__notification
         span.notification__player-action
           = message.action

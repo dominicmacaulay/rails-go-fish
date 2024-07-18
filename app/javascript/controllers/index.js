@@ -7,6 +7,9 @@ import { application } from "./application"
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import NotificationFeedController from "./notification_feed_controller"
+application.register("notification-feed", NotificationFeedController)
+
 import RankSelectorController from "./rank_selector_controller"
 application.register("rank-selector", RankSelectorController)
 
