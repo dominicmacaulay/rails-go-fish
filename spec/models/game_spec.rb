@@ -141,4 +141,26 @@ RSpec.describe Game, type: :model do
       expect(game.over?).to be true
     end
   end
+
+  context '#can_destroy?' do
+    let(:game) { create(:game) }
+    it 'returns true when the game has not been started' do
+      expect(game.can_destroy?).to be true
+    end
+
+    it 'returns false when the game has been started' do
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      expect(game.can_destroy?).to be false
+    end
+
+    it 'returns false when the game has been finished' do
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      game.go_fish.winners = game.go_fish.players
+      game.save!
+      expect(game.over?).to be true
+      expect(game.can_destroy?).to be false
+    end
+  end
 end

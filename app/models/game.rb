@@ -24,6 +24,12 @@ class Game < ApplicationRecord
     !go_fish.winners.nil?
   end
 
+  def can_destroy?
+    return true unless started? || over?
+
+    false
+  end
+
   serialize :go_fish, coder: GoFish
 
   def start!

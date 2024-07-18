@@ -45,11 +45,20 @@ RSpec.describe 'Games', type: :system, js: true do
       expect(page).to have_content('Updated game').twice
     end
 
-    it 'Destroying a game' do
-      expect(page).to have_content(game.name).twice
+    context 'destroy' do
+      it 'Destroying a game' do
+        expect(page).to have_content(game.name).twice
 
-      click_on 'Delete', match: :first
-      expect(page).not_to have_content(game.name)
+        click_on 'Delete', match: :first
+        expect(page).not_to have_content(game.name)
+      end
+
+      it 'cannot destroy a game when it is in progress' do
+        expect(page).to have_content('Delete')
+        create(:game_user, game:, user: create(:user))
+        game.start!
+        expect(page).to have_no_content('Delete')
+      end
     end
   end
 
@@ -257,7 +266,7 @@ RSpec.describe 'Games', type: :system, js: true do
         game.start!
       end
 
-      it 'plays a turn', chrome: true do
+      it 'plays a turn' do
         login_as user2
         visit games_path
         click_on 'Play', match: :first
@@ -266,7 +275,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
         expect do
           game.play_round!(user2.id, game.go_fish.current_player.hand.sample.rank, user1)
-        end.to broadcast_to "#{user2.id}_#{game.id}"
+        end.to broadcast_to "games:#{game.id}:users:#{user2.id}"
         expect(page).to have_content('asked')
       end
     end
