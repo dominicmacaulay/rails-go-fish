@@ -11,3 +11,7 @@
     opacity: var(--op-opacity-none);
   }
 }
+
+@view-transition {
+  navigation: auto;
+}

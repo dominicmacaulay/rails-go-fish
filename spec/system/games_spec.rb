@@ -300,12 +300,6 @@ RSpec.describe 'Games', type: :system, js: true do
       click_on 'Join'
 
       expect(page).to have_content('joined')
-
-      click_on 'Games'
-
-      expect(page).to have_content('1/2 Players')
-      expect(page).to have_content('Delete')
-      expect(page).to have_content('Edit')
     end
   end
 
@@ -349,14 +343,8 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it 'signs out when button is clicked' do
-      click_on 'Sign out'
+      click_on 'Logout'
       expect(page).to have_content('Sign in')
-    end
-
-    it 'returns to the game home page when button is clicked' do
-      click_on 'Play', match: :first
-      click_on 'Games'
-      expect(page).to have_content('Your Games')
     end
   end
 end

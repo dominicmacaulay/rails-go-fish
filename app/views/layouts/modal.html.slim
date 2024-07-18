@@ -9,7 +9,7 @@ html
   body
     = turbo_frame_tag 'modal' do
       .modal-wrapper(
-        class=class_names('modal-wrapper--active' => response.message == 'Unprocessable Entity')
+        class=class_names('modal-wrapper--active' => response.status == 422)
         data-controller="toggle"
         data-toggle-perform-on-connect-value=(response.message == 'OK')
         data-toggle-active-class="modal-wrapper--active"

@@ -1,8 +1,4 @@
-main.container
-  = link_to sanitize("&larr; Back to game"), games_path
+= content_for :modal_title
+  h1 Edit Game
 
-  .header
-    h1 Edit game
-
-  = turbo_frame_tag @game
-    = render "form", game: @game, editing: true
+= render "form", editing: true
