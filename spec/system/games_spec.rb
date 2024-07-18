@@ -121,7 +121,7 @@ RSpec.describe 'Games', type: :system, js: true do
         before do
           click_on 'Play now', match: :first
 
-          @rank = game.go_fish.current_player.hand.sample.rank
+          @rank = game.go_fish.current_player.hand.sample.rank.to_s
         end
         it 'should show the game action section if it is your turn' do
           expect(page).to have_selector("input[type=submit][value='Take Turn']")
@@ -129,16 +129,16 @@ RSpec.describe 'Games', type: :system, js: true do
 
         it 'sends the form information to the game model' do
           expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
-          expect(page).to have_selector('.btn-primary', text: 'Take Turn')
+          expect(page).to have_selector("input[type=submit][value='Take Turn']")
 
-          select user2.name, from: 'opponent'
-          select @rank, from: 'rank'
+          select user2.name, from: 'opponent_id'
+          click_button @rank
           click_on 'Take Turn'
         end
 
         it 'reflects that the player has drawn a card' do
-          select user2.name, from: 'opponent'
-          select @rank, from: 'rank'
+          select user2.name, from: 'opponent_id'
+          click_button @rank
           click_on 'Take Turn'
 
           session_player = game.go_fish.players.detect { |player| player.id == user.id }
@@ -151,11 +151,11 @@ RSpec.describe 'Games', type: :system, js: true do
 
         it 'show the round results in the game feed' do
           select user2.name, from: 'opponent_id'
-          select @rank, from: 'rank'
+          click_button @rank
           click_on 'Take Turn'
-          expect(page).to have_content "You asked #{user2.name}"
-          expect(page).to have_content "have any #{@rank}'s"
-          expect(page).to have_content 'got'
+          expect(page).to have_selector('.notification__player-action', text: "You asked #{user2.name}")
+          expect(page).to have_selector('.notification__opponent-response', text: "#{@rank}'s")
+          expect(page).to have_selector('.notification__result', text: 'got')
           expect(page).to have_content 'Game started!'
         end
       end

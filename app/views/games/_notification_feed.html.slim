@@ -8,7 +8,7 @@
 
   - round_results&.each do |round_result|
     - message = round_result.generate_message_for(session_player)
-    .notification-feed__round-result data-notification-feed-target="item"
+    .notification-feed__round-result id="#{round_result.id}" data-notification-feed-target="item"
       .round-result__notification
         span.notification__player-action
           = message.action

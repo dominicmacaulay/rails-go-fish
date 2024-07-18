@@ -3,11 +3,12 @@
 # round result class
 class RoundResult
   RoundResultMessage = Data.define(:action, :opponent_response, :result)
-  attr_reader :current_player, :opponent, :rank, :fished, :got_rank, :card_gotten, :amount, :empty_pond
+  attr_reader :id, :current_player, :opponent, :rank, :fished, :got_rank, :card_gotten, :amount, :empty_pond
   attr_accessor :book_made
 
-  def initialize(player:, opponent:, rank:, fished: false, got_rank: false, card_gotten: nil, # rubocop:disable Metrics/ParameterLists
+  def initialize(id:, player:, opponent:, rank:, fished: false, got_rank: false, card_gotten: nil, # rubocop:disable Metrics/ParameterLists
                  amount: 'one', empty_pond: false, book_made: false)
+    @id = id
     @current_player = player
     @opponent = opponent
     @rank = rank
@@ -34,7 +35,8 @@ class RoundResult
     message
   end
 
-  def self.from_json(json)
+  def self.from_json(json) # rubocop:disable Metrics/MethodLength
+    id = json['id']
     player = Player.from_json(json['current_player'])
     opponent = Player.from_json(json['opponent'])
     rank = json['rank']
@@ -44,7 +46,7 @@ class RoundResult
     amount = json['amount']
     empty_pond = json['empty_pond']
     book_made = json['book_made']
-    RoundResult.new(player:, opponent:, rank:, fished:, got_rank:, card_gotten:, amount:, empty_pond:, book_made:)
+    RoundResult.new(id:, player:, opponent:, rank:, fished:, got_rank:, card_gotten:, amount:, empty_pond:, book_made:)
   end
 
   def ==(other) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity

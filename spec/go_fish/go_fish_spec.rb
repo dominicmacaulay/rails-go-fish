@@ -90,7 +90,7 @@ RSpec.describe GoFish do
         end
         it 'returns object' do
           result = go_fish.play_round!(player2.id, '4', player1)
-          object = RoundResult.new(player: player1, opponent: player2, rank: '4', got_rank: true, amount: 'one')
+          object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', got_rank: true, amount: 'one')
           expect(result).to eq object
           expect(go_fish.round_results.count).to eql 1
         end
@@ -100,7 +100,7 @@ RSpec.describe GoFish do
         it 'sends the player a message saying that the pond was empty' do
           go_fish.deck.clear_cards
           result = go_fish.play_round!(player2.id, '4', player1)
-          object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, empty_pond: true)
+          object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, empty_pond: true)
           expect(result).to eq object
         end
       end
@@ -109,7 +109,7 @@ RSpec.describe GoFish do
         it 'returns message object if the player got the card they wanted and lets them play again' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
           result = go_fish.play_round!(player2.id, '4', player1)
-          object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, got_rank: true)
+          object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, got_rank: true)
           expect(result).to eq object
           go_fish.play_round!(player2.id, '4', player1)
           expect(go_fish.round_results.count).to eql 2
@@ -117,7 +117,7 @@ RSpec.describe GoFish do
         it 'returns a message object if the player did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('6', 'Spades')]))
           result = go_fish.play_round!(player2.id, '4', player1)
-          object = RoundResult.new(player: player1, opponent: player2, rank: '4', fished: true, card_gotten: '6')
+          object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, card_gotten: '6')
           expect(result).to eq object
         end
       end
@@ -297,7 +297,7 @@ def create_round_results(times, players)
   results = []
 
   until x > times
-    results << RoundResult.new(player: players.first, opponent: players.last, rank: '2')
+    results << RoundResult.new(id: 1, player: players.first, opponent: players.last, rank: '2')
     x += 1
   end
 

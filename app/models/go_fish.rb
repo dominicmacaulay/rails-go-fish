@@ -161,7 +161,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
   def opponent_transaction(opponent, rank)
     cards = opponent.remove_cards_with_rank(rank)
     current_player.add_to_hand(cards)
-    RoundResult.new(player: current_player, opponent:, rank:, got_rank: true,
+    RoundResult.new(id: (round_results.length + 1), player: current_player, opponent:, rank:, got_rank: true,
                     amount: integer_to_string(cards.count))
   end
 
@@ -169,14 +169,17 @@ class GoFish # rubocop:disable Metrics/ClassLength
     card = deck.deal
     current_player.add_to_hand(card)
     if card.equal_rank?(rank)
-      RoundResult.new(player: current_player, opponent:, rank:, fished: true, got_rank: true)
+      RoundResult.new(id: (round_results.length + 1), player: current_player, opponent:, rank:, fished: true,
+                      got_rank: true)
     else
-      RoundResult.new(player: current_player, opponent:, rank:, fished: true, card_gotten: card.rank)
+      RoundResult.new(id: (round_results.length + 1), player: current_player, opponent:, rank:, fished: true,
+                      card_gotten: card.rank)
     end
   end
 
   def pond_empty(opponent, rank)
-    RoundResult.new(player: current_player, opponent:, rank:, fished: true, empty_pond: true)
+    RoundResult.new(id: (round_results.length + 1), player: current_player, opponent:, rank:, fished: true,
+                    empty_pond: true)
   end
 
   def integer_to_string(integer)
