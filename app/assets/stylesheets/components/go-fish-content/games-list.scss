@@ -35,3 +35,10 @@
         }
     }
 }
+
+#your-games,
+#all-games {
+    display: flex;
+    flex-direction: column;
+    gap: var(--op-space-x-small);
+}
