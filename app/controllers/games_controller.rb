@@ -7,6 +7,7 @@ class GamesController < ApplicationController
 
   def show
     @users = @game.users
+    render layout: 'application_without_panel'
   end
 
   def new

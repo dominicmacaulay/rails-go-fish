@@ -1,14 +1,13 @@
 /* app/assets/stylesheets/animations.css */
 .animate {
-  animation: fadeIn 1s ease-in-out;
-}
+  height: 100%;
+  opacity: var(--op-opacity-full);
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
+  transition-property: opacity, height;
+  transition-duration: 1s;
 
-  to {
-    opacity: 1;
+  @starting-style {
+    height: 0;
+    opacity: var(--op-opacity-none);
   }
 }
