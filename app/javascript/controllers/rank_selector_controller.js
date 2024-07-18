@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-// Connects to data-controller="rank-selector"
+
 export default class extends Controller {
   connect() {
     this.selectedRank = null

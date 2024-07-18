@@ -21,8 +21,8 @@
         = select_tag :opponent_id, options_for_select(@game.go_fish.players.reject { |player| player.id == current_user.id }.map { |player| [player.name, player.id] }), class: "form-control form-control--small"
       .form-group.flex-grow-1
         = label_tag :rank, "Card Rank", class: "form-label"
-        .rank-buttons(data-controller="rank")
-          = hidden_field_tag :rank, '', data: { "rank-target": 'input' }
+        .rank-buttons(data-controller="rank-selector")
+          = hidden_field_tag :rank, nil, data: { "rank-selector-target": 'input' }
           - @game.go_fish.players.find { |player| player.id == current_user.id }.hand.map { |card| card.rank }.uniq.each do |rank|
-            = button_tag rank, class: "btn btn--small rank-button", data: { action: 'click->rank#select', "rank-target": 'button', rank: rank }
+            = button_tag rank, class: "btn btn--small rank-selector-button", data: { action: 'click->rank-selector#select', "rank-selector-target": 'button', rank: rank }
     = f.submit "Take Turn", class: "btn-primary btn--small"

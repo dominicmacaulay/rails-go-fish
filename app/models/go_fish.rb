@@ -120,7 +120,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
   private
 
   def validate_input_and_find_opponent(opponent_id, chosen_rank, requester)
-    raise ParamsRequiredError if opponent_id.nil? || chosen_rank.nil? || requester.nil?
+    raise ParamsRequiredError if opponent_id.nil? || chosen_rank.empty? || requester.nil?
 
     opponent = match_player_id(opponent_id)
     rank = validate_rank(chosen_rank)
