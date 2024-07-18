@@ -7,5 +7,11 @@ import { application } from "./application"
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
+import RankSelectorController from "./rank_selector_controller"
+application.register("rank-selector", RankSelectorController)
+
+import RemovalsController from "./removals_controller"
+application.register("removals", RemovalsController)
+
 import ToggleController from "./toggle_controller"
 application.register("toggle", ToggleController)

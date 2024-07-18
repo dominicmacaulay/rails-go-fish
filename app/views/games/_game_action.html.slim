@@ -1,14 +1,28 @@
-form.game-action action=game_rounds_path(game) method="post"
-  .game-action__options
-    .option
-      label.form-label for="player-selection" Select Player:
-      select.form-control.form-control--small#player-selection name='opponent'
-        - go_fish.players.each do |other_player|
-          - unless other_player == session_player
-            option value="#{other_player.id}" = other_player.name
-    .option
-      label.form-label for="card-selection" Select Rank:
-      select.form-control.form-control--small#card-selection name='rank'
-        - go_fish.current_player.hand.uniq(&:rank).each do |card|
-          option value="#{card.rank}" = card.rank
-  button.btn-primary.btn--small Take Turn
+/ form.game-action action=game_rounds_path(@game) method="post"
+/   .game-action__options
+/     .option
+/       label.form-label for="player-selection" Select Player:
+/       select.form-control.form-control--small#player-selection name='opponent'
+/         - go_fish.players.each do |other_player|
+/           - unless other_player == session_player
+/             option value="#{other_player.id}" = other_player.name
+/     .option
+/       label.form-label for="card-selection" Select Rank:
+/       select.form-control.form-control--small#card-selection name='rank'
+/         - go_fish.current_player.hand.uniq(&:rank).each do |card|
+/           option value="#{card.rank}" = card.rank
+/   button.btn-primary.btn--small Take Turn
+
+= form_for @game, url: game_rounds_path(@game), method: :create do |f|
+  .game-action
+    .game-action__options
+      .form-group.flex-grow-1
+        = label_tag :opponent_id, "Player", class: "form-label"
+        = select_tag :opponent_id, options_for_select(@game.go_fish.players.reject { |player| player.id == current_user.id }.map { |player| [player.name, player.id] }), class: "form-control form-control--small"
+      .form-group.flex-grow-1
+        = label_tag :rank, "Card Rank", class: "form-label"
+        .rank-buttons(data-controller="rank")
+          = hidden_field_tag :rank, '', data: { "rank-target": 'input' }
+          - @game.go_fish.players.find { |player| player.id == current_user.id }.hand.map { |card| card.rank }.uniq.each do |rank|
+            = button_tag rank, class: "btn btn--small rank-button", data: { action: 'click->rank#select', "rank-target": 'button', rank: rank }
+    = f.submit "Take Turn", class: "btn-primary btn--small"

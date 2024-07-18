@@ -1,3 +1,3 @@
 - flash.each do |flash_type, message|
-  .alert-notice.alert--flash
+  .alert-notice.alert--flash(data-controller="removals", data-action="animationend->removals#remove")
     = message
