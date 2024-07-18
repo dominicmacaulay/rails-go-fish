@@ -26,12 +26,11 @@ nav.sidebar.sidebar--drawer.sidebar--padded
       = material_icon('skull')
       | Games
 
-  .sidebar__content.sidebar__content--end style="align-items: center"
+  .sidebar__content.sidebar__content--end
     / .divider
-    .profile
+    .profile style="align-self: center"
       = material_icon('account_circle', size: 'large')
       | #{current_user.name}
-    = button_to "Sign out",
-      destroy_user_session_path,
-      method: :delete,
-      class: "btn btn--no-border full-width"
+    = button_to destroy_user_session_path, method: :delete, class: "btn btn--no-border full-width" do
+      = material_icon('logout', size: 'large')
+      | Logout
