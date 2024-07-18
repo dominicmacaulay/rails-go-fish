@@ -26,7 +26,8 @@ nav.sidebar.sidebar--drawer.sidebar--padded
       = material_icon('skull')
       | Games
 
-  .sidebar__content.sidebar__content--end
+  .sidebar__content.sidebar__content--end style="align-items: center"
+    / .divider
     .profile
       = material_icon('account_circle', size: 'large')
       | #{current_user.name}
