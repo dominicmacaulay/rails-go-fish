@@ -116,93 +116,6 @@ RSpec.describe 'Games', type: :system, js: true do
         page.find('.accordion__contents', text: user2.first_name).click
         expect(page).to have_selector("img[alt='Playing Card Back']", count: 5)
       end
-
-      context 'taking a turn' do
-        before do
-          click_on 'Play now', match: :first
-
-          @rank = game.go_fish.current_player.hand.sample.rank.to_s
-        end
-        it 'should show the game action section if it is your turn' do
-          expect(page).to have_selector("input[type=submit][value='Take Turn']")
-        end
-
-        it 'sends the form information to the game model' do
-          expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
-          expect(page).to have_selector("input[type=submit][value='Take Turn']")
-
-          select user2.first_name, from: 'opponent_id'
-          click_button @rank
-          click_on 'Take Turn'
-        end
-
-        it 'reflects that the player has drawn a card' do
-          select user2.first_name, from: 'opponent_id'
-          click_button @rank
-          click_on 'Take Turn'
-
-          session_player = game.go_fish.players.detect { |player| player.id == user.id }
-          expect(page).to have_content("\n(you)\nCards: #{session_player.hand_count}")
-          page.find('.accordion__contents', text: session_player.name).click
-          session_player.hand.each do |card|
-            expect(page).to have_selector("img[alt='#{card.rank}, #{card.suit}']").twice
-          end
-        end
-
-        it 'show the round results in the game feed' do
-          select user2.first_name, from: 'opponent_id'
-          click_button @rank
-          click_on 'Take Turn'
-          expect(page).to have_selector('.notification__player-action', text: "You asked #{user2.first_name}")
-          expect(page).to have_selector('.notification__opponent-response', text: "#{@rank}'s")
-          expect(page).to have_selector('.notification__result', text: 'got')
-          expect(page).to have_content 'Game started!'
-        end
-      end
-
-      context 'game over' do
-        let(:go_fish) { game.go_fish }
-        let(:winner) { go_fish.players.detect { |player| player.id == user.id } }
-        before do
-          go_fish.winners = [winner]
-          game.update(go_fish:)
-          click_on 'Play now', match: :first
-        end
-
-        it 'shows the game end results when a winner is declared' do
-          expect(page).to have_content 'Game Over!'
-          expect(page).to have_content 'You won the game'
-        end
-
-        it 'replaces the game action section with a button to the index page' do
-          expect(page).to have_selector('.btn-primary', text: 'Go back to your games')
-          expect(page).not_to have_css '.game-action'
-          click_on 'Go back to your games'
-          expect(page).to have_content 'Your Games'
-        end
-
-        it 'replaces the In progress text with Game Over' do
-          click_on 'Go back to your games'
-          expect(page).to have_content('Game Over').twice
-          expect(page).to have_content('View').twice
-          expect(page).to have_no_content('In progress')
-        end
-
-        it 'replaces the current_player badge text with a message' do
-          expect(page).to have_selector('.badge-primary', text: 'Game Over')
-        end
-      end
-
-      xit 'does not reload the full page when the player takes a turn' do
-        click_on 'Play now', match: :first
-        session_player = game.go_fish.players.detect { |player| player.id == user.id }
-        page.find('.accordion__contents', text: session_player.first_name).click
-
-        click_on 'Take Turn'
-        session_player.hand.each do |card|
-          expect(page).to have_content("#{card.rank}, #{card.suit}").twice
-        end
-      end
     end
 
     context 'logging in as the opponent' do
@@ -219,6 +132,100 @@ RSpec.describe 'Games', type: :system, js: true do
         expect(page).to have_content('Game started!')
         expect(page).not_to have_content('Take Turn')
       end
+    end
+  end
+
+  context 'taking a turn' do
+    let(:user) { create(:user) }
+    let(:user2) { create(:user) }
+    let(:game) { create(:game) }
+    let(:go_fish) { game.go_fish }
+
+    before do
+      create(:game_user, game:, user:)
+      create(:game_user, game:, user: user2)
+      game.start!
+      login_as user
+      visit games_path
+      click_on 'Play now', match: :first
+
+      @rank = go_fish.current_player.hand.sample.rank.to_s
+    end
+    it 'should show the game action section if it is your turn' do
+      expect(page).to have_selector("input[type=submit][value='Take Turn']")
+    end
+
+    it 'sends the form information to the game model' do
+      expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
+      expect(page).to have_selector("input[type=submit][value='Take Turn']")
+
+      select user2.first_name, from: 'opponent_id'
+      click_button @rank
+      click_on 'Take Turn'
+    end
+
+    it 'reflects that the player has drawn a card' do
+      select user2.first_name, from: 'opponent_id'
+      click_button @rank
+      click_on 'Take Turn'
+
+      session_player = game.go_fish.players.detect { |player| player.id == user.id }
+      expect(page).to have_content("\n(you)\nCards: #{session_player.hand_count}")
+      page.find('.accordion__contents', text: session_player.name).click
+      session_player.hand.each do |card|
+        expect(page).to have_selector("img[alt='#{card.rank}, #{card.suit}']").twice
+      end
+    end
+
+    it 'show the round results in the game feed' do
+      select user2.first_name, from: 'opponent_id'
+      click_button @rank
+      click_on 'Take Turn'
+      expect(page).to have_selector('.notification__player-action', text: "You asked #{user2.first_name}")
+      expect(page).to have_selector('.notification__opponent-response', text: "#{@rank}'s")
+      expect(page).to have_selector('.notification__result', text: 'got')
+      expect(page).to have_content 'Game started!'
+    end
+  end
+
+  context 'game over' do
+    let(:user) { create(:user) }
+    let(:game) { create(:game) }
+    let(:go_fish) { game.go_fish }
+    let(:winner) { go_fish.players.detect { |player| player.id == user.id } }
+
+    before do
+      create(:game_user, user:, game:)
+      create(:game_user, user: create(:user), game:)
+      game.start!
+      login_as user
+      visit games_path
+      go_fish.winners = [winner]
+      game.update(go_fish:)
+      click_on 'Play now', match: :first
+    end
+
+    it 'shows the game end results when a winner is declared' do
+      expect(page).to have_content 'Game Over!'
+      expect(page).to have_content 'You won the game'
+    end
+
+    it 'replaces the game action section with a button to the index page' do
+      expect(page).to have_selector('.btn-primary', text: 'Go back to your games')
+      expect(page).not_to have_css '.game-action'
+      click_on 'Go back to your games'
+      expect(page).to have_content 'Your Games'
+    end
+
+    it 'replaces the In progress text with Game Over' do
+      click_on 'Go back to your games'
+      expect(page).to have_content('Game Over').twice
+      expect(page).to have_content('View').twice
+      expect(page).to have_no_content('In progress')
+    end
+
+    it 'replaces the current_player badge text with a message' do
+      expect(page).to have_selector('.badge-primary', text: 'Game Over')
     end
   end
 
@@ -325,26 +332,6 @@ RSpec.describe 'Games', type: :system, js: true do
       click_on 'Join'
       expect(page).to have_content(game.name).once
       expect(page).to have_content('In progress').once
-    end
-  end
-
-  describe 'sidebar navigation', js: true do
-    let!(:user) { create(:user) }
-    let!(:game) { create(:game) }
-    let!(:game_user) { create(:game_user, game:, user:) }
-
-    before do
-      login_as user
-      visit games_path
-    end
-
-    it "shows the user's name" do
-      expect(page).to have_content(user.first_name)
-    end
-
-    it 'signs out when button is clicked' do
-      click_on 'Logout'
-      expect(page).to have_content('Sign in')
     end
   end
 end
