@@ -18,13 +18,11 @@
 @import 'core/go-fish-game-layout.scss';
 @import 'core/go-fish-home-layout.scss';
 
-// layouts
-@import 'layouts/container';
-
 // general go fish layout components
 @import 'components/layouts/go-fish-panel.scss';
 @import 'components/layouts/navigation-panel.scss';
 @import 'components/layouts/games-center.scss';
+@import 'components/layouts/landing_page.scss';
 
 // optics overrides
 @import 'components/optics-overrides/badge.scss';
