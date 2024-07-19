@@ -16,6 +16,6 @@
     }
 
     .playing-card:not(:first-child) {
-        margin-left: calc(-.5 * var(--op-space-2x-large));
+        margin-left: calc(-2.5 * var(--op-space-2x-large));
     }
 }
