@@ -26,8 +26,18 @@ nav.sidebar.sidebar--drawer.sidebar--padded
       = material_icon('playing_cards')
       | Games
 
+    = link_to games_path, class: 'btn btn--no-border' do
+      = material_icon('social_leaderboard')
+      | Leader Board
+
+    = link_to games_path, class: 'btn btn--no-border' do
+      = material_icon('history_edu')
+      | History/Status
+
   .sidebar__content.sidebar__content--end
-    / .divider
+    / .divider style="margin-bottom: var(--op-space-medium)"
+    .divider
+    br
     .profile style="align-self: center"
       = material_icon('account_circle', size: 'large')
       | #{current_user.first_name}
