@@ -66,8 +66,8 @@ RSpec.describe Game, type: :model do
     end
 
     it 'seriliazes' do
-      player1 = Player.new(user1.id, user1.name)
-      player2 = Player.new(user2.id, user2.name)
+      player1 = Player.new(user1.id, user1.first_name)
+      player2 = Player.new(user2.id, user2.first_name)
       go_fish = GoFish.new([player1, player2])
       game.update(go_fish:)
       expect(game.go_fish).to eq go_fish

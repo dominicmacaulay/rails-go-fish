@@ -41,7 +41,7 @@ class Game < ApplicationRecord
     return false unless queue_full?
     return false if started?
 
-    players = users.map { |user| Player.new(user.id, user.name) }
+    players = users.map { |user| Player.new(user.id, user.first_name) }
     go_fish = GoFish.new(players)
     go_fish.deal!
     update(go_fish:, started_at: DateTime.current)

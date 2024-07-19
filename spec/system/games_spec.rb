@@ -113,7 +113,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
       it 'should show the opponents cards as hidden' do
         click_on 'Play now', match: :first
-        page.find('.accordion__contents', text: user2.name).click
+        page.find('.accordion__contents', text: user2.first_name).click
         expect(page).to have_selector("img[alt='Playing Card Back']", count: 5)
       end
 
@@ -131,13 +131,13 @@ RSpec.describe 'Games', type: :system, js: true do
           expect_any_instance_of(Game).to receive(:play_round!).with(user2.id, @rank, user)
           expect(page).to have_selector("input[type=submit][value='Take Turn']")
 
-          select user2.name, from: 'opponent_id'
+          select user2.first_name, from: 'opponent_id'
           click_button @rank
           click_on 'Take Turn'
         end
 
         it 'reflects that the player has drawn a card' do
-          select user2.name, from: 'opponent_id'
+          select user2.first_name, from: 'opponent_id'
           click_button @rank
           click_on 'Take Turn'
 
@@ -150,10 +150,10 @@ RSpec.describe 'Games', type: :system, js: true do
         end
 
         it 'show the round results in the game feed' do
-          select user2.name, from: 'opponent_id'
+          select user2.first_name, from: 'opponent_id'
           click_button @rank
           click_on 'Take Turn'
-          expect(page).to have_selector('.notification__player-action', text: "You asked #{user2.name}")
+          expect(page).to have_selector('.notification__player-action', text: "You asked #{user2.first_name}")
           expect(page).to have_selector('.notification__opponent-response', text: "#{@rank}'s")
           expect(page).to have_selector('.notification__result', text: 'got')
           expect(page).to have_content 'Game started!'
@@ -196,7 +196,7 @@ RSpec.describe 'Games', type: :system, js: true do
       xit 'does not reload the full page when the player takes a turn' do
         click_on 'Play now', match: :first
         session_player = game.go_fish.players.detect { |player| player.id == user.id }
-        page.find('.accordion__contents', text: session_player.name).click
+        page.find('.accordion__contents', text: session_player.first_name).click
 
         click_on 'Take Turn'
         session_player.hand.each do |card|
@@ -339,7 +339,7 @@ RSpec.describe 'Games', type: :system, js: true do
     end
 
     it "shows the user's name" do
-      expect(page).to have_content(user.name)
+      expect(page).to have_content(user.first_name)
     end
 
     it 'signs out when button is clicked' do
