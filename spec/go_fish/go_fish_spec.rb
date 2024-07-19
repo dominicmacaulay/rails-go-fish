@@ -94,6 +94,11 @@ RSpec.describe GoFish do
           expect(result).to eq object
           expect(go_fish.round_results.count).to eql 1
         end
+        it 'updates the round count' do
+          expect(go_fish.rounds_played).to eql 0
+          go_fish.play_round!(player2.id, '4', player1)
+          expect(go_fish.rounds_played).to eql 1
+        end
       end
 
       context 'runs transaction if the pond has no cards in it' do
@@ -307,6 +312,7 @@ end
 def go_fish_json # rubocop:disable Metrics/MethodLength
   { 'players' => [{ 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] }, { 'id' => 2, 'name' => 'Player 2', 'hand' => [], 'books' => [] }],
     'current_player' => { 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] },
+    'rounds_played' => '0',
     'deck' =>
   { 'cards' =>
     [{ 'rank' => '2', 'suit' => 'Spades' },

@@ -6,12 +6,14 @@ class GoFish # rubocop:disable Metrics/ClassLength
   MINIMUM_BOOK_LENGTH = 4
 
   attr_reader :players, :deck, :round_results
-  attr_accessor :current_player, :winners
+  attr_accessor :current_player, :winners, :rounds_played
 
-  def initialize(players, current_player: players.first, deck: Deck.new, round_results: [], winners: nil)
+  def initialize(players, current_player: players.first, deck: Deck.new, rounds_played: 0, round_results: [], # rubocop:disable Metrics/ParameterLists
+                 winners: nil)
     @players = players
     @current_player = current_player
     @deck = deck
+    @rounds_played = rounds_played
     @round_results = round_results
     @winners = winners
   end
@@ -28,6 +30,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
     message = run_transaction(opponent, rank)
     message.book_was_made if current_player.make_book?
     switch_player unless deal_to_player_if_necessary == false || message.got_rank
+    self.rounds_played += 1
     check_for_winners
     round_results.unshift message
     message
@@ -56,6 +59,8 @@ class GoFish # rubocop:disable Metrics/ClassLength
     return false unless current_player == other.current_player
 
     return false unless deck == other.deck
+
+    return false unless rounds_played == other.rounds_played
 
     return false unless round_results_equal?(other.round_results)
 
@@ -104,9 +109,10 @@ class GoFish # rubocop:disable Metrics/ClassLength
     players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
     deck = Deck.from_json(json['deck'])
+    rounds_played = json['rounds_played'].to_i
     round_results = hydrate_round_results(json['round_results'])
     winners = json['winners']&.map { |winner| Player.from_json(winner) }
-    GoFish.new(players, current_player:, deck:, round_results:, winners:)
+    GoFish.new(players, current_player:, deck:, rounds_played:, round_results:, winners:)
   end
 
   def self.hydrate_round_results(json)
