@@ -39,8 +39,7 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    if @game.can_destroy?
-      @game.destroy
+    if @game.destroy
       respond_to do |format|
         format.html { redirect_to games_path, notice: "#{@game.name} was successfully destroyed" }
         format.turbo_stream { flash.now[:notice] = "#{@game.name} was successfully destroyed" }

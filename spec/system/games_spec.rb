@@ -53,7 +53,7 @@ RSpec.describe 'Games', type: :system, js: true do
         expect(page).not_to have_content(game.name)
       end
 
-      it 'cannot destroy a game when it is in progress' do
+      it 'cannot destroy a game when it is In progress' do
         expect(page).to have_content('Delete')
         create(:game_user, game:, user: create(:user))
         game.start!
@@ -77,7 +77,7 @@ RSpec.describe 'Games', type: :system, js: true do
       end
 
       it 'displays that the game is full and takes away the join button when full' do
-        expect(page).to have_content('Game full')
+        expect(page).to have_content('In progress')
         expect(page).not_to have_content('Players')
         expect(page).not_to have_content('Join')
       end
@@ -181,11 +181,11 @@ RSpec.describe 'Games', type: :system, js: true do
           expect(page).to have_content 'Your Games'
         end
 
-        it 'replaces the Game Full text with Game Over' do
+        it 'replaces the In progress text with Game Over' do
           click_on 'Go back to your games'
           expect(page).to have_content('Game Over').twice
           expect(page).to have_content('View').twice
-          expect(page).to have_no_content('Game Full')
+          expect(page).to have_no_content('In progress')
         end
 
         it 'replaces the current_player badge text with a message' do
@@ -324,7 +324,7 @@ RSpec.describe 'Games', type: :system, js: true do
 
       click_on 'Join'
       expect(page).to have_content(game.name).once
-      expect(page).to have_content('Game full').once
+      expect(page).to have_content('In progress').once
     end
   end
 

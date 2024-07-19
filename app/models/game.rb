@@ -5,6 +5,8 @@ class Game < ApplicationRecord
   validates :name, presence: true
   validates :number_of_players, presence: true, numericality: { only_integer: true, greater_than: 1 }
 
+  before_destroy :can_destroy?, prepend: true
+
   after_create_commit -> { broadcast_refresh_to 'games' }
   after_update_commit -> { broadcast_refresh_to 'games' }
   after_destroy_commit -> { broadcast_refresh_to 'games' }
@@ -25,7 +27,8 @@ class Game < ApplicationRecord
   end
 
   def can_destroy?
-    return true unless started? || over?
+    return true unless started?
+    return true if over?
 
     false
   end

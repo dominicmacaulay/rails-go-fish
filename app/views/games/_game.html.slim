@@ -5,7 +5,7 @@
       - if game.over?
         span Game Over
       - elsif game.queue_full?
-        span Game full
+        span In progress
       - else
         span #{game.users.count}/#{game.number_of_players} Players
 
