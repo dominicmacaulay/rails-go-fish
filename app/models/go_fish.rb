@@ -18,6 +18,14 @@ class GoFish # rubocop:disable Metrics/ClassLength
     @winners = winners
   end
 
+  def score_board
+    if winners.nil?
+      generate_score_board(players)
+    else
+      generate_score_board(winners)
+    end
+  end
+
   def deal!
     deck.shuffle
     DEAL_NUMBER.times do
@@ -44,6 +52,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
     return unless players.map(&:hand_count).sum.zero? && deck.cards.empty?
 
     self.winners = determine_winners
+    self.rounds_played = "#{rounds_played} (finished)"
   end
 
   def switch_player
@@ -124,6 +133,17 @@ class GoFish # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def generate_score_board(players)
+    score_board = {}
+    players.each do |player|
+      score_board[player.name] =
+        { 'name' => player.name.to_s, 'books_count' => player.book_count.to_s,
+          'books_value' => player.total_book_value.to_s }
+      score_board[player.name]['winner'] = 'true' unless winners.nil?
+    end
+    score_board
+  end
 
   def validate_input_and_find_opponent(opponent_id, chosen_rank, requester)
     raise ParamsRequiredError if opponent_id.nil? || chosen_rank.empty? || requester.nil?

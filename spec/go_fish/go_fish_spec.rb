@@ -75,6 +75,21 @@ RSpec.describe GoFish do
       end
     end
 
+    context '#score_board' do
+      it "returns a hash with each player's name, book count, and book value when there are no winners" do
+        response = { 'Player 1' => { 'name' => 'Player 1', 'books_count' => '0', 'books_value' => '0' },
+                     'Player 2' => { 'name' => 'Player 2', 'books_count' => '0', 'books_value' => '0' } }
+        expect(go_fish.score_board).to eq response
+      end
+      it "returns a hash with all the winner's info when there are winners" do
+        go_fish.winners = [players.first]
+        response = { 'Player 1' => { 'winner' => 'true', 'name' => 'Player 1', 'books_count' => '0',
+                                     'books_value' => '0' } }
+        expect(go_fish.score_board).to eq response
+        expect(go_fish.score_board['Player 2']).to be nil
+      end
+    end
+
     context 'play_round!' do
       before do
         player1.add_to_hand(Card.new('4', 'Hearts'))
@@ -221,6 +236,15 @@ RSpec.describe GoFish do
           winner_go_fish.check_for_winners
           message = GameResult.new(winner_go_fish.winners)
           expect(winner_go_fish.display_winners).to eq message
+        end
+        it 'make the rounds_played variable have an over message' do
+          winner = Player.new(1, 'Winner', books: books.shift(7))
+          loser = Player.new(2, 'Loser', books: books.shift(6))
+          winner_go_fish = GoFish.new([winner, loser], deck: Deck.new([0]))
+          count = winner_go_fish.rounds_played
+          winner_go_fish.deck.deal
+          winner_go_fish.check_for_winners
+          expect(winner_go_fish.rounds_played).to eq("#{count} (finished)")
         end
       end
     end

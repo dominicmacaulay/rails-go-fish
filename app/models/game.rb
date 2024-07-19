@@ -33,6 +33,9 @@ class Game < ApplicationRecord
     false
   end
 
+  delegate :rounds_played, to: :go_fish
+  delegate :score_board, to: :go_fish
+
   serialize :go_fish, coder: GoFish
 
   def start!

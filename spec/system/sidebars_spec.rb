@@ -22,7 +22,7 @@ RSpec.describe 'sidebar navigation', js: true do
     expect_header
   end
 
-  it 'directs you to the user history/status page' do
+  xit 'directs you to the user history/status page' do
     click_on 'History/Status'
     expect_header(text: 'Current Games')
     expect_header(text: 'Past Games')

@@ -163,4 +163,25 @@ RSpec.describe Game, type: :model do
       expect(game.can_destroy?).to be true
     end
   end
+
+  context '#rounds_played' do
+    it 'returns the round count for its game' do
+      game = create(:game)
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      expect(game.rounds_played).to eq 0
+      game.go_fish.rounds_played = 5
+      game.save!
+      expect(game.rounds_played).to eq 5
+    end
+  end
+
+  context '#score_board' do
+    it 'should display the scoreboard' do
+      game = create(:game)
+      2.times { create(:game_user, user: create(:user), game:) }
+      game.start!
+      expect(game.score_board).to eq game.go_fish.score_board
+    end
+  end
 end
