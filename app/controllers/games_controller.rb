@@ -49,6 +49,9 @@ class GamesController < ApplicationController
     end
   end
 
+  def history_status
+  end
+
   private
 
   def set_game

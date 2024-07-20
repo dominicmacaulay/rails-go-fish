@@ -101,7 +101,7 @@ RSpec.describe RoundResult do
         result_message = result.generate_message_for(player2)
         expect(result_message.action).to eql "P1 asked you for 2's"
         expect(result_message.opponent_response).to eql "Go Fish! You did not have any 2's"
-        expect(result_message.result).to eql 'P1 had no luck'
+        expect(result.obscure_messages).to include result_message.result.split('P1 ').last
       end
       it 'does not get anything' do
         result = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '2', fished: true, empty_pond: true)
@@ -135,7 +135,7 @@ RSpec.describe RoundResult do
         result_message = result.generate_message_for(player3)
         expect(result_message.action).to eql "P1 asked P2 for 2's"
         expect(result_message.opponent_response).to eql "Go Fish! P2 did not have any 2's"
-        expect(result_message.result).to eql 'P1 had no luck'
+        expect(result.obscure_messages).to include result_message.result.split('P1 ').last
       end
       it 'does not get anything' do
         result = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '2', fished: true, empty_pond: true)

@@ -20,6 +20,11 @@ class RoundResult
     @book_made = book_made
   end
 
+  def obscure_messages
+    @obscure_messages ||= ['had no luck', 'shot for the stars and burned up on re-entry', 'got screwed',
+                            'now wants to quit the game', 'is on the edge', 'believes 911 was an inside job']
+  end
+
   def book_was_made
     self.book_made = true
   end
@@ -99,7 +104,7 @@ class RoundResult
     if got_rank
       "got #{amount} of them"
     elsif !empty_pond
-      reveal_card ? "got a #{card_gotten}" : 'had no luck'
+      reveal_card ? "got a #{card_gotten}" : obscure_messages.sample
     else
       'got nothing for the pond is empty'
     end

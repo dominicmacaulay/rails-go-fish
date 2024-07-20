@@ -41,10 +41,10 @@ namespace :generate do
 
     games = Game.all
     games.each do |game|
-      go_fish = game.go_fish
       round_count.times do
         break if game.over?
 
+        go_fish = game.go_fish
         current_index = go_fish.players.index(go_fish.current_player)
         other_player = go_fish.players[(current_index + 1) % go_fish.players.count]
         rank = go_fish.current_player.hand.sample.rank
