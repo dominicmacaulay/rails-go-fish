@@ -17,16 +17,16 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  context 'started?' do
+  context 'started' do
     let(:game) { create(:game) }
     it 'should return false if the go_fish is nil' do
-      expect(game.started?).to be false
+      expect(game.started).to be false
     end
 
     it 'should return true if go_fish is not nil' do
       2.times { create(:game_user, user: create(:user), game:) }
       game.start!
-      expect(game.started?).to be true
+      expect(game.started).to be true
     end
   end
 
@@ -127,19 +127,19 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  context '#over?' do
+  context '#over' do
     let(:game) { create(:game) }
     before do
       2.times { create(:game_user, user: create(:user), game:) }
       game.start!
     end
     it 'returns false when the game is not over' do
-      expect(game.over?).to be false
+      expect(game.over).to be false
     end
 
     it 'returns true when a winner is declared' do
       game.go_fish.winners = game.go_fish.players
-      expect(game.over?).to be true
+      expect(game.over).to be true
     end
   end
 
@@ -160,7 +160,7 @@ RSpec.describe Game, type: :model do
       game.start!
       game.go_fish.winners = game.go_fish.players
       game.save!
-      expect(game.over?).to be true
+      expect(game.over).to be true
       expect(game.can_destroy?).to be true
     end
   end
@@ -191,5 +191,41 @@ RSpec.describe Game, type: :model do
         "#{info['name']} books: #{info['books_count']}, total score: #{info['books_value']}"
       end
     end
+  end
+
+  context 'game over' do
+    let(:game) { create(:game) }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
+    before do
+      create(:game_user, game:, user: user1)
+      create(:game_user, game:, user: user2)
+      game.start!
+      play_until_finished(game)
+    end
+
+    it 'should update the game users that are winners' do
+      user1_won = game.go_fish.winners.any? { |winner| winner.id == user1.id }
+      user2_won = game.go_fish.winners.any? { |winner| winner.id == user2.id }
+      expect(user1.game_users.first.winner).to be user1_won
+      expect(user2.game_users.first.winner).to be user2_won
+    end
+
+    it 'should set the over attribute to true' do
+      expect(game.reload.over).to be true
+    end
+
+    it 'should set the finished at timestamp' do
+      expect(game.finished_at).not_to be nil
+    end
+  end
+end
+
+def play_until_finished(game) # rubocop:disable Metrics/AbcSize
+  until game.go_fish.winners
+    current_index = game.go_fish.players.index(game.go_fish.current_player)
+    other_player = game.go_fish.players[(current_index + 1) % game.go_fish.players.count]
+    rank = game.go_fish.current_player.hand.sample.rank
+    game.play_round!(other_player.id, rank, game.go_fish.current_player)
   end
 end

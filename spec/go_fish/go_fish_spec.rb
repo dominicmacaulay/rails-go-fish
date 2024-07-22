@@ -77,14 +77,14 @@ RSpec.describe GoFish do
 
     context '#score_board' do
       it "returns a hash with each player's name, book count, and book value when there are no winners" do
-        response = { 'Player 1' => { 'name' => 'Player 1', 'books_count' => '0', 'books_value' => '0' },
-                     'Player 2' => { 'name' => 'Player 2', 'books_count' => '0', 'books_value' => '0' } }
+        response = { 1 => { 'name' => 'Player 1', 'books_count' => '0', 'books_value' => '0' },
+                     2 => { 'name' => 'Player 2', 'books_count' => '0', 'books_value' => '0' } }
         expect(go_fish.score_board).to eq response
       end
       it "returns a hash with all the winner's info when there are winners" do
         go_fish.winners = [players.first]
-        response = { 'Player 1' => { 'winner' => 'true', 'name' => 'Player 1', 'books_count' => '0',
-                                     'books_value' => '0' } }
+        response = { 1 => { 'winner' => 'true', 'name' => 'Player 1', 'books_count' => '0',
+                            'books_value' => '0' } }
         expect(go_fish.score_board).to eq response
         expect(go_fish.score_board['Player 2']).to be nil
       end

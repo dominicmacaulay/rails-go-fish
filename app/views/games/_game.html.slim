@@ -2,7 +2,7 @@
   .games-list__game-row
     span = game.name
     .game-actions
-      - if game.over?
+      - if game.over
         span Game Over
       - elsif game.queue_full?
         span In progress
@@ -11,7 +11,7 @@
 
       - if game.users.include?(current_user)
         = link_to game_path(game), data: { turbo_frame: "_top" }, class: "btn" do
-          - if game.over?
+          - if game.over
             | View
           - else
             | Play now

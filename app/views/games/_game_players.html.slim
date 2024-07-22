@@ -6,7 +6,7 @@
 
   .go-fish-panel__content.go-fish-panel__content--game-board.accordion
     span.accordion__heading Players
-    - if game.started?
+    - if game.started
       - players.each do |player|
         = render "games/player_accordion", player: player, reveal_information: player == session_player
     - else

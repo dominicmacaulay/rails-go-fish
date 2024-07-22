@@ -22,7 +22,7 @@ RSpec.describe 'history/status page', type: :system, js: true do
 
     it "should show all of the current games' name, round, and score" do
       games = Game.all
-      current_games = games.select { |game| game.started? && !game.over? }
+      current_games = games.select { |game| game.started && !game.over }
       current_games.each do |game|
         expect(page).to have_content game.name
         expect(page).to have_content game.rounds_played

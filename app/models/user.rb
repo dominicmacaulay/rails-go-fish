@@ -35,6 +35,6 @@ class User < ApplicationRecord
   end
 
   def games_played
-    games.select(&:over?).count
+    games.select(&:over).count
   end
 end

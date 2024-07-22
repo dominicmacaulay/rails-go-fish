@@ -8,7 +8,7 @@
   /     div Score
 
   /   - @games.each do |game|
-  /     - next if game.over?
+  /     - next if game.over
   /     = render "game_with_status"
 
   / .games-list
@@ -18,7 +18,7 @@
   /     div Score
 
   /   - @games.each do |game|
-  /     - next unless game.over?
+  /     - next unless game.over
   /     = render "game_with_status"
 
   table.table-primary.table--auto-layout.table--default-density
@@ -28,7 +28,7 @@
         th Round
         th Score
     tbody
-      - current_games = @games.select { |game| !game.over? }
+      - current_games = @games.select { |game| !game.over }
       - if current_games.empty?
         tr
           th There are no current games
@@ -43,7 +43,7 @@
         th Round
         th Score
     tbody
-      - past_games = @games.select { |game| game.over? }
+      - past_games = @games.select { |game| game.over }
       - if past_games.empty?
         tr
           th There are no past games

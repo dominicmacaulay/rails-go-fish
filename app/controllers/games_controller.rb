@@ -54,7 +54,7 @@ class GamesController < ApplicationController
   end
 
   def game_status
-    @games = Game.all.select(&:started?)
+    @games = Game.all.select(&:started)
   end
 
   private

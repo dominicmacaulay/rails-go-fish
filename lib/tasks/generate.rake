@@ -42,7 +42,7 @@ namespace :generate do
     games = Game.all
     games.each do |game|
       round_count.times do
-        break if game.over?
+        break if game.over
 
         go_fish = game.go_fish
         current_index = go_fish.players.index(go_fish.current_player)

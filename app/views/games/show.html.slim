@@ -1,6 +1,6 @@
 = turbo_stream_from "games:#{@game.id}:users:#{current_user.id}"
 
-- if @game.started? == false
+- if @game.started == false
   / .container
   /   = link_to sanitize("&larr; Back to games"), games_path
   /   .header
