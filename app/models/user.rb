@@ -13,4 +13,20 @@ class User < ApplicationRecord
   def name
     "#{first_name} #{last_name}"
   end
+
+  def wins
+    games.select do |game|
+      game.go_fish&.winners&.any? { |winner| winner.id == id }
+    end.count
+  end
+
+  def losses
+    games.select do |game|
+      game.go_fish&.winners&.all? { |winner| winner.id != id }
+    end.count
+  end
+
+  def games_played
+    games.select(&:over?).count
+  end
 end
