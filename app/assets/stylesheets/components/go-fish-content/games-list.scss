@@ -14,15 +14,6 @@
         color: var(--op-color-neutral-on-plus-max);
         font-size: var(--op-font-small);
         font-weight: var(--op-font-weight-semi-bold);
-
-        &.games-list__header--status {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-
-            * {
-                justify-self: center;
-            }
-        }
     }
 
     .games-list__game-row {

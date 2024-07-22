@@ -23,14 +23,13 @@ RSpec.describe 'sidebar navigation', type: :system, js: true do
   end
 
   it 'directs you to the leader board page' do
-    click_on 'Leader Board'
+    click_on 'Leaderboard'
     expect_css(selector: 'h1', text: 'Leaderboard')
   end
 
   it 'directs you to the game status page' do
     click_on 'Game Status'
-    expect_css(text: 'Current Games')
-    expect_css(text: 'Past Games')
+    expect_css(selector: 'h1', text: 'Game Status')
   end
 
   it "shows the user's name" do

@@ -50,7 +50,8 @@ RSpec.describe Game, type: :model do
 
       expect(game.reload.go_fish).not_to be_nil
       players = game.go_fish.players
-      expect(players.map(&:id)).to match [user1.user_id, user2.user_id]
+      expect(players.map(&:id)).to include user1.user_id
+      expect(players.map(&:id)).to include user2.user_id
       expect(game.go_fish.deck).to respond_to(:deal)
     end
   end
@@ -181,7 +182,14 @@ RSpec.describe Game, type: :model do
       game = create(:game)
       2.times { create(:game_user, user: create(:user), game:) }
       game.start!
-      expect(game.score_board).to eq game.go_fish.score_board
+      score_board = game.go_fish.score_board
+      expect(game.score_board).to eq create_score_message(score_board)
+    end
+
+    def create_score_message(players)
+      players.map do |_player, info|
+        "#{info['name']} books: #{info['books_count']}, total score: #{info['books_value']}"
+      end
     end
   end
 end

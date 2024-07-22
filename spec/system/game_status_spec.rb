@@ -16,8 +16,8 @@ RSpec.describe 'history/status page', type: :system, js: true do
     end
 
     it 'should show a section for the current and past games' do
-      expect_css(text: 'Current Games')
-      expect_css(text: 'Past Games')
+      expect_css(selector: 'th', text: 'Current Games')
+      expect_css(selector: 'th', text: 'Past Games')
     end
 
     it "should show all of the current games' name, round, and score" do
@@ -26,7 +26,9 @@ RSpec.describe 'history/status page', type: :system, js: true do
       current_games.each do |game|
         expect(page).to have_content game.name
         expect(page).to have_content game.rounds_played
-        expect(page).to have_content game.scoreboard
+        game.score_board.each do |score|
+          expect(page).to have_content score
+        end
       end
     end
   end

@@ -36,6 +36,13 @@ class Game < ApplicationRecord
   delegate :rounds_played, to: :go_fish
   delegate :score_board, to: :go_fish
 
+  def score_board
+    players_hash = go_fish.score_board
+    players_hash.map do |_player, info|
+      "#{info['name']} books: #{info['books_count']}, total score: #{info['books_value']}"
+    end
+  end
+
   serialize :go_fish, coder: GoFish
 
   def start!

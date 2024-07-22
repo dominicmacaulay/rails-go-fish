@@ -16,7 +16,7 @@ class Deck
     cards.shift
   end
 
-  def clear_cards
+  def clear
     self.cards = []
   end
 

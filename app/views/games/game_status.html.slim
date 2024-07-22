@@ -1,21 +1,54 @@
 .game-status-page
   h1 Game Status
 
-  .games-list
-    .games-list__header.games-list__header--status
-      div Current Games
-      div Round
-      div Score
+  / .games-list
+  /   .games-list__header.games-list__header--status
+  /     div Current Games
+  /     div Round
+  /     div Score
 
-    - @games.each do |game|
-      = render "game_with_status", current: !game.over?
+  /   - @games.each do |game|
+  /     - next if game.over?
+  /     = render "game_with_status"
 
-  .games-list
-    .games-list__header.games-list__header--status
-      div Past Games
-      div Round
-      div Score
+  / .games-list
+  /   .games-list__header.games-list__header--status
+  /     div Past Games
+  /     div Round
+  /     div Score
 
-    - @games.each do |game|
-      = render "game_with_status", current: game.over?
+  /   - @games.each do |game|
+  /     - next unless game.over?
+  /     = render "game_with_status"
+
+  table.table-primary.table--auto-layout.table--default-density
+    thead
+      tr
+        th Current Games
+        th Round
+        th Score
+    tbody
+      - current_games = @games.select { |game| !game.over? }
+      - if current_games.empty?
+        tr
+          th There are no current games
+      - else
+        - current_games.each do |game|
+          = render "game_with_status", game:
+
+  table.table-primary.table--auto-layout.table--default-density
+    thead
+      tr
+        th Past Games
+        th Round
+        th Score
+    tbody
+      - past_games = @games.select { |game| game.over? }
+      - if past_games.empty?
+        tr
+          th There are no past games
+      - else
+        - past_games.each do |game|
+          = render "game_with_status", game:
+
 
