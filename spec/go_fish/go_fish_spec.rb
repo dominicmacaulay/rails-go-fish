@@ -90,6 +90,28 @@ RSpec.describe GoFish do
       end
     end
 
+    context 'dealing to the player if necessary' do
+      before do
+        players.each(&:clear)
+        go_fish.deck.clear
+        go_fish.deck.cards = [*make_card_set('3'), *make_card_set('5')]
+        player1.add_to_hand(Card.new('4', 'Hearts'))
+      end
+
+      it 'deals to the player the card was asked from if they do not have any cards left' do
+        go_fish.play_round!(player2.id, '4', player1)
+        expect(player2.hand.count).to eql 5
+      end
+
+      it 'changes the player to the player after the next one if the next one still does not have any cards' do
+        go_fish.deck.clear
+        go_fish.deck.cards = [Card.new('3', 'Hearts')]
+        go_fish.play_round!(player2.id, '4', player1)
+        expect(player2.hand.count).to eql 0
+        expect(go_fish.current_player).to eq player1
+      end
+    end
+
     context 'play_round!' do
       before do
         player1.add_to_hand(Card.new('4', 'Hearts'))
@@ -104,9 +126,9 @@ RSpec.describe GoFish do
           expect(player1.rank_count('4')).to be 2
         end
         it 'returns object' do
-          result = go_fish.play_round!(player2.id, '4', player1)
+          go_fish.play_round!(player2.id, '4', player1)
           object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', got_rank: true, amount: 'one')
-          expect(result).to eq object
+          expect(go_fish.round_results.first).to eq object
           expect(go_fish.round_results.count).to eql 1
         end
         it 'updates the round count' do
@@ -118,27 +140,27 @@ RSpec.describe GoFish do
 
       context 'runs transaction if the pond has no cards in it' do
         it 'sends the player a message saying that the pond was empty' do
-          go_fish.deck.clear_cards
-          result = go_fish.play_round!(player2.id, '4', player1)
+          go_fish.deck.clear
+          go_fish.play_round!(player2.id, '4', player1)
           object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, empty_pond: true)
-          expect(result).to eq object
+          expect(go_fish.round_results.first).to eq object
         end
       end
 
       context 'runs transaction with the pond' do
         it 'returns message object if the player got the card they wanted and lets them play again' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('4', 'Spades')]))
-          result = go_fish.play_round!(player2.id, '4', player1)
+          go_fish.play_round!(player2.id, '4', player1)
           object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, got_rank: true)
-          expect(result).to eq object
+          expect(go_fish.round_results.first).to eq object
           go_fish.play_round!(player2.id, '4', player1)
           expect(go_fish.round_results.count).to eql 2
         end
         it 'returns a message object if the player did not get the card they wanted' do
           go_fish = GoFish.new([player1, player2], deck: Deck.new([Card.new('6', 'Spades')]))
-          result = go_fish.play_round!(player2.id, '4', player1)
+          go_fish.play_round!(player2.id, '4', player1)
           object = RoundResult.new(id: 1, player: player1, opponent: player2, rank: '4', fished: true, card_gotten: '6')
-          expect(result).to eq object
+          expect(go_fish.round_results.first).to eq object
         end
       end
 
@@ -183,7 +205,7 @@ RSpec.describe GoFish do
           go_fish = GoFish.new([player1, player2])
           player2.add_to_hand(Card.new('4', 'Spades'))
           player1.add_to_hand([Card.new('4', 'Spades'), Card.new('4', 'Spades'), Card.new('4', 'Spades')])
-          go_fish.deck.clear_cards
+          go_fish.deck.clear
           go_fish.play_round!(player2.id, '4', player1)
           expect(player1.hand_count).to eq 0
           expect(go_fish.current_player).to eql player2
@@ -254,35 +276,39 @@ RSpec.describe GoFish do
     let(:player1) { Player.new(1, 'Dom') }
     let(:player2) { Player.new(2, 'Micah') }
     let(:player3) { Player.new(3, 'Josh') }
-    let(:game) { GoFish.new([player1, player2, player3]) }
-    it 'runs test' do
-      game.deal!
-      until game.winners
-        current_index = game.players.index(game.current_player)
-        other_player = game.players[(current_index + 1) % game.players.count]
-        rank = game.current_player.hand.sample.rank
-        # puts "#{game.current_player.name} is asking for #{rank}'s"
-        result = game.play_round!(other_player.id, rank, game.current_player)
-        message = result.generate_message_for(game.players[current_index])
-        puts message.action
-        puts message.opponent_response
-        puts message.result
-        puts '-----------------------------'
-        message = result.generate_message_for(other_player)
-        puts message.action
-        puts message.opponent_response
-        puts message.result
-        puts '-----------------------------'
-        message = result.generate_message_for(game.players[(current_index + 2) % game.players.count])
-        puts message.action
-        puts message.opponent_response
-        puts message.result
-        puts '-----------------------------'
-        puts
-      end
-      final_result = game.display_winners
-      game.players.each do |player|
-        puts final_result.display_for(player)
+    let(:players) { [player1, player2, player3] }
+    it 'plays the game to completion' do
+      100.times do
+        players.each(&:clear)
+        go_fish = GoFish.new(players)
+        go_fish.deal!
+        until go_fish.winners
+          current_index = go_fish.players.index(go_fish.current_player)
+          other_player = go_fish.players[(current_index + 1) % go_fish.players.count]
+          rank = go_fish.current_player.hand.sample.rank
+          # puts "#{go_fish.current_player.name} is asking for #{rank}'s"
+          go_fish.play_round!(other_player.id, rank, go_fish.current_player)
+          # message = result.generate_message_for(go_fish.players[current_index])
+          # puts message.action
+          # puts message.opponent_response
+          # puts message.result
+          # puts '-----------------------------'
+          # message = result.generate_message_for(other_player)
+          # puts message.action
+          # puts message.opponent_response
+          # puts message.result
+          # puts '-----------------------------'
+          # message = result.generate_message_for(go_fish.players[(current_index + 2) % go_fish.players.count])
+          # puts message.action
+          # puts message.opponent_response
+          # puts message.result
+          # puts '-----------------------------'
+          # puts
+          # end
+          # final_result = go_fish.display_winners
+          # go_fish.players.each do |player|
+          #   puts final_result.display_for(player)
+        end
       end
     end
   end

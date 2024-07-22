@@ -37,11 +37,8 @@ class GoFish # rubocop:disable Metrics/ClassLength
     opponent = validate_input_and_find_opponent(opponent_id, rank, requester)
     message = run_transaction(opponent, rank)
     message.book_was_made if current_player.make_book?
-    switch_player unless deal_to_player_if_necessary == false || message.got_rank
-    self.rounds_played += 1
-    check_for_winners
-    round_results.unshift message
-    message
+    switch_player unless message.got_rank
+    post_round_actions(message)
   end
 
   def display_winners
@@ -133,6 +130,13 @@ class GoFish # rubocop:disable Metrics/ClassLength
   end
 
   private
+
+  def post_round_actions(message)
+    deal_to_player_if_necessary
+    self.rounds_played += 1
+    check_for_winners
+    round_results.unshift message
+  end
 
   def generate_score_board(players)
     score_board = {}
