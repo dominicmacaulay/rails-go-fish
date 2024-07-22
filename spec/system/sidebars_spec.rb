@@ -42,7 +42,3 @@ RSpec.describe 'sidebar navigation', type: :system, js: true do
     expect(page).to have_content('Sign in')
   end
 end
-
-def expect_header(selector: '.games-list__header', text: 'Your Games')
-  expect(page).to have_selector(selector, text:)
-end

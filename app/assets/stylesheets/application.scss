@@ -23,6 +23,7 @@
 @import 'components/layouts/navigation-panel.scss';
 @import 'components/layouts/games-center.scss';
 @import 'components/layouts/game-status-page.scss';
+@import 'components/layouts/leaderboard-page.scss';
 
 // optics overrides
 @import 'components/optics-overrides/badge.scss';
@@ -37,6 +38,7 @@
 @import 'components/go-fish-content/accordion.scss';
 @import 'components/go-fish-content/games-list.scss';
 @import 'components/go-fish-content/rank_selector.scss';
+@import 'components/go-fish-content/user-list.scss';
 
 @import 'components/devise/form.scss';
 

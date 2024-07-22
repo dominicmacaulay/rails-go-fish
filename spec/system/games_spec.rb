@@ -335,7 +335,3 @@ RSpec.describe 'Games', type: :system, js: true do
     end
   end
 end
-
-def expect_header(selector: '.games-list__header', text: 'Your Games')
-  expect(page).to have_selector(selector, text:)
-end
