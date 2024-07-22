@@ -8,3 +8,6 @@
       div wins
       div losses
       div games played
+
+    - @users.each_with_index do |user, index|
+      = render "user", user:, index:

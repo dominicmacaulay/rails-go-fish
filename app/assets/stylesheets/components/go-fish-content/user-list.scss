@@ -6,13 +6,17 @@
   gap: var(--op-space-x-small);
 
   .user-list__header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr, 1fr, 1fr, 1fr, 1fr;
     padding-bottom: var(--op-space-x-small);
-    justify-content: space-between;
-    align-items: flex-end;
 
     color: var(--op-color-neutral-on-plus-max);
     font-size: var(--op-font-small);
     font-weight: var(--op-font-weight-semi-bold);
+  }
+
+  .user-list__user-row {
+    display: grid;
+    grid-template-columns: 1fr, 1fr, 1fr, 1fr, 1fr;
   }
 }
