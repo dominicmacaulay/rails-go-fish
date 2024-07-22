@@ -50,7 +50,7 @@ class GamesController < ApplicationController
   end
 
   def leaderboard
-    @users = User.order(wins: :desc, losses: :asc)
+    @users = User.all.sort_by(&:wins).reverse
   end
 
   def game_status

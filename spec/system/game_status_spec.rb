@@ -12,12 +12,12 @@ RSpec.describe 'history/status page', type: :system, js: true do
   end
   context "showing the current user's games" do
     it 'should bring you to the history page' do
-      expect_header(selector: 'h1', text: 'Game Status')
+      expect_css(selector: 'h1', text: 'Game Status')
     end
 
     it 'should show a section for the current and past games' do
-      expect_header(text: 'Current Games')
-      expect_header(text: 'Past Games')
+      expect_css(text: 'Current Games')
+      expect_css(text: 'Past Games')
     end
 
     it "should show all of the current games' name, round, and score" do

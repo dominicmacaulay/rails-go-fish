@@ -1,13 +1,14 @@
 .leaderboard-page
   h1 Leaderboard
 
-  .user-list
-    .user-list__header
-      div rank
-      div name
-      div wins
-      div losses
-      div games played
-
-    - @users.each_with_index do |user, index|
-      = render "user", user:, index:
+  table.table-primary.table--auto-layout.table--default-density
+    thead
+      tr
+        th Rank
+        th Name
+        th Wins
+        th Losses
+        th Games Played
+    tbody
+      - @users.each_with_index do |user, index|
+        = render "user", user:, index: (index + 1)

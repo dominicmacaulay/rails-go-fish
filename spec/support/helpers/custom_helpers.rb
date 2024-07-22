@@ -1,5 +1,5 @@
 module CustomHelpers
-  def expect_header(selector: '.games-list__header', text: 'Your Games')
+  def expect_css(selector: '.games-list__header', text: 'Your Games')
     expect(page).to have_selector(selector, text:)
   end
 

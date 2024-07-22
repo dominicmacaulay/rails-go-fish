@@ -13,19 +13,19 @@ RSpec.describe 'leaderboards', type: :system, js: true do
   end
 
   it 'shows the header' do
-    headers = ['rank', 'name', 'wins', 'losses', 'games played']
+    headers = ['Rank', 'Name', 'Wins', 'Losses', 'Games Played']
     headers.each do |header|
-      expect_header(selector: '.user-list__header', text: header)
+      expect_css(selector: 'th', text: header)
     end
   end
 
   it 'shows the info for each user' do
     users = User.all
     users.each do |user|
-      expect(page).to have_content user.name
-      expect(page).to have_content user.wins
-      expect(page).to have_content user.losses
-      expect(page).to have_content user.games_played
+      expect_css(selector: 'td', text: user.name)
+      expect_css(selector: 'td', text: user.wins)
+      expect_css(selector: 'td', text: user.losses)
+      expect_css(selector: 'td', text: user.games_played)
     end
   end
 end
