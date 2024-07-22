@@ -26,7 +26,7 @@ namespace :generate do
 
     user_count = User.count
     game_count.times.each do |i|
-      offset = rand(user_count)
+      offset = rand(user_count + 5)
       users = User.offset(offset).first((2..5).to_a.sample)
       game = Game.create(name: "Game#{i}", number_of_players: users.count, users:)
       game.start!

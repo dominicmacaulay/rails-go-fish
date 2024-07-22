@@ -49,8 +49,12 @@ class GamesController < ApplicationController
     end
   end
 
+  def leaderboard
+    @users = User.all
+  end
+
   def game_status
-    @games = Game.all
+    @games = Game.all.select(&:started?)
   end
 
   private
