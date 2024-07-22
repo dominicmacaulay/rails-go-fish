@@ -26,6 +26,12 @@ class User < ApplicationRecord
     end.count
   end
 
+  def win_rate
+    return 'none' if wins.zero? || losses.zero?
+
+    (wins.to_f / games_played * 100).round(2)
+  end
+
   def games_played
     games.select(&:over?).count
   end

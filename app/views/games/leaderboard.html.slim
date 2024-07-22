@@ -9,6 +9,7 @@
         th Wins
         th Losses
         th Games Played
+        th Win/Loss Ratio
     tbody
       - @users.each_with_index do |user, index|
         = render "user", user:, index: (index + 1)

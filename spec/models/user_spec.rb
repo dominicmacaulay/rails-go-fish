@@ -22,6 +22,18 @@ RSpec.describe User, type: :model do
       expect(user.losses).to eql losses
     end
 
+    it 'returns the win rate' do
+      total_games = wins + losses
+      answer = (wins.to_f / total_games * 100).round(2)
+      expect(user.win_rate).to eql answer
+    end
+
+    it 'returns none if there are no wins or losses' do
+      user = create(:user)
+      create(:game_user, user:, game: create(:game))
+      expect(user.win_rate).to eql 'none'
+    end
+
     it 'returns the total games played' do
       expect(user.games_played).to eql(wins + losses)
     end

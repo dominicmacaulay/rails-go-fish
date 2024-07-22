@@ -26,6 +26,7 @@ RSpec.describe 'leaderboards', type: :system, js: true do
       expect_css(selector: 'td', text: user.wins)
       expect_css(selector: 'td', text: user.losses)
       expect_css(selector: 'td', text: user.games_played)
+      expect_css(selector: 'td', text: user.win_rate)
     end
   end
 end
