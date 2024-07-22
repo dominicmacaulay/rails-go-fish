@@ -10,6 +10,8 @@
         th Losses
         th Games Played
         th Win/Loss Ratio
+        th Total Time Played
+        th Highest Book Count
     tbody
       - @users.each_with_index do |user, index|
         = render "user", user:, index: (index + 1)

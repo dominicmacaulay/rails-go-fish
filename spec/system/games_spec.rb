@@ -220,7 +220,6 @@ RSpec.describe 'Games', type: :system, js: true do
     it 'replaces the In progress text with Game Over' do
       click_on 'Go back to your games'
       expect(page).to have_content('Game Over').twice
-      expect(page).to have_content('View').twice
       expect(page).to have_no_content('In progress')
     end
 

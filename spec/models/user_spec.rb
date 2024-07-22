@@ -49,6 +49,34 @@ RSpec.describe User, type: :model do
     it 'returns the total games played' do
       expect(user.games_played).to eql(wins + losses)
     end
+
+    it 'returns the total time' do
+      total_time = user.games.map { |game| game.finished_at - game.started_at }.sum
+      expect(user.total_time).to eql (total_time / 3600).round(2)
+    end
+
+    it 'shows run time if the game is not over yet' do
+      user = create(:user)
+      game = create_game(user:)
+      game.play_round!(game.users.last.id, game.go_fish.current_player.hand.sample.rank, user)
+      total_time = user.games.map { |this_game| this_game.updated_at - this_game.started_at }.sum
+      expect(user.total_time).to eql (total_time / 3600).round(2)
+    end
+
+    it 'shows 0 if the game has been started but not played' do
+      user = create(:user)
+      create_game(user:)
+      expect(user.total_time).to eql 0.0
+    end
+
+    it 'returns the highest book count' do
+      games = user.game_users.map(&:game)
+      book_counts = games.map do |game|
+        game.go_fish.players.detect { |player| player.id == user.id }.book_count
+      end
+      highest_book_count = book_counts.max
+      expect(user.highest_book_count).to eql highest_book_count
+    end
   end
 end
 

@@ -35,4 +35,24 @@ class User < ApplicationRecord
   def games_played
     games.select(&:over).count
   end
+
+  def total_time
+    time = games.map do |game|
+      if game.started_at.nil? || (game.updated_at.nil? && game.finished_at.nil?)
+        0
+      elsif game.finished_at.nil?
+        game.updated_at - game.started_at
+      else
+        game.finished_at - game.started_at
+      end
+    end.sum
+    (time / 3600).round(2)
+  end
+
+  def highest_book_count
+    games = game_users.map(&:game)
+    games.map do |game|
+      game.go_fish&.players&.detect { |player| player.id == id }&.book_count
+    end.max
+  end
 end

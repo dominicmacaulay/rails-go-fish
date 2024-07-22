@@ -13,7 +13,7 @@ RSpec.describe 'leaderboards', type: :system, js: true do
   end
 
   it 'shows the header' do
-    headers = ['Rank', 'Name', 'Wins', 'Losses', 'Games Played']
+    headers = ['Rank', 'Name', 'Wins', 'Losses', 'Games Played', 'Total Time Played', 'Highest Book Count']
     headers.each do |header|
       expect_css(selector: 'th', text: header)
     end
@@ -27,6 +27,8 @@ RSpec.describe 'leaderboards', type: :system, js: true do
       expect_css(selector: 'td', text: user.losses)
       expect_css(selector: 'td', text: user.games_played)
       expect_css(selector: 'td', text: user.win_rate)
+      expect_css(selector: 'td', text: user.total_time)
+      expect_css(selector: 'td', text: user.highest_book_count)
     end
   end
 end
