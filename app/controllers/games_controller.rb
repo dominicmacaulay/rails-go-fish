@@ -2,7 +2,8 @@ class GamesController < ApplicationController
   before_action :set_game, only: %i[show edit update destroy]
 
   def index
-    @games = Game.order(created_at: :desc)
+    all_games = Game.order(created_at: :desc)
+    @games = all_games.select { |game| game.over == false }
   end
 
   def show
@@ -50,7 +51,9 @@ class GamesController < ApplicationController
   end
 
   def leaderboard
-    @users = User.all.sort_by { |user| [-user.wins, -user.win_rate] }
+    @users = User.all.sort do |a, b|
+      [b.win_rate, b.wins] <=> [a.win_rate, a.wins]
+    end
   end
 
   def game_status
