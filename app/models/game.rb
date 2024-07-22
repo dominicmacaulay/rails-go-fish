@@ -63,11 +63,7 @@ class Game < ApplicationRecord
     raise UnplayableError if over
 
     go_fish.play_round!(opponent_id, rank, requester)
-    if go_fish.winners
-      self.over = true
-      self.finished_at = DateTime.current
-      update_game_users(go_fish)
-    end
+    end_game(go_fish) if go_fish.winners
     save!
     # update(over: true, finished_at: DateTime.current) if go_fish.winners
     update_show
@@ -77,12 +73,10 @@ class Game < ApplicationRecord
     users.each { |user| broadcast_refresh_to "games:#{id}:users:#{user.id}" }
   end
 
-  def update_game_users(go_fish)
-    winners = go_fish.winners
-    game_users.each do |game_user|
-      game_user.winner = true if winners.any? { |w| w.id == game_user.user_id }
-      game_user.save!
-    end
+  def end_game(go_fish)
+    self.over = true
+    self.finished_at = DateTime.current
+    update_game_users(go_fish)
   end
 
   class GameError < StandardError; end
@@ -90,6 +84,16 @@ class Game < ApplicationRecord
   class UnplayableError < GameError
     def message
       'The game cannot currently be played as requested...'
+    end
+  end
+
+  private
+
+  def update_game_users(go_fish)
+    winners = go_fish.winners
+    game_users.each do |game_user|
+      game_user.winner = true if winners.any? { |w| w.id == game_user.user_id }
+      game_user.save!
     end
   end
 end

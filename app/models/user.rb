@@ -15,15 +15,13 @@ class User < ApplicationRecord
   end
 
   def wins
-    games.select do |game|
-      game.go_fish&.winners&.any? { |winner| winner.id == id }
+    game_users.select do |game_user|
+      game_user.winner == true
     end.count
   end
 
   def losses
-    games.select do |game|
-      game.go_fish&.winners&.all? { |winner| winner.id != id }
-    end.count
+    games_played - wins
   end
 
   def win_rate

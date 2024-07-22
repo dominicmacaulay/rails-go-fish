@@ -58,12 +58,16 @@ def create_and_play_games(user:, wins:, losses:) # rubocop:disable Metrics/AbcSi
     player = game.go_fish.players.select { |p| p.id == user.id }
     game.go_fish.winners = player
     game.save!
+    game.end_game(game.go_fish)
+    game.save!
   end
 
   losses.times do
     game = create_game(user:)
     player = game.go_fish.players.reject { |p| p.id == user.id }
     game.go_fish.winners = player
+    game.save!
+    game.end_game(game.go_fish)
     game.save!
   end
 end

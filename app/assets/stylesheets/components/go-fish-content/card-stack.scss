@@ -2,20 +2,24 @@
     display: flex;
     overflow: auto;
 
+    .playing-card:not(:first-child) {
+        margin-left: calc(-2.5 * var(--op-space-2x-large));
+    }
+
     &.card-stack--accordion-hand {
         max-height: calc(35 * var(--op-size-unit));
     }
 
     &.card-stack--accordion-books {
         max-height: calc(25 * var(--op-size-unit));
-        max-width: calc(50 * var(--op-size-unit))
+        max-width: calc(50 * var(--op-size-unit));
+
+        .playing-card:not(:first-child) {
+            margin-left: calc(-1.5 * var(--op-space-2x-large));
+        }
     }
 
     &.card-stack--your-books {
         max-height: calc(30 * var(--op-size-unit));
-    }
-
-    .playing-card:not(:first-child) {
-        margin-left: calc(-2.5 * var(--op-space-2x-large));
     }
 }
