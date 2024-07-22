@@ -151,10 +151,10 @@ class GoFish # rubocop:disable Metrics/ClassLength
   def generate_score_board(players)
     score_board = {}
     players.each do |player|
-      score_board[player.name] =
+      score_board[player.id] =
         { 'name' => player.name.to_s, 'books_count' => player.book_count.to_s,
           'books_value' => player.total_book_value.to_s }
-      score_board[player.name]['winner'] = 'true' unless winners.nil?
+      score_board[player.id]['winner'] = 'true' unless winners.nil?
     end
     score_board
   end

@@ -5,7 +5,7 @@ namespace :generate do
   task :users, [:user_count] => :environment do |_t, args|
     args.with_defaults(user_count: 100)
 
-    user_count = args[:user_count]
+    user_count = args[:user_count].to_i
 
     user_count.times.each do |i|
       User.create(
@@ -22,7 +22,7 @@ namespace :generate do
   task :games, [:game_count] => :environment do |_t, args|
     args.with_defaults(game_count: 100)
 
-    game_count = args[:game_count]
+    game_count = args[:game_count].to_i
 
     user_count = User.count
     game_count.times.each do |i|
@@ -37,7 +37,7 @@ namespace :generate do
   task :rounds, [:round_count] => :environment do |_t, args|
     args.with_defaults(round_count: 10)
 
-    round_count = args[:round_count]
+    round_count = args[:round_count].to_i
 
     games = Game.all
     games.each do |game|

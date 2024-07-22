@@ -27,7 +27,9 @@ class User < ApplicationRecord
   end
 
   def win_rate
-    return 'none' if wins.zero? || losses.zero?
+    return 0 if wins.zero?
+
+    return 100 if losses.zero?
 
     (wins.to_f / games_played * 100).round(2)
   end

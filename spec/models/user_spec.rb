@@ -28,10 +28,22 @@ RSpec.describe User, type: :model do
       expect(user.win_rate).to eql answer
     end
 
-    it 'returns none if there are no wins or losses' do
+    it 'returns 0 if there are no wins or losses' do
       user = create(:user)
-      create(:game_user, user:, game: create(:game))
-      expect(user.win_rate).to eql 'none'
+      create_and_play_games(user:, wins: 0, losses: 0)
+      expect(user.win_rate).to eql 0
+    end
+
+    it 'returns 0 if there are losses but no wins' do
+      user = create(:user)
+      create_and_play_games(user:, wins: 0, losses: 1)
+      expect(user.win_rate).to eql 0
+    end
+
+    it 'returns 100 if there are wins but no losses' do
+      user = create(:user)
+      create_and_play_games(user:, wins: 1, losses: 0)
+      expect(user.win_rate).to eql 100
     end
 
     it 'returns the total games played' do
