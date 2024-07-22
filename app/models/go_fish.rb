@@ -132,10 +132,20 @@ class GoFish # rubocop:disable Metrics/ClassLength
   private
 
   def post_round_actions(message)
-    deal_to_player_if_necessary
     self.rounds_played += 1
     check_for_winners
+    change_to_valid_player
     round_results.unshift message
+  end
+
+  def change_to_valid_player
+    return if winners
+
+    empty_hand = current_player.hand_count.zero?
+    while empty_hand
+      deal_to_player_if_necessary
+      empty_hand = current_player.hand_count.zero?
+    end
   end
 
   def generate_score_board(players)

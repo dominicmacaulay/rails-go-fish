@@ -203,7 +203,7 @@ RSpec.describe GoFish do
         end
         it 'switches the player if the player and the deck have no cards' do
           go_fish = GoFish.new([player1, player2])
-          player2.add_to_hand(Card.new('4', 'Spades'))
+          player2.add_to_hand([Card.new('4', 'Spades'), Card.new('5', 'Hearts')])
           player1.add_to_hand([Card.new('4', 'Spades'), Card.new('4', 'Spades'), Card.new('4', 'Spades')])
           go_fish.deck.clear
           go_fish.play_round!(player2.id, '4', player1)
