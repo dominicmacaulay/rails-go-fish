@@ -8,11 +8,16 @@ RSpec.describe 'history/status page' do
     5.times { create(:game_user, user:, game: create(:game)) }
     login_as user
     visit games_path
-    click_on 'History/Status'
+    click_on 'Game Status'
   end
   context "showing the current user's games" do
     it 'should bring you to the history page' do
-      expect_header(selector: 'h1', text: 'History and Status')
+      expect_header(selector: 'h1', text: 'Game Status')
+    end
+
+    it 'should show a section for the current and past games' do
+      expect_header(text: 'Current Games')
+      expect_header(text: 'Past Games')
     end
   end
 end

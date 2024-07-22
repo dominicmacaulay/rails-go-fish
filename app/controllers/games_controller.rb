@@ -49,7 +49,8 @@ class GamesController < ApplicationController
     end
   end
 
-  def history_status
+  def game_status
+    @games = Game.all
   end
 
   private
