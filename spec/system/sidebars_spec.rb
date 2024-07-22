@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'sidebar navigation', js: true do
+RSpec.describe 'sidebar navigation', type: :system, js: true do
   include Warden::Test::Helpers
 
   let!(:user) { create(:user) }

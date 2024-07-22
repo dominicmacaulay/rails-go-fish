@@ -7,9 +7,15 @@
       div Round
       div Score
 
+    - @games.each do |game|
+      = render "game_with_status", current: !game.over?
+
   .games-list
     .games-list__header.games-list__header--status
       div Past Games
       div Round
       div Score
+
+    - @games.each do |game|
+      = render "game_with_status", current: game.over?
 
