@@ -51,7 +51,7 @@ class GamesController < ApplicationController
   end
 
   def leaderboard
-    @leaderboard = Leaderboard.all
+    @leaderboard = Leaderboard.all.page params[:page]
     # @users = User.includes(:game_users, :games).sort do |a, b|
     #   [b.win_rate, b.wins] <=> [a.win_rate, a.wins]
     # end
@@ -68,6 +68,6 @@ class GamesController < ApplicationController
   end
 
   def game_params
-    params.require(:game).permit(:name, :number_of_players)
+    params.require(:game).permit(:name, :number_of_players, :page)
   end
 end

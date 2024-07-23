@@ -16,3 +16,6 @@
     tbody
       - @leaderboard.each_with_index do |entry, index|
         = render "entry", entry:, index: index + 1
+
+  .app__footer
+    = paginate @leaderboard
