@@ -1,4 +1,6 @@
 class Leaderboard < ApplicationRecord
+  SECONDS_TO_HOURS_FACTOR = 3600
+
   attr_accessor :rank
 
   self.primary_key = :user_id
@@ -9,7 +11,7 @@ class Leaderboard < ApplicationRecord
   end
 
   def time
-    "#{(total_time_played / 3600).round(2)} hours"
+    "#{(total_time_played / SECONDS_TO_HOURS_FACTOR).round(2)} hours"
   end
 
   def self.ransackable_attributes(auth_object = nil)

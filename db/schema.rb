@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_200816) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_232203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_200816) do
     t.datetime "updated_at", null: false
     t.boolean "winner"
     t.integer "books"
+    t.integer "book_value"
     t.index ["game_id", "user_id"], name: "index_game_users_on_game_id_and_user_id", unique: true
     t.index ["game_id"], name: "index_game_users_on_game_id"
     t.index ["user_id"], name: "index_game_users_on_user_id"
@@ -57,7 +58,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_200816) do
 
   create_view "leaderboards", sql_definition: <<-SQL
       SELECT users.id AS user_id,
-      COALESCE(winners.total_book_count, (0)::bigint) AS score,
+      COALESCE(winners.total_book_value, (0)::bigint) AS score,
       concat(users.first_name, ' ', users.last_name) AS "user",
       COALESCE(winners.wins, (0)::bigint) AS wins,
       COALESCE(losers.losses, (0)::bigint) AS losses,
@@ -72,7 +73,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_200816) do
      FROM ((((users
        LEFT JOIN ( SELECT users_1.id AS user_id,
               count(winners_1.*) AS wins,
-              sum(winners_1.books) AS total_book_count
+              sum(winners_1.book_value) AS total_book_value
              FROM (users users_1
                JOIN game_users winners_1 ON (((winners_1.user_id = users_1.id) AND (winners_1.winner = true))))
             GROUP BY users_1.id) winners ON ((users.id = winners.user_id)))

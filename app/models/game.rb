@@ -96,6 +96,7 @@ class Game < ApplicationRecord
     game_users.each do |game_user|
       game_user.winner = winners.any? { |winner| winner.id == game_user.user_id }
       game_user.books = go_fish.players.detect { |player| player.id == game_user.user_id }.book_count
+      game_user.book_value = go_fish.players.detect { |player| player.id == game_user.user_id }.total_book_value
       game_user.save!
     end
   end
