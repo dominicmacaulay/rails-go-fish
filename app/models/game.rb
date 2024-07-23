@@ -7,6 +7,8 @@ class Game < ApplicationRecord
 
   before_destroy :can_destroy?, prepend: true
 
+  scope :joinable, -> { order(created_at: :desc).where(over: false) }
+
   after_create_commit -> { broadcast_refresh_to 'games' }
   after_update_commit -> { broadcast_refresh_to 'games' }
   after_destroy_commit -> { broadcast_refresh_to 'games' }

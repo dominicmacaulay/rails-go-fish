@@ -2,8 +2,8 @@ class GamesController < ApplicationController
   before_action :set_game, only: %i[show edit update destroy]
 
   def index
-    all_games = Game.order(created_at: :desc)
-    @games = all_games.select { |game| game.over == false }
+    @my_games = current_user.games.joinable
+    @games = Game.joinable.page params[:page]
   end
 
   def show
@@ -51,7 +51,14 @@ class GamesController < ApplicationController
   end
 
   def leaderboard
-    @leaderboard = Leaderboard.all.page params[:page]
+    @q = Leaderboard.ransack(params[:q])
+    page = (params[:page].presence || 1).to_i
+    @leaderboards = @q.result.order(score: :desc).page(page)
+
+    @ranked_leaderboards = @leaderboards.each_with_index.map do |leaderboard, index|
+      leaderboard.rank = ((page - 1) * @leaderboards.limit_value) + index + 1
+      leaderboard
+    end
     # @users = User.includes(:game_users, :games).sort do |a, b|
     #   [b.win_rate, b.wins] <=> [a.win_rate, a.wins]
     # end

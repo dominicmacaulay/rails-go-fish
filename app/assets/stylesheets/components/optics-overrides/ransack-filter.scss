@@ -1,0 +1,11 @@
+.ransack-filter {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: var(--op-space-medium);
+
+  .ransack-form {
+    display: flex;
+    gap: var(--op-space-small);
+  }
+}

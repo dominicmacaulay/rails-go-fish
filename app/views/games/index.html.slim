@@ -12,9 +12,8 @@
     = turbo_frame_tag Game.new
 
     = turbo_frame_tag "your-games"
-      - @games.each do |game|
-        - if current_user.games.include?(game)
-          = render "game", game: game
+      - @my_games.each do |game|
+        = render "game", game: game
 
   .games-list
     .games-list__header
@@ -23,3 +22,6 @@
     = turbo_frame_tag "all-games"
       - @games.each do |game|
         = render "game", game: game
+
+  .app__footer
+    = paginate @games
