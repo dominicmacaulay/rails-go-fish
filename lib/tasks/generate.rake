@@ -5,13 +5,15 @@ namespace :generate do
   task :users, [:user_count] => :environment do |_t, args|
     args.with_defaults(user_count: 100)
 
+    existing_users = User.count
     user_count = args[:user_count].to_i
 
-    user_count.times.each do |i|
+    user_count.times do
+      existing_users += 1
       User.create(
-        email: "user#{i}@example.com",
+        email: "user#{existing_users}@example.com",
         first_name: 'Test',
-        last_name: "User#{i}",
+        last_name: "User#{existing_users}",
         password: 'password',
         password_confirmation: 'password'
       )
@@ -22,13 +24,15 @@ namespace :generate do
   task :games, [:game_count] => :environment do |_t, args|
     args.with_defaults(game_count: 100)
 
+    existing_games = Game.count
     game_count = args[:game_count].to_i
 
     user_count = User.count
-    game_count.times.each do |i|
+    game_count.times do
+      existing_games += 1
       offset = rand(user_count + 5)
       users = User.offset(offset).first((2..5).to_a.sample)
-      game = Game.create(name: "Game#{i}", number_of_players: users.count, users:)
+      game = Game.create(name: "Game#{existing_games}", number_of_players: users.count, users:)
       game.start!
     end
   end

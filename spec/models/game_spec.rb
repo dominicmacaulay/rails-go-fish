@@ -211,6 +211,13 @@ RSpec.describe Game, type: :model do
       expect(user2.game_users.first.winner).to be user2_won
     end
 
+    it 'should update the game users with how many books they had' do
+      user1_books = game.go_fish.players.detect { |player| player.id == user1.id }.book_count
+      user2_books = game.go_fish.players.detect { |player| player.id == user2.id }.book_count
+      expect(user1.game_users.first.books).to eql user1_books
+      expect(user2.game_users.first.books).to eql user2_books
+    end
+
     it 'should set the over attribute to true' do
       expect(game.reload.over).to be true
     end

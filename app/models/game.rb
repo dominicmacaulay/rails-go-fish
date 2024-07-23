@@ -92,7 +92,8 @@ class Game < ApplicationRecord
   def update_game_users(go_fish)
     winners = go_fish.winners
     game_users.each do |game_user|
-      game_user.winner = true if winners.any? { |w| w.id == game_user.user_id }
+      game_user.winner = winners.any? { |winner| winner.id == game_user.user_id }
+      game_user.books = go_fish.players.detect { |player| player.id == game_user.user_id }.book_count
       game_user.save!
     end
   end

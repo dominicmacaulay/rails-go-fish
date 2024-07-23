@@ -51,7 +51,7 @@ class GamesController < ApplicationController
   end
 
   def leaderboard
-    @users = User.all.sort do |a, b|
+    @users = User.includes(:game_users, :games).sort do |a, b|
       [b.win_rate, b.wins] <=> [a.win_rate, a.wins]
     end
   end

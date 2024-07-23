@@ -19,7 +19,7 @@ class User < ApplicationRecord
   def wins
     game_users.select do |game_user|
       game_user.winner == true
-    end.count
+    end.size
   end
 
   def losses
@@ -35,7 +35,7 @@ class User < ApplicationRecord
   end
 
   def games_played
-    games.select(&:over).count
+    games.select(&:over).size
   end
 
   def total_time
@@ -52,7 +52,6 @@ class User < ApplicationRecord
   end
 
   def highest_book_count
-    games = game_users.map(&:game)
     games.map do |game|
       game.go_fish&.players&.detect { |player| player.id == id }&.book_count
     end.max
