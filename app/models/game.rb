@@ -8,6 +8,8 @@ class Game < ApplicationRecord
   before_destroy :can_destroy?, prepend: true
 
   scope :joinable, -> { order(created_at: :desc).where(over: false) }
+  scope :in_progress, -> { order(created_at: :desc).where(started: true, over: false) }
+  scope :finished, -> { order(created_at: :desc).where(over: true) }
 
   after_create_commit -> { broadcast_refresh_to 'games' }
   after_update_commit -> { broadcast_refresh_to 'games' }

@@ -29,7 +29,12 @@ RSpec.describe 'sidebar navigation', type: :system, js: true do
 
   it 'directs you to the game status page' do
     click_on 'Game Status'
-    expect_css(selector: 'h1', text: 'Game Status')
+    expect_css(selector: 'h1', text: 'Active Game Status')
+  end
+
+  it 'directs you to the game history page' do
+    click_on 'Game History'
+    expect_css(selector: 'h1', text: 'Game History')
   end
 
   it "shows the user's name" do

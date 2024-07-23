@@ -65,7 +65,11 @@ class GamesController < ApplicationController
   end
 
   def game_status
-    @games = Game.all.select(&:started)
+    @games = Game.in_progress.page params[:page]
+  end
+
+  def game_history
+    @games = Game.finished.page params[:page]
   end
 
   private

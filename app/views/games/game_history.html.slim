@@ -1,21 +1,19 @@
 .game-status-page
-  h1 Active Game Status
+  h1 Game History
 
   table.table-primary.table--auto-layout.table--default-density
     thead
       tr
-        th Current Games
+        th Past Games
         th Round
         th Score
     tbody
       - if @games.empty?
         tr
-          th There are no current games
+          th There are no past games
       - else
         - @games.each do |game|
           = render "game_info", game:
 
   .app__footer
     = paginate @games
-
-
