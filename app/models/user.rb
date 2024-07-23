@@ -52,8 +52,6 @@ class User < ApplicationRecord
   end
 
   def highest_book_count
-    games.map do |game|
-      game.go_fish&.players&.detect { |player| player.id == id }&.book_count
-    end.max
+    game_users.map(&:books).compact.max
   end
 end

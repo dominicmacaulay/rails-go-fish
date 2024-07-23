@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_184434) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_193050) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_184434) do
 
   create_view "leaderboards", sql_definition: <<-SQL
       SELECT users.id AS user_id,
+      COALESCE(winners.total_book_count, (0)::bigint) AS score,
       concat(users.first_name, ' ', users.last_name) AS "user",
       COALESCE(winners.wins, (0)::bigint) AS wins,
       COALESCE(losers.losses, (0)::bigint) AS losses,
@@ -67,10 +68,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_184434) do
               ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
           END AS win_rate,
       COALESCE(games.total_time, (0)::numeric) AS total_time_played,
-      COALESCE(users_with_books.highest_book_count, 0) AS book_count
+      COALESCE(users_with_books.highest_book_count, 0) AS highest_book_count
      FROM ((((users
        LEFT JOIN ( SELECT users_1.id AS user_id,
-              count(winners_1.*) AS wins
+              count(winners_1.*) AS wins,
+              sum(winners_1.books) AS total_book_count
              FROM (users users_1
                JOIN game_users winners_1 ON (((winners_1.user_id = users_1.id) AND (winners_1.winner = true))))
             GROUP BY users_1.id) winners ON ((users.id = winners.user_id)))
@@ -90,11 +92,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_184434) do
              FROM (users users_1
                JOIN game_users ON (((game_users.user_id = users_1.id) AND (game_users.books > 0))))
             GROUP BY users_1.id) users_with_books ON ((users.id = users_with_books.user_id)))
-    ORDER BY
+    ORDER BY COALESCE(winners.total_book_count, (0)::bigint) DESC,
           CASE
               WHEN (COALESCE(winners.wins, (0)::bigint) = 0) THEN (0)::numeric
               WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (100)::numeric
               ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
-          END DESC, COALESCE(winners.wins, (0)::bigint) DESC, (COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)) DESC;
+          END DESC, COALESCE(users_with_books.highest_book_count, 0) DESC;
   SQL
 end
