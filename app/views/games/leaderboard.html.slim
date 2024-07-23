@@ -5,13 +5,14 @@
     thead
       tr
         th Rank
+        th Score
         th Name
         th Wins
         th Losses
         th Games Played
-        th Win/Loss Ratio
+        th Win Rate
         th Total Time Played
         th Highest Book Count
     tbody
-      - @users.each_with_index do |user, index|
-        = render "user", user:, index: (index + 1)
+      - @leaderboard.each_with_index do |entry, index|
+        = render "entry", entry:, index: index + 1

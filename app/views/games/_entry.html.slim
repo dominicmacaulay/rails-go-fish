@@ -1,0 +1,19 @@
+tr
+  td
+    = index
+  td
+    = entry.score
+  td
+    = entry.user
+  td
+    = entry.wins
+  td
+    = entry.losses
+  td
+    = entry.total_games
+  td
+    = "#{entry.win_rate}%"
+  td
+    = "#{(entry.total_time_played / 3600).round(2)} hours"
+  td
+    = entry.highest_book_count
