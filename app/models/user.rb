@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  SECONDS_TO_HOURS_FACTOR = 3600
+  STANDARD_ROUND = 2
   has_many :game_users
   has_many :games, through: :game_users
 
@@ -29,7 +31,7 @@ class User < ApplicationRecord
 
     return 100 if losses.zero?
 
-    (wins.to_f / games_played * 100).round(2)
+    (wins.to_f / games_played * 100).round(STANDARD_ROUND)
   end
 
   def games_played
@@ -46,7 +48,7 @@ class User < ApplicationRecord
         game.finished_at - game.started_at
       end
     end.sum
-    (time / 3600).round(2)
+    (time / SECONDS_TO_HOURS_FACTOR).round(STANDARD_ROUND)
   end
 
   def highest_book_count
