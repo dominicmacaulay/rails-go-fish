@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_160548) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_184434) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -54,4 +54,47 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_160548) do
 
   add_foreign_key "game_users", "games"
   add_foreign_key "game_users", "users"
+
+  create_view "leaderboards", sql_definition: <<-SQL
+      SELECT users.id AS user_id,
+      concat(users.first_name, ' ', users.last_name) AS "user",
+      COALESCE(winners.wins, (0)::bigint) AS wins,
+      COALESCE(losers.losses, (0)::bigint) AS losses,
+      (COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)) AS total_games,
+          CASE
+              WHEN (COALESCE(winners.wins, (0)::bigint) = 0) THEN (0)::numeric
+              WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (100)::numeric
+              ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
+          END AS win_rate,
+      COALESCE(games.total_time, (0)::numeric) AS total_time_played,
+      COALESCE(users_with_books.highest_book_count, 0) AS book_count
+     FROM ((((users
+       LEFT JOIN ( SELECT users_1.id AS user_id,
+              count(winners_1.*) AS wins
+             FROM (users users_1
+               JOIN game_users winners_1 ON (((winners_1.user_id = users_1.id) AND (winners_1.winner = true))))
+            GROUP BY users_1.id) winners ON ((users.id = winners.user_id)))
+       LEFT JOIN ( SELECT users_1.id AS user_id,
+              count(losers_1.*) AS losses
+             FROM (users users_1
+               JOIN game_users losers_1 ON (((losers_1.user_id = users_1.id) AND (losers_1.winner = false))))
+            GROUP BY users_1.id) losers ON ((users.id = losers.user_id)))
+       LEFT JOIN ( SELECT users_1.id AS user_id,
+              sum(GREATEST(COALESCE(EXTRACT(epoch FROM (games_1.finished_at - games_1.started_at)), (0)::numeric), COALESCE(EXTRACT(epoch FROM (games_1.updated_at - games_1.started_at)), (0)::numeric))) AS total_time
+             FROM ((users users_1
+               JOIN game_users ON ((game_users.user_id = users_1.id)))
+               JOIN games games_1 ON (((game_users.game_id = games_1.id) AND (games_1.started = true))))
+            GROUP BY users_1.id) games ON ((users.id = games.user_id)))
+       LEFT JOIN ( SELECT users_1.id AS user_id,
+              max(game_users.books) AS highest_book_count
+             FROM (users users_1
+               JOIN game_users ON (((game_users.user_id = users_1.id) AND (game_users.books > 0))))
+            GROUP BY users_1.id) users_with_books ON ((users.id = users_with_books.user_id)))
+    ORDER BY
+          CASE
+              WHEN (COALESCE(winners.wins, (0)::bigint) = 0) THEN (0)::numeric
+              WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (100)::numeric
+              ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
+          END DESC, COALESCE(winners.wins, (0)::bigint) DESC, (COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)) DESC;
+  SQL
 end
