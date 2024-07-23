@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_23_193050) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_23_200816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -64,7 +64,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_193050) do
       (COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)) AS total_games,
           CASE
               WHEN (COALESCE(winners.wins, (0)::bigint) = 0) THEN (0)::numeric
-              WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (100)::numeric
+              WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (1)::numeric
               ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
           END AS win_rate,
       COALESCE(games.total_time, (0)::numeric) AS total_time_played,
@@ -91,12 +91,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_23_193050) do
               max(game_users.books) AS highest_book_count
              FROM (users users_1
                JOIN game_users ON (((game_users.user_id = users_1.id) AND (game_users.books > 0))))
-            GROUP BY users_1.id) users_with_books ON ((users.id = users_with_books.user_id)))
-    ORDER BY COALESCE(winners.total_book_count, (0)::bigint) DESC,
-          CASE
-              WHEN (COALESCE(winners.wins, (0)::bigint) = 0) THEN (0)::numeric
-              WHEN (COALESCE(losers.losses, (0)::bigint) = 0) THEN (100)::numeric
-              ELSE round(((winners.wins)::numeric / ((COALESCE(winners.wins, (0)::bigint) + COALESCE(losers.losses, (0)::bigint)))::numeric), 2)
-          END DESC, COALESCE(users_with_books.highest_book_count, 0) DESC;
+            GROUP BY users_1.id) users_with_books ON ((users.id = users_with_books.user_id)));
   SQL
 end
