@@ -16,6 +16,12 @@ RSpec.describe 'game history', type: :system, js: true do
       expect_css(selector: 'h1', text: 'Game History')
     end
 
+    it 'should show all of the table headers' do
+      expect_css(selector: 'th', text: 'Past Games')
+      expect_css(selector: 'th', text: 'Final Round')
+      expect_css(selector: 'th', text: 'Winning Score(s)')
+    end
+
     it "should show all of the current games' name, round, and score" do
       games = Game.all
       current_games = games.select { |game| game.started && game.over }

@@ -218,7 +218,7 @@ RSpec.describe Game, type: :model do
       expect(user2.game_users.first.books).to eql user2_books
     end
 
-    it 'should update the game users with how many books they had' do
+    it 'should update the game users with their total book value' do
       user1_books = game.go_fish.players.detect { |player| player.id == user1.id }.total_book_value
       user2_books = game.go_fish.players.detect { |player| player.id == user2.id }.total_book_value
       expect(user1.game_users.first.book_value).to eql user1_books

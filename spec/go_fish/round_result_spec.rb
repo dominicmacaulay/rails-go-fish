@@ -5,7 +5,6 @@ RSpec.describe RoundResult do
   let(:player2) { Player.new(2, 'P2') }
   let(:player3) { Player.new(3, 'P3') }
 
-  # TODO: write serialization tests for this
   context '#from_json' do
     let(:result) do
       RoundResult.new(id: 1, player: player1, opponent: player2, rank: '2', fished: false, got_rank: true,
