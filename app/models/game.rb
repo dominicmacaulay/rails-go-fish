@@ -101,6 +101,7 @@ class Game < ApplicationRecord
     broadcast_refresh_to 'game_status'
     broadcast_refresh_to 'game_history'
     broadcast_refresh_to 'leaderboard'
+    broadcast_refresh_to 'spectate'
   end
 
   def end_game(go_fish)

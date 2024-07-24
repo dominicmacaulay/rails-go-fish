@@ -1,0 +1,6 @@
+= turbo_stream_from "spectate"
+
+.game-page.game-page--spectate
+  = render "games/game_players", game: @game, players: @game.go_fish.players, session_player: nil, source: @source
+
+  = render "games/game_feed", game: @game, go_fish: @game.go_fish, current_player: @game.go_fish.current_player, session_player: nil, source: @source

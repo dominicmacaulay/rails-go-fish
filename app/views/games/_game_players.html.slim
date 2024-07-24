@@ -1,6 +1,13 @@
 .go-fish-panel.go-fish-panel--game-board
   .go-fish-panel__header.go-fish-panel__header--game-board
-    = link_to games_path, class: "btn-primary" do
+    - if source == 'game'
+      = link_to games_path, class: "btn-primary btn-back" do
+        = material_icon('arrow_back')
+    - elsif source == 'status'
+      = link_to games_game_status_path, class: "btn-primary btn-back" do
+        = material_icon('arrow_back')
+    - elsif source == 'history'
+      = link_to games_game_history_path, class: "btn-primary btn-back" do
         = material_icon('arrow_back')
     span = game.name
 
@@ -8,7 +15,9 @@
     span.accordion__heading Players
     - if game.started
       - players.each do |player|
-        = render "games/player_accordion", player: player, reveal_information: player == session_player
+        - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id } if session_player.nil?
+        - reveal_information = player == session_player unless session_player.nil?
+        = render "games/player_accordion", player: player, reveal_information:
     - else
       p Waiting for other players to join #{game.name}
       p #{game.users.count}/#{game.number_of_players} players joined

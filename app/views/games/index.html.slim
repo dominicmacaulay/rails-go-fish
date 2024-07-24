@@ -17,11 +17,9 @@
 
   .games-list
     .games-list__header
-      span All Available Games
+      span Joinable Games
 
     = turbo_frame_tag "all-games"
-      - @my_games.each do |game|
-        = render "game", game: game
       - @games.each do |game|
         = render "game", game: game
 

@@ -6,10 +6,11 @@ class GameResult
   end
 
   def display_for(player)
-    if winners.include?(player)
-      first_person_message(player)
-    else
+    winner = winners.detect { |w| w.id == player.id }
+    if winner.nil?
       third_person_message
+    else
+      first_person_message(winner)
     end
   end
 

@@ -5,7 +5,7 @@ RSpec.describe 'game history', type: :system, js: true do
 
   let(:user) { create(:user) }
   before do
-    create_and_start_games(amount: 5, user:)
+    create_and_finish_games(amount: 5, user:)
     login_as user
     visit games_path
     click_on 'Game History'
@@ -38,6 +38,27 @@ RSpec.describe 'game history', type: :system, js: true do
         end
         expect(page).to have_content game.run_time
       end
+    end
+  end
+  context 'spectating' do
+    before do
+      click_on 'View', match: :first
+    end
+
+    it 'allows you to spectate the game without the you hand and your books section' do
+      expect(page).to have_content 'Game Feed'
+      expect(page).to have_no_content 'Your Hand'
+      expect(page).to have_no_content 'Your Books'
+    end
+
+    it 'lets you go back to the history page with the back arrow' do
+      page.find('a.btn-primary', match: :first).click
+      expect_css(selector: 'h1', text: 'Game History')
+    end
+
+    it 'lets you go back to the history page with the go back button' do
+      page.find('a.btn-primary', text: 'Go back').click
+      expect_css(selector: 'h1', text: 'Game History')
     end
   end
 end

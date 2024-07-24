@@ -7,7 +7,7 @@
   /     h1 = game.name
   /   p #{game.users.count}/#{game.number_of_players} players joined
   .game-page
-    = render "games/game_players", game: @game, players: nil, session_player: nil
+    = render "games/game_players", game: @game, players: nil, session_player: nil, source: 'game'
 
     = render "games/game_feed", game: @game, go_fish: nil, current_player: nil, session_player: nil
 
@@ -18,9 +18,9 @@
 - else
   - session_player = @game.go_fish.players.detect { |player| player.id == current_user.id }
   .game-page
-    = render "games/game_players", game: @game, players: @game.go_fish.players, session_player:
+    = render "games/game_players", game: @game, players: @game.go_fish.players, session_player:, source: 'game'
 
-    = render "games/game_feed", game: @game, go_fish: @game.go_fish, current_player: @game.go_fish.current_player, session_player:
+    = render "games/game_feed", game: @game, go_fish: @game.go_fish, current_player: @game.go_fish.current_player, session_player:, source: 'game'
 
     = render "games/your_hand", player: session_player
 

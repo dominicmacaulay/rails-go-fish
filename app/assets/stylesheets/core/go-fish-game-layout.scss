@@ -10,6 +10,13 @@
     grid-template-rows: 1fr var(--gf-panel-height);
     height: 100vh;
     overflow: auto;
+
+    &.game-page--spectate {
+        grid-template-areas:
+            "game-board game-feed";
+        grid-template-columns: 1fr var(--gf-panel-width);
+        grid-template-rows: 1fr;
+    }
 }
 
 // modifiers

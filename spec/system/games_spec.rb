@@ -78,8 +78,8 @@ RSpec.describe 'Games', type: :system, js: true do
 
       it 'displays that the game is full and takes away the join button when full' do
         expect(page).to have_content('In progress')
-        expect(page).not_to have_content('Players')
-        expect(page).not_to have_content('Join')
+        expect(page).to have_no_content('Players')
+        expect(page).to have_no_selector('.btn', text: 'Join')
       end
 
       it 'shows a game started message in the show window' do

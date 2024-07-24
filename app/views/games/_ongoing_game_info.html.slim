@@ -10,3 +10,5 @@ tr
     - game.users.each do |user|
       span = user.name
       br
+  td
+    = link_to 'Spectate', games_spectate_path(id: game.id, source: 'status'), class: "btn"

@@ -11,10 +11,15 @@
 
   .go-fish-panel__content.go-fish-panel__content--game-feed
     - if game.started
-      = render "games/notification_feed", round_results: go_fish.round_results, session_player:, game:, go_fish:
+      = render "games/notification_feed", round_results: go_fish.round_results, game:, go_fish:
 
-      - if session_player == current_player && !game.over
+      - if source == 'game' && session_player == current_player && !game.over
         = render "games/game_action", game:, go_fish:, session_player:, game_id: game.id
 
       - if game.over
-        = link_to "Go back to your games", games_path, class: "btn-primary"
+        - if source == 'game'
+          = link_to "Go back to your games", games_path, class: "btn-primary"
+        - elsif source == 'status'
+          = link_to "Go back to Game Status", games_game_status_path, class: "btn-primary"
+        - elsif source == 'history'
+          = link_to "Go back to Game History", games_game_history_path, class: "btn-primary"

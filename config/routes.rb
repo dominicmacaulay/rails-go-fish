@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   get "games/game_status", to: "games#game_status"
   get "games/game_history", to: "games#game_history"
   get "games/leaderboard", to: "games#leaderboard"
+  get "games/spectate", to: "games#spectate"
 
   # Defines the root path route ("/")
   # root "posts#index"

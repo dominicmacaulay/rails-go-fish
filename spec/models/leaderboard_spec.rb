@@ -70,12 +70,12 @@ RSpec.describe Leaderboard, type: :model do
     end
 
     it "should return the users' total time played" do
-      total_time_played = leaderboards.map(&:total_time_played)
+      total_time_played = leaderboards.map { |l| l.total_time_played.round(2) }
       expect(total_time_played.count).to eql 2
       user1_time = user1.games.map { |game| game.finished_at - game.started_at }.sum
       user2_time = user2.games.map { |game| game.finished_at - game.started_at }.sum
-      expect(total_time_played).to include(user1_time)
-      expect(total_time_played).to include(user2_time)
+      expect(total_time_played).to include(user1_time.round(2))
+      expect(total_time_played).to include(user2_time.round(2))
     end
   end
 

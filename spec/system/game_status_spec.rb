@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'history/status page', type: :system, js: true do
+RSpec.describe 'status page', type: :system, js: true do
   include Warden::Test::Helpers
 
   let(:user) { create(:user) }
@@ -37,6 +37,23 @@ RSpec.describe 'history/status page', type: :system, js: true do
           expect(page).to have_content user.name
         end
       end
+    end
+  end
+
+  context 'spectating' do
+    before do
+      click_on 'Spectate', match: :first
+    end
+
+    it 'allows you to spectate the game without the you hand and your books section' do
+      expect(page).to have_content 'Game Feed'
+      expect(page).to have_no_content 'Your Hand'
+      expect(page).to have_no_content 'Your Books'
+    end
+
+    it 'lets you go back to the status page with the back arrow' do
+      page.find('a.btn-primary', match: :first).click
+      expect_css(selector: 'h1', text: 'Game Status')
     end
   end
 end

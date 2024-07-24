@@ -10,3 +10,5 @@ tr
       span = user.name
       br
   td = game.run_time
+  td
+    = link_to 'View', games_spectate_path(id: game.id, source: 'history'), class: "btn"

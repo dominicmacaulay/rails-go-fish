@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[show edit update destroy]
+  before_action :set_game, only: %i[show edit update destroy spectate]
 
   def index
     @my_games = current_user.games.unfinished
@@ -74,6 +74,10 @@ class GamesController < ApplicationController
     @games = @q.result.order(created_at: :desc).page params[:page]
   end
 
+  def spectate
+    @source = params[:source]
+  end
+
   private
 
   def set_game
@@ -81,6 +85,6 @@ class GamesController < ApplicationController
   end
 
   def game_params
-    params.require(:game).permit(:name, :number_of_players, :page)
+    params.require(:game).permit(:name, :number_of_players)
   end
 end
