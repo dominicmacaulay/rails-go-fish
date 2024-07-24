@@ -44,7 +44,7 @@ nav.sidebar.sidebar--drawer.sidebar--padded
     br
     .profile style="align-self: center"
       = material_icon('account_circle', size: 'large')
-      | #{current_user.first_name}
+      | #{current_user.first_name} #{current_user.last_name}
     = button_to destroy_user_session_path, method: :delete, class: "btn btn--no-border full-width" do
       = material_icon('logout', size: 'large')
       | Logout
