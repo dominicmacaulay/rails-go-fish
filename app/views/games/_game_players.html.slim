@@ -4,10 +4,10 @@
       = link_to games_path, class: "btn-primary btn-back" do
         = material_icon('arrow_back')
     - elsif source == 'status'
-      = link_to games_game_status_path, class: "btn-primary btn-back" do
+      = link_to status_path, class: "btn-primary btn-back" do
         = material_icon('arrow_back')
     - elsif source == 'history'
-      = link_to games_game_history_path, class: "btn-primary btn-back" do
+      = link_to history_path, class: "btn-primary btn-back" do
         = material_icon('arrow_back')
     span = game.name
 

@@ -50,30 +50,6 @@ class GamesController < ApplicationController
     end
   end
 
-  def leaderboard
-    @q = Leaderboard.ransack(params[:q])
-    page = (params[:page].presence || 1).to_i
-    @leaderboards = @q.result.order(score: :desc).page(page)
-
-    @ranked_leaderboards = @leaderboards.each_with_index.map do |leaderboard, index|
-      leaderboard.rank = ((page - 1) * @leaderboards.limit_value) + index + 1
-      leaderboard
-    end
-    # @users = User.includes(:game_users, :games).sort do |a, b|
-    #   [b.win_rate, b.wins] <=> [a.win_rate, a.wins]
-    # end
-  end
-
-  def game_status
-    @q = Game.in_progress.ransack(params[:q])
-    @games = @q.result.order(created_at: :desc).page params[:page]
-  end
-
-  def game_history
-    @q = Game.finished.ransack(params[:q])
-    @games = @q.result.order(created_at: :desc).page params[:page]
-  end
-
   def spectate
     @source = params[:source]
   end

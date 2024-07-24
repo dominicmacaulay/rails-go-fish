@@ -3,11 +3,11 @@
   h1 Leaderboard
 
   .ransack-filter
-    = search_form_for @q, url: games_leaderboard_path, method: :get, class: 'ransack-form form-inline' do |f|
+    = search_form_for @q, url: leaderboard_path, method: :get, class: 'ransack-form form-inline' do |f|
       = f.label :user_cont, 'Filter by name', class: 'sr-only'
       = f.search_field :user_cont, class: 'form-control', placeholder: 'Search by name'
       = f.submit 'Search', class: 'btn btn-primary'
-    = button_to 'Clear Search', games_leaderboard_path, method: :get, class: 'btn btn-destructive'
+    = button_to 'Clear Search', leaderboard_path, method: :get, class: 'btn btn-destructive'
 
   table.table-primary.table--auto-layout.table--default-density
     thead
