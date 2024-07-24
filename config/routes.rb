@@ -9,13 +9,16 @@ Rails.application.routes.draw do
   get "games/game_status", to: "games#game_status"
   get "games/game_history", to: "games#game_history"
   get "games/leaderboard", to: "games#leaderboard"
-  get "games/spectate", to: "games#spectate"
 
   # Defines the root path route ("/")
   # root "posts#index"
   root to: "pages#home"
+  # resources :leaderboard, only: :index
+  # resources :game_status, only: :index
+  # resources :game_history, only: :index
   resources :games do
     resources :game_users, only: %i[create destroy]
     resources :rounds, only: %i[create]
+    get "spectate", on: :member
   end
 end

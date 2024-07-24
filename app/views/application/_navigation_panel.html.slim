@@ -1,25 +1,6 @@
-/ .side-panel.navigation-panel
-/   .navigation-panel__primary-navigation
-/     .side-panel__header Go Fish
-
-/     = link_to "Games",
-/       games_path,
-/       class: "btn btn--no-border"
-
-/   .divider
-
-/   .navigation-panel__secondary-navigation
-/     .profile
-/       = material_icon('account_circle', size: 'large')
-/       | #{current_user.name}
-/     = button_to "Sign out",
-/       destroy_user_session_path,
-/       method: :delete,
-/       class: "btn btn--no-border"
-
 nav.sidebar.sidebar--drawer.sidebar--padded
-
-  = link_to 'Go Fish', root_path, class: 'sidebar__brand'
+  a.sidebar__brand href="/"
+    = image_tag "Go-Fish-Logo", alt: "Go Fish"
 
   .sidebar__content.sidebar__content--start
     = link_to games_path, class: 'btn btn--no-border' do

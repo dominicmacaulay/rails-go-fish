@@ -1,0 +1,11 @@
+%sidebar-global {
+  padding-inline: var(--op-space-large);
+  padding-block: var(--op-space-2x-large);
+  gap: var(--op-space-medium);
+
+  .sidebar__brand {
+    padding: 0;
+    font-size: var(--op-font-2x-large);
+    font-weight: var(--op-font-weight-semi-bold);
+  }
+}
