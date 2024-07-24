@@ -32,8 +32,7 @@ namespace :generate do
       existing_games += 1
       offset = rand(user_count + 5)
       users = User.offset(offset).first((2..5).to_a.sample)
-      game = Game.create(name: "Game#{existing_games}", number_of_players: users.count, users:)
-      game.start!
+      Game.create(name: "Game#{existing_games}", number_of_players: users.count, users:)
     end
   end
 
@@ -45,6 +44,7 @@ namespace :generate do
 
     games = Game.all
     games.each do |game|
+      game.start! unless game.started
       round_count.times do
         break if game.over
 
