@@ -1,5 +1,6 @@
 class Leaderboard < ApplicationRecord
   SECONDS_TO_HOURS_FACTOR = 3600
+  SECONDS_TO_MINUTES_FACTOR = 60
 
   attr_accessor :rank
 
@@ -11,7 +12,17 @@ class Leaderboard < ApplicationRecord
   end
 
   def time
-    "#{(total_time_played / SECONDS_TO_HOURS_FACTOR).round(2)} hours"
+    if total_time_played >= SECONDS_TO_HOURS_FACTOR
+      hours = (total_time_played / SECONDS_TO_HOURS_FACTOR).to_i
+      minutes = ((total_time_played % SECONDS_TO_HOURS_FACTOR) / SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{hours}h #{minutes}m"
+    elsif total_time_played >= SECONDS_TO_MINUTES_FACTOR
+      minutes = (total_time_played / SECONDS_TO_MINUTES_FACTOR).to_i
+      remaining_seconds = (total_time_played % SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{minutes}m #{remaining_seconds}s"
+    else
+      "#{total_time_played.to_i}s"
+    end
   end
 
   def self.ransackable_attributes(auth_object = nil)

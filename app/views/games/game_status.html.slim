@@ -11,16 +11,18 @@
   table.table-primary.table--auto-layout.table--default-density
     thead
       tr
-        th Current Games
+        th Games
         th Current Round
+        th Current Player
         th Scores
+        th Players
     tbody
       - if @games.empty?
         tr
           th There are no current games
       - else
         - @games.each do |game|
-          = render "game_info", game:
+          = render "ongoing_game_info", game:
 
   .app__footer
     = paginate @games

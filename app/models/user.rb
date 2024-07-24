@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   SECONDS_TO_HOURS_FACTOR = 3600
+  SECONDS_TO_MINUTES_FACTOR = 60
   STANDARD_ROUND = 2
+
   has_many :game_users
   has_many :games, through: :game_users
 
@@ -48,7 +50,21 @@ class User < ApplicationRecord
         game.finished_at - game.started_at
       end
     end.sum
-    (time / SECONDS_TO_HOURS_FACTOR).round(STANDARD_ROUND)
+    format_time(time)
+  end
+
+  def format_time(time)
+    if time >= SECONDS_TO_HOURS_FACTOR
+      hours = (time / SECONDS_TO_HOURS_FACTOR).to_i
+      minutes = ((time % SECONDS_TO_HOURS_FACTOR) / SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{hours}h #{minutes}m"
+    elsif time >= SECONDS_TO_MINUTES_FACTOR
+      minutes = (time / SECONDS_TO_MINUTES_FACTOR).to_i
+      remaining_seconds = (time % SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{minutes}m #{remaining_seconds}s"
+    else
+      "#{time.to_i}s"
+    end
   end
 
   def highest_book_count

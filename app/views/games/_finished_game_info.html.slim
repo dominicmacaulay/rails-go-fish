@@ -5,3 +5,8 @@ tr
     - game.score_board.each do |score|
       span = score
       br
+  td
+    - game.users.each do |user|
+      span = user.name
+      br
+  td = game.run_time

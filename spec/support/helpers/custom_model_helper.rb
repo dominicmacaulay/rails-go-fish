@@ -59,4 +59,18 @@ module CustomModelHelpers
       end
     end
   end
+
+  def format_time(time)
+    if time >= Leaderboard::SECONDS_TO_HOURS_FACTOR
+      hours = (time / Leaderboard::SECONDS_TO_HOURS_FACTOR).to_i
+      minutes = ((time % Leaderboard::SECONDS_TO_HOURS_FACTOR) / Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{hours}h #{minutes}m"
+    elsif time >= Leaderboard::SECONDS_TO_MINUTES_FACTOR
+      minutes = (time / Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      remaining_seconds = (time % Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{minutes}m #{remaining_seconds}s"
+    else
+      "#{time.to_i}s"
+    end
+  end
 end

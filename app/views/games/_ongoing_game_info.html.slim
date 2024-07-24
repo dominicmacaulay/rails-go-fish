@@ -1,0 +1,12 @@
+tr
+  td = game.name
+  td = game.rounds_played
+  td = game.users.detect { |user| user.id == game.go_fish.current_player.id }.name
+  td
+    - game.score_board.each do |score|
+      span = score
+      br
+  td
+    - game.users.each do |user|
+      span = user.name
+      br

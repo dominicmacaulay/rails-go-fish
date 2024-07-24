@@ -85,8 +85,8 @@ RSpec.describe Leaderboard, type: :model do
       expect(times.count).to eql 2
       user1_time = user1.games.map { |game| game.finished_at - game.started_at }.sum
       user2_time = user2.games.map { |game| game.finished_at - game.started_at }.sum
-      expect(times).to include("#{(user1_time / Leaderboard::SECONDS_TO_HOURS_FACTOR).round(2)} hours")
-      expect(times).to include("#{(user2_time / Leaderboard::SECONDS_TO_HOURS_FACTOR).round(2)} hours")
+      expect(times).to include format_time(user1_time)
+      expect(times).to include format_time(user2_time)
     end
 
     it 'formats the winning rate into a percentage string' do

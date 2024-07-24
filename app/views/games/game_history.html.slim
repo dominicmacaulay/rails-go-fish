@@ -11,16 +11,18 @@
   table.table-primary.table--auto-layout.table--default-density
     thead
       tr
-        th Past Games
-        th Final Round
+        th Games
+        th Rounds Played
         th Winning Score(s)
+        th Players
+        th Time To Play
     tbody
       - if @games.empty?
         tr
           th There are no past games
       - else
         - @games.each do |game|
-          = render "game_info", game:
+          = render "finished_game_info", game:
 
   .app__footer
     = paginate @games

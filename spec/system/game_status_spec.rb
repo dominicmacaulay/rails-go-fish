@@ -16,9 +16,11 @@ RSpec.describe 'history/status page', type: :system, js: true do
     end
 
     it 'should show all of the table headers' do
-      expect_css(selector: 'th', text: 'Current Games')
+      expect_css(selector: 'th', text: 'Games')
       expect_css(selector: 'th', text: 'Current Round')
+      expect_css(selector: 'th', text: 'Current Player')
       expect_css(selector: 'th', text: 'Scores')
+      expect_css(selector: 'th', text: 'Players')
     end
 
     it "should show all of the current games' name, round, and score" do
@@ -27,8 +29,12 @@ RSpec.describe 'history/status page', type: :system, js: true do
       current_games.each do |game|
         expect(page).to have_content game.name
         expect(page).to have_content game.rounds_played
+        expect(page).to have_content game.go_fish.current_player.name
         game.score_board.each do |score|
           expect(page).to have_content score
+        end
+        game.users.each do |user|
+          expect(page).to have_content user.name
         end
       end
     end

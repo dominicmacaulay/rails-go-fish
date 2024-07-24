@@ -20,6 +20,24 @@ class Game < ApplicationRecord
     %w[name]
   end
 
+  def run_time
+    return unless finished_at
+
+    seconds_played = finished_at - started_at
+
+    if seconds_played >= Leaderboard::SECONDS_TO_HOURS_FACTOR
+      hours = (seconds_played / Leaderboard::SECONDS_TO_HOURS_FACTOR).to_i
+      minutes = ((seconds_played % Leaderboard::SECONDS_TO_HOURS_FACTOR) / Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{hours}h #{minutes}m"
+    elsif seconds_played >= Leaderboard::SECONDS_TO_MINUTES_FACTOR
+      minutes = (seconds_played / Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      remaining_seconds = (seconds_played % Leaderboard::SECONDS_TO_MINUTES_FACTOR).to_i
+      "#{minutes}m #{remaining_seconds}s"
+    else
+      "#{seconds_played.to_i}s"
+    end
+  end
+
   def queue_full?
     users.count == number_of_players
   end
@@ -59,7 +77,7 @@ class Game < ApplicationRecord
     return false unless queue_full?
     return false if started
 
-    players = users.map { |user| Player.new(user.id, user.first_name) }
+    players = users.map { |user| Player.new(user.id, user.name) }
     go_fish = GoFish.new(players)
     go_fish.deal!
     update(go_fish:, started_at: DateTime.current, started: true)
