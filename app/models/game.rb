@@ -73,7 +73,7 @@ class Game < ApplicationRecord
 
   def start!
     update(users:)
-    update_show
+    update_views
     return false unless queue_full?
     return false if started
 
@@ -81,7 +81,7 @@ class Game < ApplicationRecord
     go_fish = GoFish.new(players)
     go_fish.deal!
     update(go_fish:, started_at: DateTime.current, started: true)
-    update_show
+    update_views
   end
 
   def play_round!(opponent_id = nil, rank = nil, requester = nil)
@@ -92,11 +92,14 @@ class Game < ApplicationRecord
     end_game(go_fish) if go_fish.winners
     save!
     # update(over: true, finished_at: DateTime.current) if go_fish.winners
-    update_show
+    update_views
   end
 
-  def update_show
+  def update_views
     users.each { |user| broadcast_refresh_to "games:#{id}:users:#{user.id}" }
+    broadcast_refresh_to 'game_status'
+    broadcast_refresh_to 'game_history'
+    broadcast_refresh_to 'leaderboard'
   end
 
   def end_game(go_fish)
