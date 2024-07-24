@@ -65,11 +65,13 @@ class GamesController < ApplicationController
   end
 
   def game_status
-    @games = Game.in_progress.page params[:page]
+    @q = Game.in_progress.ransack(params[:q])
+    @games = @q.result.order(created_at: :desc).page params[:page]
   end
 
   def game_history
-    @games = Game.finished.page params[:page]
+    @q = Game.finished.ransack(params[:q])
+    @games = @q.result.order(created_at: :desc).page params[:page]
   end
 
   private

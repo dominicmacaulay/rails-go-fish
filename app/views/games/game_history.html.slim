@@ -1,6 +1,13 @@
 .game-status-page
   h1 Game History
 
+  .ransack-filter
+    = search_form_for @q, url: games_game_history_path, method: :get, class: 'ransack-form form-inline' do |f|
+      = f.label :name_cont, 'Filter by name', class: 'sr-only'
+      = f.search_field :name_cont, class: 'form-control', placeholder: 'Search by name'
+      = f.submit 'Search', class: 'btn btn-primary'
+    = button_to 'Clear Search', games_game_history_path, method: :get, class: 'btn btn-destructive'
+
   table.table-primary.table--auto-layout.table--default-density
     thead
       tr

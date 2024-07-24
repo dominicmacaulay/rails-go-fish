@@ -16,6 +16,14 @@ class Game < ApplicationRecord
   after_destroy_commit -> { broadcast_refresh_to 'games' }
   # broadcasts_refreshes
 
+  def self.ransackable_attributes(auth_object = nil)
+    %w[name]
+  end
+
+  def readonly?
+    true
+  end
+
   def queue_full?
     users.count == number_of_players
   end
