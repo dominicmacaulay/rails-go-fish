@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   before_action :set_game, only: %i[show edit update destroy]
 
   def index
-    @my_games = current_user.games.joinable
+    @my_games = current_user.games.unfinished
     @games = Game.joinable.page params[:page]
   end
 

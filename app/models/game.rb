@@ -7,7 +7,8 @@ class Game < ApplicationRecord
 
   before_destroy :can_destroy?, prepend: true
 
-  scope :joinable, -> { order(created_at: :desc).where(over: false) }
+  scope :unfinished, -> { order(created_at: :desc).where(over: false) }
+  scope :joinable, -> { order(created_at: :desc).where(started: false, over: false) }
   scope :in_progress, -> { order(created_at: :desc).where(started: true, over: false) }
   scope :finished, -> { order(created_at: :desc).where(over: true) }
 
