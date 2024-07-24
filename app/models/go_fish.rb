@@ -115,7 +115,7 @@ class GoFish # rubocop:disable Metrics/ClassLength
     players = json['players'].map { |player| Player.from_json(player) }
     current_player = players.detect { |player| player.id == json['current_player']['id'] }
     deck = Deck.from_json(json['deck'])
-    rounds_played = json['rounds_played'].to_i
+    rounds_played = json['rounds_played']
     round_results = hydrate_round_results(json['round_results'])
     winners = json['winners']&.map { |winner| Player.from_json(winner) }
     GoFish.new(players, current_player:, deck:, rounds_played:, round_results:, winners:)
@@ -126,6 +126,16 @@ class GoFish # rubocop:disable Metrics/ClassLength
       []
     else
       json.map { |result| RoundResult.from_json(result) }
+    end
+  end
+
+  def self.hydrate_rounds_played(json)
+    if json.include?('finished')
+      rounds = json.split
+      rounds.first.to_i
+      rounds.join(' ')
+    else
+      json.to_i
     end
   end
 

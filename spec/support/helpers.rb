@@ -6,5 +6,6 @@ RSpec.configure do |c|
   # for example, given you have a spec/support/helpers/login_helpers.rb
   c.include TestElementHelper, type: :system
   c.include ActionCableHelper, type: :system
-  c.include CustomHelpers, type: :system
+  c.include CustomSystemHelpers, type: :system
+  c.include CustomModelHelpers, type: :model
 end

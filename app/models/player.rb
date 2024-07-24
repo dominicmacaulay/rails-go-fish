@@ -17,6 +17,10 @@ class Player
     hand.push(*cards)
   end
 
+  def add_to_books(books)
+    self.books.push(*books)
+  end
+
   def hand_count # rubocop:disable Rails/Delegate
     hand.count
   end

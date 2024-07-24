@@ -20,10 +20,6 @@ class Game < ApplicationRecord
     %w[name]
   end
 
-  def readonly?
-    true
-  end
-
   def queue_full?
     users.count == number_of_players
   end

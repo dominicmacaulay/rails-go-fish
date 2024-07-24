@@ -79,31 +79,3 @@ RSpec.describe User, type: :model do
     end
   end
 end
-
-def create_and_play_games(user:, wins:, losses:) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-  wins.times do
-    game = create_game(user:)
-    player = game.go_fish.players.select { |p| p.id == user.id }
-    game.go_fish.winners = player
-    game.save!
-    game.end_game(game.go_fish)
-    game.save!
-  end
-
-  losses.times do
-    game = create_game(user:)
-    player = game.go_fish.players.reject { |p| p.id == user.id }
-    game.go_fish.winners = player
-    game.save!
-    game.end_game(game.go_fish)
-    game.save!
-  end
-end
-
-def create_game(user:)
-  game = create(:game)
-  create(:game_user, user:, game:)
-  create(:game_user, user: create(:user), game:)
-  game.start!
-  game
-end

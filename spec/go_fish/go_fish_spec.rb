@@ -362,7 +362,7 @@ end
 def go_fish_json # rubocop:disable Metrics/MethodLength
   { 'players' => [{ 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] }, { 'id' => 2, 'name' => 'Player 2', 'hand' => [], 'books' => [] }],
     'current_player' => { 'id' => 1, 'name' => 'Player 1', 'hand' => [], 'books' => [] },
-    'rounds_played' => '0',
+    'rounds_played' => 0,
     'deck' =>
   { 'cards' =>
     [{ 'rank' => '2', 'suit' => 'Spades' },
