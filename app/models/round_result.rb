@@ -21,8 +21,10 @@ class RoundResult
   end
 
   def obscure_messages
-    @obscure_messages ||= ['had no luck', 'shot for the stars and burned up on re-entry', 'got screwed',
-                            'now wants to quit the game', 'is on the edge', 'believes 911 was an inside job']
+    @obscure_messages ||= ['had no luck', 'shot for the stars and burned up on re-entry',
+                            'now wants to quit the game', 'is on the edge', 'does not care that you broke your elbow',
+                          'understand what Job must have felt', "doesn't like go fish anymore",
+                          'wants to go home and rethink their life', 'has a bad feeling about this']
   end
 
   def book_was_made
