@@ -91,9 +91,9 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: <%= dockerfile_bun_version %>
+      # - uses: oven-sh/setup-bun@v1
+      #   with:
+      #     bun-version: <%= dockerfile_bun_version %>
 
       - name: Run tests
         env:
