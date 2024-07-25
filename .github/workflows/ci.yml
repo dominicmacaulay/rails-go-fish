@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 
 jobs:
-- unless skip_brakeman?
+  <%- unless skip_brakeman? -%>
   scan_ruby:
     runs-on: ubuntu-latest
 
@@ -23,8 +23,8 @@ jobs:
       - name: Scan for security vulnerabilities in Ruby dependencies
         run: bin/brakeman --no-pager
 
- end
-- if options[:javascript] == "importmap"
+  <% end -%>
+  <%- if options[:javascript] == "importmap" -%>
   scan_js:
     runs-on: ubuntu-latest
 
@@ -41,8 +41,8 @@ jobs:
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
- end
-- unless skip_rubocop?
+  <% end -%>
+  <%- unless skip_rubocop? -%>
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -58,21 +58,21 @@ jobs:
       - name: Lint code for consistent style
         run: bin/rubocop -f github
 
- end
- unless options[:skip_test]
+  <% end -%>
+  <% unless options[:skip_test] -%>
   test:
     runs-on: ubuntu-latest
 
-    - if options[:database] == "sqlite3"
+      <%- if options[:database] == "sqlite3" -%>
     # services:
     #  redis:
     #    image: redis
     #    ports:
     #      - 6379:6379
     #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
-    - else
+      <%- else -%>
     services:
-      - if options[:database] == "mysql" || options[:database] == "trilogy"
+        <%- if options[:database] == "mysql" || options[:database] == "trilogy" -%>
       mysql:
         image: mysql
         env:
@@ -80,7 +80,7 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-      - elsif options[:database] == "postgresql"
+        <%- elsif options[:database] == "postgresql" -%>
       postgres:
         image: postgres
         env:
@@ -89,7 +89,7 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
-      - end
+        <%- end -%>
 
       # redis:
       #   image: redis
@@ -97,10 +97,10 @@ jobs:
       #     - 6379:6379
       #   options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
-    - end
+      <%- end -%>
     steps:
       - name: Install packages
-        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable = dockerfile_base_packages.join(" ") %>
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable  <%= dockerfile_base_packages.join(" ") %>
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -110,21 +110,21 @@ jobs:
         with:
           ruby-version: .ruby-version
           bundler-cache: true
-      - if using_bun?
+        <%- if using_bun? -%>
 
       - uses: oven-sh/setup-bun@v1
         with:
-          bun-version: = dockerfile_bun_version %>
-      - end
+          bun-version:  <%= dockerfile_bun_version %>
+        <%- end -%>
 
       - name: Run tests
         env:
           RAILS_ENV: test
-          - if options[:database] == "mysql" || options[:database] == "trilogy"
+            <%- if options[:database] == "mysql" || options[:database] == "trilogy" -%>
           DATABASE_URL: mysql2://127.0.0.1:3306
-          - elsif options[:database] == "postgresql"
+            <%- elsif options[:database] == "postgresql" -%>
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
-          - end
+            <%- end -%>
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare spec
 
@@ -135,4 +135,4 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/capybara
           if-no-files-found: ignore
- end
+  <% end -%>
