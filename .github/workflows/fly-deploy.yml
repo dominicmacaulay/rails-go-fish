@@ -2,6 +2,13 @@
 
 name: Fly Deploy
 on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: 'specific sha or branch name'
+        required: false
+        type: string
+
   push:
     branches:
       - main
