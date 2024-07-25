@@ -2,3 +2,7 @@
 = turbo_stream.prepend "all-games", @game
 = turbo_stream.update Game.new, ""
 = render_turbo_stream_flash_messages
+= turbo_stream.replace 'modal' do
+  = turbo_frame_tag 'modal' do
+    script
+      | document.dispatchEvent(new CustomEvent('modal:close'));

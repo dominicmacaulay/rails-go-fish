@@ -84,3 +84,5 @@ end
 gem 'simple_form', '~> 5.3'
 
 gem "kaminari", "~> 1.2"
+
+gem "dockerfile-rails", ">= 1.6", :group => :development

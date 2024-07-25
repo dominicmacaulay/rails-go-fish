@@ -3,7 +3,8 @@ class Game < ApplicationRecord
   has_many :users, through: :game_users
 
   validates :name, presence: true
-  validates :number_of_players, presence: true, numericality: { only_integer: true, greater_than: 1 }
+  validates :number_of_players, presence: true,
+                                numericality: { only_integer: true, greater_than: 1, less_than_or_equal_to: 6 }
 
   before_destroy :can_destroy?, prepend: true
 

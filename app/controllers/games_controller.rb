@@ -25,7 +25,10 @@ class GamesController < ApplicationController
 
     if @game.save
       @game.users << current_user
-      redirect_to games_path, notice: "#{@game.name} was successfully created"
+      respond_to do |format|
+        format.html { redirect_to games_path, notice: "#{@game.name} was successfully created" }
+        format.turbo_stream { flash.now[:notice] = "#{@game.name} was successfully created" }
+      end
     else
       render :new, status: :unprocessable_entity, layout: 'modal'
     end
@@ -33,7 +36,10 @@ class GamesController < ApplicationController
 
   def update
     if @game.update(game_params)
-      redirect_to games_path, notice: "#{@game.name} was successfully created"
+      respond_to do |format|
+        format.html { redirect_to games_path, notice: "#{@game.name} was successfully updated" }
+        format.turbo_stream { flash.now[:notice] = "#{@game.name} was successfully updated" }
+      end
     else
       render :edit, status: :unprocessable_entity, layout: 'modal'
     end

@@ -2,7 +2,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
 
-config.middleware.use  Rolemodel::SourceMap
+# config.middleware.use  Rolemodel::SourceMap
 
   # Settings specified here will take precedence over those in config/application.rb.
 
