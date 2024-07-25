@@ -202,7 +202,7 @@ RSpec.describe 'Games', type: :system, js: true do
       visit games_path
       go_fish.winners = [winner]
       game.update(go_fish:)
-      click_on 'Play now', match: :first
+      click_on 'View', match: :first
     end
 
     it 'shows the game end results when a winner is declared' do
