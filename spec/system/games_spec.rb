@@ -199,10 +199,12 @@ RSpec.describe 'Games', type: :system, js: true do
       create(:game_user, user: create(:user), game:)
       game.start!
       login_as user
-      visit games_path
       go_fish.winners = [winner]
       game.update(go_fish:)
+      visit games_path
       click_on 'View', match: :first
+      expect(page).to have_content 'Game Feed'
+      wait_for_stream_connection
     end
 
     it 'shows the game end results when a winner is declared' do
@@ -217,7 +219,7 @@ RSpec.describe 'Games', type: :system, js: true do
       expect(page).to have_content 'Your Games'
     end
 
-    it 'replaces the In progress text with Game Over' do
+    it 'replaces the In progress text with Game Over', chrome: true do
       click_on 'Go back to your games'
       expect(page).to have_content('Game Over').twice
       expect(page).to have_no_content('In progress')
